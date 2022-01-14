@@ -8,13 +8,18 @@ use Illuminate\Support\Facades\Hash;
 
 final class SignUp
 {
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     public function record(string $name, string $email, string $password): bool
     {
         $valueCheck = strlen($name) > 0 && strlen($email) > 0 && strlen($password) > 0;
+        $isNew = $this->isNew($email);
 
-        if($valueCheck) {
-            $db = new User();
-            $db->create(
+        if($valueCheck && $isNew) {
+            $this->user->create(
                 [
                 'name' => $name,
                 'email' => $email,
@@ -25,6 +30,11 @@ final class SignUp
             return true;
         }
         return false;
+    }
+
+    private function isNew(string $email): bool
+    {
+        return !$this->user->where('email', $email)->exists();
     }
 }
 ?>

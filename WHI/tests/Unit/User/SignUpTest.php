@@ -19,17 +19,29 @@ class SignUpTest extends TestCase
      */
     public function record()
     {
+        // ユーザー情報
         $name = 'Jamboo';
         $email = 'Jamboo@gmail.com';
         $password = 'Jamboo';
 
-        $domain = new SignUp();
+        // ユーザー情報の登録
+        $db = new User();
+        $domain = new SignUp($db);
         $domain->record($name, $email, $password);
 
+        // データベースから登録されたユーザー情報を取得
         $user = User::find(1);
 
+        // データベースの情報が元の情報と同じであることを確認
         $result = $name === $user->name && $email === $user->email && Hash::check($password, $user->password);
 
         $this->assertTrue($result);
+
+        // 同じ情報の登録ができないことを確認
+        $domain = new SignUp($user);
+        $domain->record($name, $email, $password);
+
+        $falseUser = User::find(2);
+        $this->assertTrue(null === $falseUser);
     }
 }
