@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(
+    '/', function () {
+        return view('welcome');
+    }
+);
+
+Route::get(
+    '/no', function () {
+        return view('welcome');
+    }
+)->name('login');
+
+$nameSpace = 'App\Http\Controllers\User';
+Route::namespace($nameSpace)->middleware('throttle')->group(
+    function () {
+        Route::resource('user', 'BasicController');
+    }
+);
