@@ -37,7 +37,7 @@ class BasicController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新たなユーザーの登録
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
