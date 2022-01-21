@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
-use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 
 class BasicController extends Controller
 {
     public function __construct()
     {
-        $this->user = new User();
     }
     /**
      * Display a listing of the resource.
@@ -50,7 +48,7 @@ class BasicController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
 
-        $service = new SignUp($this->user);
+        $service = new SignUp();
         $result = $service->record($name, $email, $password);
         if($result) {
             $data = [$name, $email];

@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 final class SignUp
 {
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        $this->user = new User();
     }
 
     public function record(string $name, string $email, string $password): bool

@@ -25,8 +25,7 @@ class SignUpTest extends TestCase
         $password = 'Jamboo';
 
         // ユーザー情報の登録
-        $db = new User();
-        $domain = new SignUp($db);
+        $domain = new SignUp();
         $domain->record($name, $email, $password);
 
         // データベースから登録されたユーザー情報を取得
