@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
+use App\Services\User\Resign;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 
@@ -93,13 +94,20 @@ class BasicController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * ユーザーの退会機能
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id, Request $request): JsonResponse
     {
-        //
+        $email = $request->input('email');
+
+        $service = new Resign();
+        $result = $service->remove($id, $email);
+        if($result) {
+               return response()->json('Success'); 
+        }
+        return response()->json('Error'); 
     }
 }

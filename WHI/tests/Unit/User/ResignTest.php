@@ -40,10 +40,10 @@ class ResignTest extends TestCase
 
         // ユーザー情報の削除
         $domain = new Resign();
-        $domain->remove($name, $email);
+        $domain->remove(1, $email);
 
         // 異なるユーザーのユーザー名とパスワードを入力したときの挙動チェック
-        //$domain->remove($name2, $email);
+        //$domain->remove(2, $email);
 
         $this->assertDeleted($user);
     }

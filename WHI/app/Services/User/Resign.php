@@ -12,15 +12,15 @@ final class Resign
         $this->user = new User();
     }
 
-    public function remove(string $name,string $email): bool
+    public function remove(int $id,string $email): bool
     {
-        $valueCheck = strlen($name) > 0 && strlen($email) > 0;
+        $valueCheck = $id > 0 && strlen($email) > 0;
         $isUser = $this->isUser($email);
 
         if($valueCheck && $isUser) {
             $this->user->where(
                 [
-                ['name', '=', $name],
+                ['id', '=', $id],
                 ['email', '=', $email]
                 ]
             )->delete();
