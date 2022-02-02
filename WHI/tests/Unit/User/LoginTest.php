@@ -30,12 +30,13 @@ class LoginTest extends TestCase
         $signUp->record($name, $email, $password);
 
         // 誤ったデータの入力
-        //$falseName = 'Jamboooo';
         //$falseEmail = 'Jamboooooo@gmail.com';
+        //$falsePassword = 'Jamboo00';
 
-        $login = new Login();
-        $test = $login->execute($name, $email);
+        $domain = new Login();
+        $test = $domain->execute($email, $password);
+        $data = ['name' => $name, 'email' => $email];
 
-        $this->assertTrue($test);
+        $this->assertTrue($data === $test);
     }
 }
