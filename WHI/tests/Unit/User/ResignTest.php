@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\User;
 
@@ -25,8 +26,7 @@ class ResignTest extends TestCase
         $password = 'Jamboo';
 
         // ユーザー情報の登録
-        $db = new User();
-        $signUp = new SignUp($db);
+        $signUp = new SignUp();
         $signUp->record($name, $email, $password);
 
         // 2件目のユーザー情報の登録

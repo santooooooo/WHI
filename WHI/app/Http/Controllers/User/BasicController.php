@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers\User;
 
@@ -8,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\DestoryUserRequest;
 
 class BasicController extends Controller
 {
@@ -38,7 +40,7 @@ class BasicController extends Controller
     /**
      * 新たなユーザーの登録
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\StoreUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUserRequest $request): JsonResponse
@@ -94,10 +96,11 @@ class BasicController extends Controller
     /**
      * ユーザーの退会機能
      *
-     * @param  int $id
+     * @param int $id
+     * @param \App\Http\Requests\DestoryUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id, Request $request): JsonResponse
+    public function destroy(int $id, DestoryUserRequest $request): JsonResponse
     {
         $email = $request->input('email');
 

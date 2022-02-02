@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
@@ -29,5 +30,6 @@ $nameSpace = 'App\Http\Controllers\User';
 Route::namespace($nameSpace)->middleware('throttle')->group(
     function () {
         Route::resource('user', 'BasicController');
+        Route::post('login', 'OtherController@login');
     }
 );
