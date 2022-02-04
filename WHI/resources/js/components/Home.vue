@@ -1,15 +1,19 @@
 <template>
     <v-container>
-        <v-avatar color="primary" size="50" rounded
-            ><span class="white--text text-h5">36</span></v-avatar
-        >
-        <v-app-bar elevation="100" color="blue" app>Jamboo</v-app-bar>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Example Component</div>
 
                     <div class="card-body">I'm an example component.</div>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
+		    <h1>Hello</h1>
                 </div>
             </div>
         </div>
