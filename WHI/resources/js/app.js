@@ -4,17 +4,16 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 //window.Vue = require('vue').default;
-import Vue from 'vue';
-import Vuetify from 'vuetify';
-import Vuex from 'vuex';
-import ExampleComponent from './components/ExampleComponent.vue';
-import store from './Store/index';
-
+import Vue from "vue";
+import Vuetify from "vuetify";
+import store from "./Store/index";
+import router from "./router";
+import App from "./components/App.vue";
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify);
-Vue.use(Vuex)
 
 /**
  * The following block of code may be used to automatically register your
@@ -33,11 +32,14 @@ Vue.use(Vuex)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+const opts = {}
 
 const app = new Vue({
-    el: '#app',
-	components: {
-		ExampleComponent,
-	},
-	store,
+    el: "#app",
+    store,
+    router,
+    vuetify: new Vuetify(opts),
+    components: {
+        App,
+    },
 });
