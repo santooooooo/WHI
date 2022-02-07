@@ -19,7 +19,7 @@
                 v-model="password"
                 :rules="passwordRules"
             ></v-text-field>
-            <v-btn :disabled="!valid">登録</v-btn>
+            <v-btn :disabled="!valid" @click="signUp">登録</v-btn>
         </v-form>
     </v-container>
 </template>
@@ -44,6 +44,22 @@ export default {
                     "パスワードは半角英数字6文字以上です",
             ],
         };
+    },
+    methods: {
+        signUp() {
+            axios
+                .post("/user", {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
     },
 };
 </script>

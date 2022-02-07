@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\DestoryUserRequest;
+use App\Http\Requests\DestroyUserRequest;
 
 class BasicController extends Controller
 {
@@ -97,10 +97,10 @@ class BasicController extends Controller
      * ユーザーの退会機能
      *
      * @param int $id
-     * @param \App\Http\Requests\DestoryUserRequest $request
+     * @param \App\Http\Requests\DestroyUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(int $id, DestoryUserRequest $request): JsonResponse
+    public function destroy(int $id, DestroyUserRequest $request): JsonResponse
     {
         $email = $request->input('email');
 
