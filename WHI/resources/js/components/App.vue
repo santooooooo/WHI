@@ -18,10 +18,11 @@
                 temporary
                 right
                 width="12rem"
+                style="background-color: rgba(100, 100, 100, 0.6)"
             >
                 <v-list nav dense>
                     <v-list-item v-for="menu in menus" :key="menu.key">
-                        <v-btn :disabled="menu.isUser" value="menu.isUser" text>
+                        <v-btn :disabled="menu.isUser" value="menu.isUser">
                             <router-link
                                 :to="menu.url"
                                 class="text-decoration-none black--text"
@@ -44,23 +45,26 @@
 export default {
     data() {
         return {
-            user: null,
-            drawer: false,
-            menus: [],
+            user: null, //アクセス元のチェック
+            drawer: false, //メニューの表示制御
+            menus: [
+                { name: "新規登録", url: "signup", isUser: false },
+                { name: "ログイン", url: "login", isUser: false },
+                { name: "ログアウト", url: "logout", isUser: true },
+                { name: "退会", url: "resign", isUser: true },
+            ], //メニュー一覧
         };
     },
     mounted() {
+        // CSRFトークンの取得
         this.$store.commit("getCsrfToken", document.cookie.substring(11));
 
-        this.menus[0] = { name: "新規登録", url: "signup", isUser: false };
-        this.menus[1] = { name: "ログイン", url: "login", isUser: false };
-        this.menus[2] = { name: "ログアウト", url: "logout", isUser: true };
-        this.menus[3] = { name: "退会", url: "resign", isUser: true };
-
+        // アクセス元がユーザーからかそうでないのかのチェック
         this.user = this.$store.state.user;
         if (this.user.name !== null) {
             this.menus.forEach((menu) => (menu.isUser = !menu.isUser));
         }
+
         return;
     },
 };
