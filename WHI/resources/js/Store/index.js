@@ -5,7 +5,11 @@ Vue.use(Vuex);
 
 const store =  new Vuex.Store({
 	state: {
-		test: 'jamboo'
+		user: {
+			name: null,
+			email: null,
+		},
+		csrf: null,
 	},
 
 	getters: {
@@ -13,6 +17,11 @@ const store =  new Vuex.Store({
 			console.log(state.test);
 		},
 	},
+	mutations: {
+		getCsrfToken(state, token) {
+			state.csrf = token
+		}
+	}
 });
 
 export default store

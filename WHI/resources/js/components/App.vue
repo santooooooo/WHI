@@ -1,6 +1,6 @@
 <template>
-    <v-app>
-        <div class="black white--text">
+    <v-app style="background-color: black">
+        <div class="white--text">
             <v-app-bar class="black text-h3 pa-6 ma-3" dark>
                 <router-link to="/" class="text-decoration-none white--text">
                     <div class="header-font font-weight-bold">WHI?</div>
@@ -12,17 +12,25 @@
                 >
             </v-app-bar>
 
-            <v-navigation-drawer v-model="drawer" absolute temporary right width="9rem">
+            <v-navigation-drawer
+                v-model="drawer"
+                absolute
+                temporary
+                right
+                width="12rem"
+            >
                 <v-list nav dense>
                     <v-list-item v-for="menu in menus" :key="menu.key">
-                        <router-link
-                            :to="menu.url"
-                            class="text-decoration-none black--text"
-                        >
-                            <v-list-item-title class="subtitle-1 pa-5">
-                                {{ menu.name }}
-                            </v-list-item-title>
-                        </router-link>
+                        <v-btn :disabled="menu.isUser" value="menu.isUser" text>
+                            <router-link
+                                :to="menu.url"
+                                class="text-decoration-none black--text"
+                            >
+                                <v-list-item-title class="subtitle-1 pa-5">
+                                    {{ menu.name }}
+                                </v-list-item-title>
+                            </router-link>
+                        </v-btn>
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
@@ -36,16 +44,23 @@
 export default {
     data() {
         return {
+            user: null,
             drawer: false,
-            group: null,
             menus: [],
         };
     },
     mounted() {
-        this.menus[0] = { name: "新規登録", url: "aha" };
-        this.menus[1] = { name: "ログイン", url: "aha" };
-        this.menus[2] = { name: "ログアウト", url: "aha" };
-        this.menus[3] = { name: "退会", url: "aha" };
+        this.$store.commit("getCsrfToken", document.cookie.substring(11));
+
+        this.menus[0] = { name: "新規登録", url: "signup", isUser: false };
+        this.menus[1] = { name: "ログイン", url: "login", isUser: false };
+        this.menus[2] = { name: "ログアウト", url: "logout", isUser: true };
+        this.menus[3] = { name: "退会", url: "resign", isUser: true };
+
+        this.user = this.$store.state.user;
+        if (this.user.name !== null) {
+            this.menus.forEach((menu) => (menu.isUser = !menu.isUser));
+        }
         return;
     },
 };
@@ -54,9 +69,5 @@ export default {
 <style scoped>
 .header-font {
     font-family: "Merriweather", serif;
-}
-.v-list-item:hover {
-    color: white;
-    background-color: grey;
 }
 </style>
