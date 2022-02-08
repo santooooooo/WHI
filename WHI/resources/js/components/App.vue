@@ -66,13 +66,6 @@ export default {
         },
     },
     mounted() {
-        // アクセス元がユーザーからかそうでないのかのチェック
-        //        this.user = this.$store.state.user;
-        //        if (this.user.name !== null) {
-        //            this.menus.forEach((menu) => (menu.isUser = !menu.isUser));
-        //        }
-
-        return;
     },
 };
 </script>

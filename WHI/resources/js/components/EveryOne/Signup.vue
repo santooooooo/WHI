@@ -1,6 +1,12 @@
 <template>
     <v-container>
-        <v-form v-model="valid" class="white pa-6" width="30%">
+        <h1>新規登録フォーム</h1>
+
+        <v-alert v-if="showAlert" color="red lighten-1" border="top" dark
+            >こちらのメールアドレスは既に使用されています。他のメールアドレスから登録してください。</v-alert
+        >
+
+        <v-form v-model="valid" class="white pa-7" width="30%">
             <v-text-field
                 required
                 label="name"
@@ -19,7 +25,7 @@
                 v-model="password"
                 :rules="passwordRules"
             ></v-text-field>
-            <v-btn :disabled="!valid" @click="signUp">登録</v-btn>
+            <v-btn color="green white--text" :disabled="!valid" @click="signUp">登録</v-btn>
         </v-form>
     </v-container>
 </template>
@@ -43,6 +49,7 @@ export default {
                     (/.+\w+/.test(value) && value.length >= 6) ||
                     "パスワードは半角英数字6文字以上です",
             ],
+            showAlert: false,
         };
     },
     methods: {
@@ -62,9 +69,7 @@ export default {
                         return;
                     }
                     //既に使用されているメールアドレスからの登録を行った場合
-                    alert(
-                        "こちらのメールアドレスは既に使用されています。他のメールアドレスから登録してください。"
-                    );
+                    vm.showAlert = !vm.showAlert;
                     return;
                 })
                 .catch(function (error) {
