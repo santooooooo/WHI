@@ -45,7 +45,7 @@ class BasicController extends TestCase
         $this->assertTrue($result);
 
         // 返信データが元のユーザーの情報と一致しているか確認
-        $data = [$name, $email];
+        $data = [1,$name];
         $response->assertJson($data);
     }
 

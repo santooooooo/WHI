@@ -51,9 +51,9 @@ class BasicController extends Controller
         $password = $request->input('password');
 
         $service = new SignUp();
-        $result = $service->record($name, $email, $password);
-        if($result) {
-            $data = [$name, $email];
+        $id = $service->record($name, $email, $password);
+        if($id !== 0) {
+            $data = [$id, $name];
             return response()->json($data);
         }
             return response()->json('error');

@@ -22,7 +22,7 @@
             >
                 <v-list nav dense>
                     <v-list-item v-for="menu in menus" :key="menu.key">
-                        <v-btn :disabled="menu.isUser" value="menu.isUser">
+                        <v-btn :disabled="isUser(menu.isUser)" value="menu.isUser">
                             <router-link
                                 :to="menu.url"
                                 class="text-decoration-none black--text"
@@ -55,15 +55,22 @@ export default {
             ], //メニュー一覧
         };
     },
+    computed: {
+        isUser: function () {
+            return function (isUser) {
+                if (this.$store.state.user.name !== null) {
+                    return !isUser;
+                }
+                return isUser;
+            };
+        },
+    },
     mounted() {
-        // CSRFトークンの取得
-        this.$store.commit("getCsrfToken", document.cookie.substring(11));
-
         // アクセス元がユーザーからかそうでないのかのチェック
-        this.user = this.$store.state.user;
-        if (this.user.name !== null) {
-            this.menus.forEach((menu) => (menu.isUser = !menu.isUser));
-        }
+        //        this.user = this.$store.state.user;
+        //        if (this.user.name !== null) {
+        //            this.menus.forEach((menu) => (menu.isUser = !menu.isUser));
+        //        }
 
         return;
     },

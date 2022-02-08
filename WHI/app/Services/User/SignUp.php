@@ -13,7 +13,10 @@ final class SignUp
         $this->user = new User();
     }
 
-    public function record(string $name, string $email, string $password): bool
+    /**
+     * 新規登録の値が正常である場合は登録したユーザーのIDを、正常でなければ何もせずに0を返す
+     */
+    public function record(string $name, string $email, string $password): int
     {
         $valueCheck = strlen($name) > 0 && strlen($email) > 0 && strlen($password) > 0;
         $isNew = $this->isNew($email);
@@ -27,9 +30,10 @@ final class SignUp
                 ]
             );
 
-            return true;
+            $id = $this->user->where('email', $email)->value('id');
+            return $id;
         }
-        return false;
+        return 0;
     }
 
     private function isNew(string $email): bool

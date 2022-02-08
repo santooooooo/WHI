@@ -46,7 +46,10 @@ export default {
         };
     },
     methods: {
+        // 新規ユーザーの登録処理
         signUp() {
+            //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
+            const vm = this;
             axios
                 .post("/user", {
                     name: this.name,
@@ -54,12 +57,26 @@ export default {
                     password: this.password,
                 })
                 .then(function (response) {
-                    console.log(response);
+                    if (response.data !== "error") {
+                        vm.$store.commit("setUserInfo", response.data);
+                        return;
+                    }
+                    //既に使用されているメールアドレスからの登録を行った場合
+                    alert(
+                        "こちらのメールアドレスは既に使用されています。他のメールアドレスから登録してください。"
+                    );
+                    return;
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
                 });
         },
+    },
+    mounted() {
+        console.log(this.$store.state.user);
     },
 };
 </script>
