@@ -20,21 +20,76 @@
                 width="12rem"
                 style="background-color: rgba(100, 100, 100, 0.6)"
             >
-                <v-list nav dense>
-                    <v-list-item v-for="menu in menus" :key="menu.key">
-                        <v-btn :disabled="isUser(menu.isUser)" value="menu.isUser">
-                            <router-link
-                                :to="menu.url"
-                                class="text-decoration-none black--text"
-                            >
-                                <v-list-item-title class="subtitle-1 pa-5">
-                                    {{ menu.name }}
-                                </v-list-item-title>
-                            </router-link>
-                        </v-btn>
-                    </v-list-item>
-                </v-list>
+                <v-list-item>
+                    <v-btn :disabled="$store.state.user.id !== null">
+                        <router-link
+                            to="signup"
+                            class="text-decoration-none black--text"
+                        >
+                            <v-list-item-title class="subtitle-1 pa-5">
+                                新規登録
+                            </v-list-item-title>
+                        </router-link>
+                    </v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-btn :disabled="$store.state.user.id !== null">
+                        <router-link
+                            to="login"
+                            class="text-decoration-none black--text"
+                        >
+                            <v-list-item-title class="subtitle-1 pa-5">
+                                ログイン
+                            </v-list-item-title>
+                        </router-link>
+                    </v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-btn :disabled="$store.state.user.id === null">
+                        <v-list-item-title class="subtitle-1 pa-5">
+                            ログアウト
+                        </v-list-item-title>
+                    </v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-btn
+                        :disabled="$store.state.user.id === null"
+                        @click="check"
+                    >
+                        <v-list-item-title class="subtitle-1 pa-5">
+                            退会
+                        </v-list-item-title>
+                    </v-btn>
+                </v-list-item>
             </v-navigation-drawer>
+
+            <v-overlay :absolute="false" :value="overlay">
+                <v-row justify="center" align="center">
+                    <v-alert
+                        color="yellow darken-3 white--text"
+                        border="top"
+                        dark
+                    >
+                        今までのデータがすべて消えてしまいますが、よろしいでしょうか？
+                        <v-list-item class="justify-center">
+                            <v-btn @click="userCancel" class="ma-3">
+                                <v-list-item-title class="subtitle-1 pa-5">
+                                    退会する
+                                </v-list-item-title>
+                            </v-btn>
+
+                            <v-btn @click="check" class="ma-3">
+                                <v-list-item-title class="subtitle-1 pa-5">
+                                    戻る
+                                </v-list-item-title>
+                            </v-btn>
+                        </v-list-item>
+                    </v-alert>
+                </v-row>
+            </v-overlay>
 
             <router-view></router-view>
         </div>
@@ -45,28 +100,39 @@
 export default {
     data() {
         return {
-            user: null, //アクセス元のチェック
             drawer: false, //メニューの表示制御
-            menus: [
-                { name: "新規登録", url: "signup", isUser: false },
-                { name: "ログイン", url: "login", isUser: false },
-                { name: "ログアウト", url: "logout", isUser: true },
-                { name: "退会", url: "resign", isUser: true },
-            ], //メニュー一覧
+            overlay: true,
         };
     },
-    computed: {
-        isUser: function () {
-            return function (isUser) {
-                if (this.$store.state.user.name !== null) {
-                    return !isUser;
-                }
-                return isUser;
-            };
+    methods: {
+        check() {
+            this.drawer = !this.drawer;
+            this.overlay = !this.overlay;
+        },
+        userCancel() {
+            //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
+            const vm = this;
+            axios
+                .delete("/user/" + vm.$store.state.user.id, {
+                    data: { name: vm.$store.state.user.name },
+                })
+                .then(function (response) {
+                    if (response.data !== "error") {
+                        vm.$store.commit("resetUserInfo");
+                        vm.overlay = !vm.overlay;
+                        return;
+                    }
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
         },
     },
-    mounted() {
-    },
+    mounted() {},
 };
 </script>
 
