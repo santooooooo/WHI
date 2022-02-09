@@ -101,7 +101,7 @@ export default {
     data() {
         return {
             drawer: false, //メニューの表示制御
-            overlay: true,
+            overlay: false,
         };
     },
     methods: {
@@ -120,6 +120,7 @@ export default {
                     if (response.data !== "error") {
                         vm.$store.commit("resetUserInfo");
                         vm.overlay = !vm.overlay;
+			vm.$router.push('/')
                         return;
                     }
                     return;

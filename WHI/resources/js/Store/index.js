@@ -28,6 +28,10 @@ const store = new Vuex.Store({
             state.user.id = userInfo[0];
             state.user.name = userInfo[1];
         },
+        resetUserInfo(state) {
+            state.user.id = null;
+            state.user.name = null;
+        },
     },
 });
 
