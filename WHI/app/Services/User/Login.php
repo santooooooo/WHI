@@ -33,7 +33,7 @@ final class Login
 
     private function userInfo(string $email): array
     {
-        $name = $this->user->where('email', $email)->value('name');
-        return ['name' => $name, 'email' => $email];
+        $user = $this->user->where('email', $email)->first();
+        return ['id' => $user->id, 'name' => $user->name];
     }
 }
