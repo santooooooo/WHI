@@ -35,7 +35,7 @@ class LoginTest extends TestCase
 
         $domain = new Login();
         $test = $domain->execute($email, $password);
-        $data = ['name' => $name, 'email' => $email];
+        $data = ['id' => 1, 'name' => $name];
 
         $this->assertTrue($data === $test);
     }

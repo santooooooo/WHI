@@ -32,7 +32,7 @@ class OtherControllller extends TestCase
 
         $response = $this->post('/login', ['email' => $email, 'password' => $password]);
 
-        $data = ['name' => $name, 'email' => $email];
+        $data = ['id' => 1, 'name' => $name];
         $response->assertStatus(200);
         $response->assertJson($data);
     }
