@@ -12,16 +12,16 @@ final class Resign
         $this->user = new User();
     }
 
-    public function remove(int $id,string $email): bool
+    public function remove(int $id,string $name): bool
     {
-        $valueCheck = $id > 0 && strlen($email) > 0;
-        $isUser = $this->isUser($email);
+        $valueCheck = $id > 0 && strlen($name) > 0;
+        $isUser = $this->isUser($name);
 
         if($valueCheck && $isUser) {
             $this->user->where(
                 [
                 ['id', '=', $id],
-                ['email', '=', $email]
+                ['name', '=', $name]
                 ]
             )->delete();
             return true;
@@ -29,8 +29,8 @@ final class Resign
         return false;
     }
 
-    private function isUser(string $email): bool
+    private function isUser(string $name): bool
     {
-        return $this->user->where('email', $email)->exists();
+        return $this->user->where('name', $name)->exists();
     }
 }

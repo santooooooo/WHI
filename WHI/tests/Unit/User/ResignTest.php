@@ -30,17 +30,17 @@ class ResignTest extends TestCase
         $signUp->record($name, $email, $password);
 
         // 2件目のユーザー情報の登録
-        $name2 = 'Jamboos';
-        $email2 = 'Jamboos@gmail.com';
-        $password2 = 'Jamboo';
-        $signUp->record($name2, $email2, $password2);
+        //$name2 = 'Jamboos';
+        //$email2 = 'Jamboos@gmail.com';
+        //$password2 = 'Jamboo';
+        //$signUp->record($name2, $email2, $password2);
 
         // 登録されたユーザー情報の取得
         $user = User::find(1);
 
         // ユーザー情報の削除
         $domain = new Resign();
-        $domain->remove(1, $email);
+        $domain->remove(1, $name);
 
         // 異なるユーザーのユーザー名とパスワードを入力したときの挙動チェック
         //$domain->remove(2, $email);

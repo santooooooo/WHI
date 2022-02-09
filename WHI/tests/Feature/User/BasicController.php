@@ -71,7 +71,7 @@ class BasicController extends TestCase
         $user = User::find(1);
 
         // ユーザーの退会を行うリクエストを送信
-        $response = $this->delete('/user/1', ['email' => $email]);
+        $response = $this->delete('/user/1', ['name' => $name]);
 
         // 存在しないユーザーの退会を行うリクエストを送信
         //$response = $this->delete('/user/2', ['email' => $email]);

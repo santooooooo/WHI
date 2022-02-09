@@ -102,10 +102,10 @@ class BasicController extends Controller
      */
     public function destroy(int $id, DestroyUserRequest $request): JsonResponse
     {
-        $email = $request->input('email');
+        $name = $request->input('name');
 
         $service = new Resign();
-        $result = $service->remove($id, $email);
+        $result = $service->remove($id, $name);
         if($result) {
                return response()->json('Success'); 
         }
