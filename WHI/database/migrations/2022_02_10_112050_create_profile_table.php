@@ -15,7 +15,7 @@ class CreateProfileTable extends Migration
     public function up()
     {
         Schema::create(
-            'profile', function (Blueprint $table) {
+            'profiles', function (Blueprint $table) {
                 $table->id();
                 $table->foreignIdFor(User::class)->unique();
                 $table->string('icon')->nullable();
