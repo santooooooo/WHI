@@ -69,6 +69,8 @@ class WriteProfileTest extends TestCase
         $data = [
         'user_id' => 1,
         'icon' => UploadedFile::fake()->image('fake.png'),
+        // ファイルじゃない情報
+        //'icon' => '/var/www/public/',
         'career' => Str::random(10000),
         'title' => Str::random(255),
         'text' => Str::random(10000),

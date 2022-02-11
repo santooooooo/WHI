@@ -51,8 +51,9 @@ final class WriteProfile
 
     private function storeIcon($icon = null)
     {
-        if($icon !== null) {
-            $path = Storage::disk('local')->put('users', $icon);
+        $isFile = is_file($icon);
+        if($icon !== null && $isFile) {
+            $path = Storage::disk('s3')->put('users', $icon);
             return $path;
         }
         return null;
