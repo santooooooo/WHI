@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services\User;
 
@@ -14,7 +15,7 @@ final class WriteProfile
         $this->profile = new Profile();
     }
 
-    public function write(string $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null)
+    public function write(int $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         if($isUser) {
@@ -49,10 +50,10 @@ final class WriteProfile
         return false;
     }
 
-    private function storeIcon($icon = null)
+    private function storeIcon($icon)
     {
-        $isFile = is_file($icon);
-        if($icon !== null && $isFile) {
+        $isObject = is_object($icon);
+        if(!is_null($icon) && $isObject) {
             $path = Storage::disk('s3')->put('users', $icon);
             return $path;
         }

@@ -47,6 +47,9 @@ class BasicController extends TestCase
         // 返信データが元のユーザーの情報と一致しているか確認
         $data = [1,$name];
         $response->assertJson($data);
+
+        // 新規ユーザー用のプロフィールDBが作成されているか確認
+        $this->assertDatabaseHas('profiles', ['user_id' => 1]);
     }
 
     /**
@@ -67,6 +70,9 @@ class BasicController extends TestCase
 
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        // 新規ユーザー用のプロフィールDBが作成されているか確認
+        $this->assertDatabaseHas('profiles', ['user_id' => 1]);
 
         $user = User::find(1);
 

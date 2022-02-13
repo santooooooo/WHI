@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
+use App\Services\User\WriteProfile;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 
@@ -40,7 +41,7 @@ class BasicController extends Controller
     /**
      * 新たなユーザーの登録
      *
-     * @param \App\Http\Requests\StoreUserRequest $request
+     * @param  \App\Http\Requests\StoreUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreUserRequest $request): JsonResponse
@@ -53,6 +54,10 @@ class BasicController extends Controller
         $service = new SignUp();
         $id = $service->record($name, $email, $password);
         if($id !== 0) {
+            // 新規ユーザー用のプロフィールDBの作成
+            $profile = new WriteProfile();
+            $profile->write($id, $name);
+
             $data = [$id, $name];
             return response()->json($data);
         }
@@ -96,8 +101,8 @@ class BasicController extends Controller
     /**
      * ユーザーの退会機能
      *
-     * @param int $id
-     * @param \App\Http\Requests\DestroyUserRequest $request
+     * @param  int                                   $id
+     * @param  \App\Http\Requests\DestroyUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(int $id, DestroyUserRequest $request): JsonResponse

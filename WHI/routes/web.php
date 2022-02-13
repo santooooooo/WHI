@@ -31,5 +31,6 @@ Route::namespace($nameSpace)->middleware('throttle')->group(
     function () {
         Route::resource('user', 'BasicController');
         Route::post('login', 'OtherController@login');
+        Route::resource('user.profile', 'ProfileController')->shallow();
     }
 );

@@ -1,10 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -19,7 +19,7 @@ class WriteProfileTest extends TestCase
     /**
      * 新たなプロフィールの作成
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -35,8 +35,8 @@ class WriteProfileTest extends TestCase
         $domain->record($name, $email, $password);
 
         $domain = new WriteProfile();
-        $result = $domain->write(1, $name);
-        $this->assertTrue($result);
+        $domain->write(1, $name);
+        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => null]);
     }
 
     /**
@@ -50,9 +50,6 @@ class WriteProfileTest extends TestCase
         //データベースの初期化
         DB::table('users')->truncate();
 
-        // テスト用の画像の生成の準備
-        Storage::fake('local');
-
         // ユーザー情報
         $name = 'Jamboo';
         $email = 'Jamboo@gmail.com';
@@ -62,12 +59,13 @@ class WriteProfileTest extends TestCase
         $domain = new SignUp();
         $domain->record($name, $email, $password);
 
+        //新規ユーザー用のプロフィールDBの作成
         $domain = new WriteProfile();
         $domain->write(1, $name);
  
+        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => null]);
         // プロフィール情報
         $data = [
-        'user_id' => 1,
         'icon' => UploadedFile::fake()->image('fake.png'),
         // ファイルじゃない情報
         //'icon' => '/var/www/public/',
@@ -78,9 +76,12 @@ class WriteProfileTest extends TestCase
         'twitter' => 'Jamboo'
         ];
 
-        $result = $domain->write($data['user_id'], $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
+        $result = $domain->write(1, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
 
+        // 実行結果
         $this->assertTrue($result);
-        $this->assertDatabaseCount('profiles', 1);
+
+        // データベースに登録されているかのチェック
+        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => $data['career']]);
     }
 }
