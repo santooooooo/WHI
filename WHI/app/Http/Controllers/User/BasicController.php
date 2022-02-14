@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
 use App\Services\User\WriteProfile;
+use App\Services\User\DeleteProfile;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 
@@ -109,11 +110,14 @@ class BasicController extends Controller
     {
         $name = $request->input('name');
 
-        $service = new Resign();
-        $result = $service->remove($id, $name);
-        if($result) {
-               return response()->json('Success'); 
-        }
-        return response()->json('Error'); 
+        // 退会するユーザーのプロフィール削除
+        $deleteProfile = new DeleteProfile();
+        $deleteProfile->deleteProfile($id, $name);
+
+        // ユーザーの退会
+        $resign = new Resign();
+        $resign->remove($id, $name);
+
+        return response()->json('Success'); 
     }
 }

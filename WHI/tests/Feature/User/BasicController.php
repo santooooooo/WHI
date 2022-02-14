@@ -64,6 +64,7 @@ class BasicController extends TestCase
         DB::table('users')->truncate();
 
         // ユーザー情報
+        $id = 1;
         $name = 'test';
         $email = 'test@gmail.com';
         $password = 'w44wwwww';
@@ -72,17 +73,16 @@ class BasicController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // 新規ユーザー用のプロフィールDBが作成されているか確認
-        $this->assertDatabaseHas('profiles', ['user_id' => 1]);
-
-        $user = User::find(1);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id]);
 
         // ユーザーの退会を行うリクエストを送信
-        $response = $this->delete('/user/1', ['name' => $name]);
+        $response = $this->delete('/user/'.$id, ['name' => $name]);
 
         // 存在しないユーザーの退会を行うリクエストを送信
         //$response = $this->delete('/user/2', ['email' => $email]);
 
         $response->assertStatus(200);
-        $this->assertDeleted($user);
+        $this->assertDatabaseMissing('users', ['id' => $id]);
+        $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
     }
 }

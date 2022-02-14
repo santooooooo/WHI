@@ -12,7 +12,8 @@ final class Resign
         $this->user = new User();
     }
 
-    public function remove(int $id,string $name): bool
+    // ユーザーの退会
+    public function remove(int $id,string $name): void
     {
         $valueCheck = $id > 0 && strlen($name) > 0;
         $isUser = $this->isUser($name);
@@ -24,9 +25,9 @@ final class Resign
                 ['name', '=', $name]
                 ]
             )->delete();
-            return true;
+            return;
         }
-        return false;
+        return;
     }
 
     private function isUser(string $name): bool
