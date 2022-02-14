@@ -28,11 +28,9 @@ export default {
         };
     },
     mounted() {
-        console.log("Component mounted.");
     },
     computed: {
         testFunc() {
-            console.log(this.$store.state.test);
             this.$store.getters["testLog"];
         },
     },

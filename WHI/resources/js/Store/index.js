@@ -25,8 +25,8 @@ const store = new Vuex.Store({
     },
     mutations: {
         setUserInfo(state, userInfo) {
-            state.user.id = userInfo[0];
-            state.user.name = userInfo[1];
+            state.user.id = userInfo['id'];
+            state.user.name = userInfo['name'];
         },
         resetUserInfo(state) {
             state.user.id = null;
