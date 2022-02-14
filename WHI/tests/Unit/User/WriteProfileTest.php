@@ -51,6 +51,7 @@ class WriteProfileTest extends TestCase
         DB::table('users')->truncate();
 
         // ユーザー情報
+        $id = 1;
         $name = 'Jamboo';
         $email = 'Jamboo@gmail.com';
         $password = 'Jamboo';
@@ -61,9 +62,9 @@ class WriteProfileTest extends TestCase
 
         //新規ユーザー用のプロフィールDBの作成
         $domain = new WriteProfile();
-        $domain->write(1, $name);
+        $domain->write($id, $name);
  
-        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => null]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => null]);
         // プロフィール情報
         $data = [
         'icon' => UploadedFile::fake()->image('fake.png'),
@@ -76,12 +77,16 @@ class WriteProfileTest extends TestCase
         'twitter' => 'Jamboo'
         ];
 
-        $result = $domain->write(1, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
+        $result = $domain->write($id, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
+
+        // すでにアイコンがある状態でアイコンを更新
+        //$data['icon'] = UploadedFile::fake()->image('fake2.png');
+        //$result = $domain->write($id, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
 
         // 実行結果
         $this->assertTrue($result);
 
         // データベースに登録されているかのチェック
-        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => $data['career']]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career']]);
     }
 }

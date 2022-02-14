@@ -24,16 +24,11 @@ final class WriteProfile
                 $this->profile->create(
                     [
                     'user_id' => $id,
-                    'icon' => $icon,
-                    'carrer' => $carrer,
-                    'title' => $title,
-                    'text' => $text,
-                    'mail' => $mail,
-                    'twitter' => $twitter,
                     ]
                 );
                 return true;
             }
+                $this->deleteIcon($id);
                 $path = $this->storeIcon($icon);
                 $this->profile->where('user_id', $id)->update(
                     [
@@ -50,6 +45,11 @@ final class WriteProfile
         return false;
     }
 
+    /**
+     * ユーザーのアイコンをAmazonS3へ保存
+     *
+     * @return string | null
+     */
     private function storeIcon($icon)
     {
         $isObject = is_object($icon);
@@ -58,5 +58,18 @@ final class WriteProfile
             return $path;
         }
         return null;
+    }
+
+    /**
+     * もしアイコンが存在していた場合、古いアイコンを削除
+     */
+    private function deleteIcon(int $id): void
+    {
+        $icon = $this->profile->where('user_id', $id)->value('icon');
+        if(!is_null($icon)) {
+            Storage::disk('s3')->delete($icon);
+            return;
+        }
+        return;
     }
 }
