@@ -8,6 +8,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\User\GetProfile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use App\Services\User\WriteProfile;
 use App\Services\User\SignUp;
 use App\Services\User\DeleteProfile;
@@ -57,12 +58,13 @@ class GetProfileTest extends TestCase
         $result = $domain->getInfo($id);
 
         // ユーザーのプロフィールが取得できているのかチェック
-        $this->assertArrayHasKey('icon', $result);
-        $this->assertArrayHasKey('career', $result);
-        $this->assertArrayHasKey('title', $result);
-        $this->assertArrayHasKey('text', $result);
-        $this->assertArrayHasKey('mail', $result);
-        $this->assertArrayHasKey('twitter', $result);
+        $icon = DB::table('profiles')->where('user_id', $id)->value('icon');
+        $this->assertSame('https://whi.s3.amazonaws.com/'.$icon, $result['icon']);
+        $this->assertSame($data['career'], $result['career']);
+        $this->assertSame($data['title'], $result['title']);
+        $this->assertSame($data['text'], $result['text']);
+        $this->assertSame($data['mail'], $result['mail']);
+        $this->assertSame($data['twitter'], $result['twitter']);
 
         // テスト用の画像の消去
         $deleteProfile = new DeleteProfile();

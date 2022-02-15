@@ -16,11 +16,13 @@ class ProfileController extends TestCase
      * ユーザーのプロフィールの新規作成
      *
      * @test
+     *
      * @return void
      */
     public function store()
     {
         // ユーザー情報
+        $id = 1;
         $name = 'test';
         $email = 'test@gmail.com';
         $password = 'w44wwwww';
@@ -28,7 +30,7 @@ class ProfileController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $response = $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => null]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => null]);
 
         $data = [
         'name' => $name,
@@ -41,7 +43,7 @@ class ProfileController extends TestCase
         'mail' => $email,
         'twitter' => 'Jamboo',
         ];
-        $response = $this->put('/profile/1', $data);
+        $response = $this->put('/profile/'.$id, $data);
 
         // リクエストが正常に実行されているかチェック
         $response->assertStatus(200);
@@ -52,6 +54,60 @@ class ProfileController extends TestCase
 
         // データベースに登録されているかのチェック
         $this->assertDatabaseCount('profiles', 1);
-        $this->assertDatabaseHas('profiles', ['user_id' => 1, 'career' => $data['career']]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career']]);
+
+        // ユーザーの退会を行うリクエストを送信
+        $response = $this->delete('/user/'.$id, ['name' => $name]);
+    }
+
+    /**
+     * ユーザーのプロフィール表示
+     *
+     * @test
+     * @return void
+     */
+    public function index()
+    {
+        //データベースの初期化
+        DB::table('users')->truncate();
+
+        // ユーザー情報
+        $id = 1;
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = 'w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $response = $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        $data = [
+        'name' => $name,
+        'icon' => UploadedFile::fake()->image('fake.png')->size(10000),
+        'career' => Str::random(1000),
+        'title' => Str::random(255),
+        'text' => Str::random(10000),
+        'mail' => $email,
+        'twitter' => 'Jamboo',
+        ];
+        $response = $this->put('/profile/'.$id, $data);
+        $response->assertStatus(200);
+
+        // ユーザーの登録を行うリクエストを送信
+        $response = $this->get('/user/'.$id.'/profile');
+
+        // ユーザーのプロフィールが取得できているかチェック
+        $icon = DB::table('profiles')->where('user_id', $id)->value('icon');
+        $result = [
+        'icon' => 'https://whi.s3.amazonaws.com/'.$icon,
+        'career' => $data['career'],
+        'title' => $data['title'],
+        'text' => $data['text'],
+        'mail' => $data['mail'],
+        'twitter' => $data['twitter'],
+        ];
+        $response->assertExactJson($result);
+
+        // ユーザーの退会を行うリクエストを送信
+        $response = $this->delete('/user/'.$id, ['name' => $name]);
     }
 }

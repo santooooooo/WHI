@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\WriteProfile;
+use App\Services\User\GetProfile;
 use App\Http\Requests\ProfileRequest;
 
 class ProfileController extends Controller
@@ -14,12 +15,13 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(int $id): JsonResponse
     {
-        //
-        return 'Jamboo!';
+	    $service = new GetProfile();
+	    $profile = $service->getInfo($id);
+	    return response()->json($profile);
     }
 
     /**
@@ -80,7 +82,7 @@ class ProfileController extends Controller
         $career = $request->input('career');
         $title = $request->input('title');
         $text = $request->input('text');
-        $email = $request->input('email');
+        $email = $request->input('mail');
         $twitter = $request->input('twitter');
 
         if($icon->extension() !== 'png' && $icon->extension() !== 'jpg') {

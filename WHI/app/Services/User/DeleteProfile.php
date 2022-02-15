@@ -15,24 +15,30 @@ final class DeleteProfile
         $this->profile = new Profile();
     }
 
-    // ユーザーのプロフィールの削除
-    public function deleteProfile(int $id, string $name): bool
+    /**
+     * ユーザーのプロフィールの削除
+     *
+     */
+    public function deleteProfile(int $id, string $name): void
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         if($isUser) {
 
-            // ユーザーのアイコンの削除
             $iconPath = $this->profile->where('user_id', $id)->value('icon');
             if(!is_null($iconPath)) {
                 $this->deleteIcon($iconPath);
             }
 
             $this->profile->where('user_id', $id)->delete();
-            return true;
+            return;
         }
-        return false;
+        return;
     }
 
+    /**
+     * ユーザーのアイコンの削除
+     *
+     */
     private function deleteIcon(string $path): void
     {
         Storage::disk('s3')->delete($path);
