@@ -54,7 +54,7 @@ final class WriteProfile
     {
         $isObject = is_object($icon);
         if(!is_null($icon) && $isObject) {
-            $path = Storage::disk('s3')->put('users', $icon);
+            $path = Storage::disk('s3')->put('users', $icon, 'public');
             return $path;
         }
         return null;
