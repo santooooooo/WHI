@@ -15,7 +15,7 @@ final class WriteProfile
         $this->profile = new Profile();
     }
 
-    public function write(int $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
+    public function write(int $id, string $name, object $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         if($isUser) {
@@ -29,7 +29,7 @@ final class WriteProfile
                 return true;
             }
                 $this->deleteIcon($id);
-                $path = $this->storeIcon($icon);
+                $path = $this->storeIcon($id, $icon);
                 $this->profile->where('user_id', $id)->update(
                     [
                     'icon' => $path,
@@ -50,11 +50,10 @@ final class WriteProfile
      *
      * @return string | null
      */
-    private function storeIcon($icon)
+    private function storeIcon(int $id, object $icon)
     {
-        $isObject = is_object($icon);
-        if(!is_null($icon) && $isObject) {
-            $path = Storage::disk('s3')->put('users', $icon, 'public');
+        if(!is_null($icon)) {
+            $path = Storage::disk('s3')->put('users/'.$id.'/profile', $icon, 'public');
             return $path;
         }
         return null;

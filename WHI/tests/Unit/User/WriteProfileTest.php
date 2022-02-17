@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Services\User\WriteProfile;
 use App\Services\User\SignUp;
+use App\Services\User\DeleteProfile;
 use App\Models\Profile;
 use App\Models\User;
 
@@ -83,10 +84,17 @@ class WriteProfileTest extends TestCase
         //$data['icon'] = UploadedFile::fake()->image('fake2.png');
         //$result = $domain->write($id, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
 
+	// 再度実行し、一回目で保存した画像がAmazonS3から消去されているか確認
+        //$result = $domain->write($id, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
+
         // 実行結果
         $this->assertTrue($result);
 
         // データベースに登録されているかのチェック
         $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career']]);
+
+        // テスト用の画像の消去
+        $deleteProfile = new DeleteProfile();
+        $deleteProfile->deleteProfile($id, $name);
     }
 }
