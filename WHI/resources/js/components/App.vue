@@ -8,7 +8,7 @@
                 <v-spacer></v-spacer>
 
                 <v-btn @click.stop="drawer = !drawer"
-                    ><v-icon size="2.5rem">mdi-menu-open</v-icon></v-btn
+                    >Menu</v-btn
                 >
             </v-app-bar>
 
