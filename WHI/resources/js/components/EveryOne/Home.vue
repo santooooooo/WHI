@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <v-card-title
-                            >テキスト以外にもブログやSNSなどのURLも自己PRページ記載できる</v-card-title
+                            >ブログやURLを通じてSNSなどと連携可能</v-card-title
                         >
                     </v-card>
 
