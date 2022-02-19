@@ -27,14 +27,14 @@
                     <v-card
                         class="d-flex justify-space-around ml-auto mr-auto pa-5 mb-5"
                     >
-                        <div class="d-flex">
+                        <div  style="display: grid">
                             <v-icon class="black--text pr-0" size="3rem"
                                 >mdi-application-edit-outline</v-icon
                             >
                             <v-icon class="black--text px-0.5" size="2.5rem"
                                 >mdi-transit-connection-variant</v-icon
                             >
-                            <div style="display: grid">
+                            <div class="d-flex">
                                 <v-icon class="black--text pr-0" size="2rem"
                                     >mdi-post</v-icon
                                 >
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <v-card-title
-                            >ブログの作成とURLを通じた外部からの情報の表示が可能</v-card-title
+                            >テキスト以外にもブログやSNSなどのURLも自己PRページ記載できる</v-card-title
                         >
                     </v-card>
 

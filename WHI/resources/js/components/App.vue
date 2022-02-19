@@ -49,6 +49,17 @@
                 <v-list-item>
                     <v-btn
                         :disabled="$store.state.user.id === null"
+                        to="mypage"
+                    >
+                        <v-list-item-title class="subtitle-1 pa-5">
+                            マイページ
+                        </v-list-item-title>
+                    </v-btn>
+                </v-list-item>
+
+                <v-list-item>
+                    <v-btn
+                        :disabled="$store.state.user.id === null"
                         @click="logout"
                     >
                         <v-list-item-title class="subtitle-1 pa-5">

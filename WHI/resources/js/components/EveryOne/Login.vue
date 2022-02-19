@@ -60,7 +60,7 @@ export default {
                 .then(function (response) {
                     if (response.data !== "error") {
                         vm.$store.commit("setUserInfo", response.data);
-                        vm.$router.push("/");
+                        vm.$router.push("/user");
                         return;
                     }
                     //既に使用されているメールアドレスからの登録を行った場合

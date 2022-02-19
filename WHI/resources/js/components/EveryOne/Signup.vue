@@ -25,7 +25,9 @@
                 v-model="password"
                 :rules="passwordRules"
             ></v-text-field>
-            <v-btn color="green white--text" :disabled="!valid" @click="signUp">登録</v-btn>
+            <v-btn color="green white--text" :disabled="!valid" @click="signUp"
+                >登録</v-btn
+            >
         </v-form>
     </v-container>
 </template>
@@ -66,6 +68,7 @@ export default {
                 .then(function (response) {
                     if (response.data !== "error") {
                         vm.$store.commit("setUserInfo", response.data);
+                        this.$router.push("/user");
                         return;
                     }
                     //既に使用されているメールアドレスからの登録を行った場合
