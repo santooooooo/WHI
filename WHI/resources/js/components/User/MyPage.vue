@@ -1,12 +1,14 @@
 <template>
-    <div class="d-flex">
+    <div class="d-flex pa-3" style="position: relative">
         <v-navigation-drawer
             v-model="drawer"
             :mini-variant.sync="mini"
             permanent
-            class="mt-15 ml-5"
+            absolute
+            class="white--text mt-15 rounded-lg rounded-l-0 drawer"
+            style="max-height: 85%"
         >
-            <v-list-item class="px-2">
+            <v-list-item class="px-2 white--text">
                 <v-list-item-avatar>
                     <v-img
                         src="https://randomuser.me/api/portraits/men/1.jpg"
@@ -17,15 +19,20 @@
                     $store.state.user.name
                 }}</v-list-item-title>
 
-                <v-btn icon @click.stop="mini = !mini">
+                <v-btn icon @click.stop="mini = !mini" class="white--text">
                     <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
             </v-list-item>
 
-            <v-divider class="black"></v-divider>
+            <v-divider class="white"></v-divider>
 
             <v-list dense>
-                <v-list-item v-for="item in items" :key="item.title" link>
+                <v-list-item
+                    v-for="item in items"
+                    :key="item.title"
+                    link
+                    class="white--text"
+                >
                     <v-list-item-title>
                         <div @click="section = item.sectionName">
                             {{ item.title }}
@@ -35,7 +42,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <div class="mt-15 ml-5">
+        <div class="mt-15 ml-16 section">
             <profile v-if="section === 'Profile'" />
         </div>
     </div>
@@ -64,7 +71,7 @@ export default {
                 },
             ],
             // 表示するComponentの切り替えに使用
-            section: 'Profile',
+            section: "Profile",
         };
     },
     mounted() {
@@ -79,3 +86,19 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.theme--light.v-navigation-drawer {
+    background: rgba(54, 54, 54, 0.9);
+}
+@media (min-width: 700px) {
+    .section {
+        width: 90%;
+    }
+}
+@media (max-width: 699px) {
+    .section {
+        width: 75%;
+    }
+}
+</style>

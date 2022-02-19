@@ -42,8 +42,8 @@ export default {
             password: "",
             nameRules: [(value) => !!value || "名前が入力されていません"],
             emailRules: [
-                (v) => !!v || "メールが入力されていません",
-                (v) => /.+@.+\..+/.test(v) || "メールアドレスとして無効です",
+                (value) => !!value || "メールが入力されていません",
+                (value) => /.+@.+\..+/.test(value) || "メールアドレスとして無効です",
             ],
             passwordRules: [
                 (value) => !!value || "パスワードが入力されていません",

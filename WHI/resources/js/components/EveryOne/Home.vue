@@ -20,14 +20,14 @@
                             >mdi-file-account</v-icon
                         >
                         <v-card-title
-                            >テキストを入力するだけで自己PRページが手軽に作成可能</v-card-title
+                            >テキストの入力だけで自己PRページが手軽に作成可能</v-card-title
                         >
                     </v-card>
 
                     <v-card
                         class="d-flex justify-space-around ml-auto mr-auto pa-5 mb-5"
                     >
-                        <div  style="display: grid">
+                        <div style="display: grid">
                             <v-icon class="black--text pr-0" size="3rem"
                                 >mdi-application-edit-outline</v-icon
                             >
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <v-card-title
-                            >ブログやURLを通じてSNSなどと連携可能</v-card-title
+                            >ブログやURLを通した外部コンテンツと連携可能</v-card-title
                         >
                     </v-card>
 
@@ -61,7 +61,11 @@
                             >利用料金は利用期間に関わらず、ずっーと無料！</v-card-title
                         >
                     </v-card>
-                    <v-btn color="orange" class="text-decoration-none white--text">利用例を見る</v-btn>
+                    <v-btn
+                        color="orange"
+                        class="text-decoration-none white--text"
+                        >利用例を見る</v-btn
+                    >
                     <v-btn color="green"
                         ><router-link
                             to="signup"
