@@ -1,32 +1,35 @@
 <template>
     <div>
         <h1>プロフィール</h1>
+        <v-form v-model="valid" class="white pa-7">
+            <div class="mb-5 icon-size">
+                <v-img :src="$store.state.user.icon" class="rounded-circle mb-4"> </v-img>
 
-        <v-form v-model="valid" class="white pa-7" width="30%">
-            <v-file-input
-                accept="image/*"
-                label="icon"
-                v-model="icon"
-                prepend-icon="mdi-camera"
-                filled
-            ></v-file-input>
+                <v-file-input
+                    accept="image/*"
+                    label="icon"
+                    v-model="icon"
+                    prepend-icon="mdi-camera"
+                    filled
+                ></v-file-input>
+            </div>
 
             <v-textarea
-                label="career"
+                label="経歴"
                 v-model="career"
                 :rules="careerRules"
                 auto-grow
             ></v-textarea>
 
             <v-text-field
-                label="title"
+                label="プロフィールタイトル"
                 v-model="title"
                 :rules="textFieldRules"
                 auto-grow
             ></v-text-field>
 
             <v-textarea
-                label="text"
+                label="プロフィールの内容"
                 v-model="text"
                 :rules="textAreaRules"
                 auto-grow
@@ -59,21 +62,24 @@ export default {
     data() {
         return {
             valid: false,
-            showAlert: false,
             icon: null,
             career: "",
             title: "",
             text: "",
             email: "",
             twitter: "",
+            iconUrl: null,
             careerRules: [
-                (value) => value.length <= 1000 || "最大文字数は文字数が1000字です",
+                (value) =>
+                    value.length <= 1000 || "最大文字数は文字数が1000字です",
             ],
             textAreaRules: [
-                (value) => value.length <= 10000 || "最大文字数は文字数が10000字です",
+                (value) =>
+                    value.length <= 10000 || "最大文字数は文字数が10000字です",
             ],
             textFieldRules: [
-                (value) => value.length <= 255 || "最大文字数は文字数が255字です",
+                (value) =>
+                    value.length <= 255 || "最大文字数は文字数が255字です",
             ],
             emailRules: [
                 (value) => {
@@ -114,8 +120,7 @@ export default {
                 })
                 .then(function (response) {
                     if (response.data === "Success!") {
-                        console.log("update profile success!");
-                        //    window.location.reload();
+                        location.reload();
                         return;
                     }
                     return;
@@ -127,6 +132,43 @@ export default {
                     );
                 });
         },
+
+        // ユーザーのプロフィールの取得
+        async getProfile() {
+            const profile = await axios
+                .get("/user/" + this.$store.state.user.id + "/profile")
+                .then(function (response) {
+                    return response.data;
+                })
+                .catch(function (error) {
+                    alert(
+                        "サーバー側の問題により、プロフィールの更新が行えません。問題が解決するまでお待ちください。"
+                    );
+                    return;
+                });
+
+            this.$store.commit("setUserIcon", profile.icon);
+            this.career = profile.career ?? "";
+            this.title = profile.title ?? "";
+            this.text = profile.text ?? "";
+            this.email = profile.email ?? "";
+            this.twitter = profile.twitter ?? "";
+        },
+    },
+    mounted() {
+        this.getProfile();
     },
 };
 </script>
+<style scoped>
+@media (min-width: 700px) {
+    .icon-size {
+        width: 20%;
+    }
+}
+@media (max-width: 699px) {
+    .icon-size {
+        width: 80%;
+    }
+}
+</style>

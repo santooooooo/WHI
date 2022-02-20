@@ -11,7 +11,7 @@
             <v-list-item class="px-2 white--text">
                 <v-list-item-avatar>
                     <v-img
-                        src="https://randomuser.me/api/portraits/men/1.jpg"
+                        :src="$store.state.user.icon"
                     ></v-img>
                 </v-list-item-avatar>
 

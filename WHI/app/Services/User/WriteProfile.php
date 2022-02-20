@@ -28,7 +28,7 @@ final class WriteProfile
                 );
                 return true;
             }
-                $this->deleteIcon($id);
+                $this->deleteIcon($id, $icon);
                 $path = $this->storeIcon($id, $icon);
                 $this->profile->where('user_id', $id)->update(
                     [
@@ -50,10 +50,14 @@ final class WriteProfile
      *
      * @return string | null
      */
-    private function storeIcon(int $id, $icon)
+    private function storeIcon(int $id, $newIcon)
     {
-        if(!is_null($icon)) {
-            $path = Storage::disk('s3')->put('users/'.$id.'/profile', $icon, 'public');
+        $oldIcon = $this->profile->where('user_id', $id)->value('icon');
+        if(!is_null($newIcon)) {
+            $path = Storage::disk('s3')->put('users/'.$id.'/profile', $newIcon, 'public');
+            return $path;
+        } elseif(!is_null($oldIcon)) {
+            $path = Storage::disk('s3')->path($oldIcon);
             return $path;
         }
         return null;
@@ -62,11 +66,11 @@ final class WriteProfile
     /**
      * もしアイコンが存在していた場合、古いアイコンを削除
      */
-    private function deleteIcon(int $id): void
+    private function deleteIcon(int $id,$newIcon): void
     {
-        $icon = $this->profile->where('user_id', $id)->value('icon');
-        if(!is_null($icon)) {
-            Storage::disk('s3')->delete($icon);
+        $oldIcon = $this->profile->where('user_id', $id)->value('icon');
+        if(!is_null($newIcon) && !is_null($oldIcon)) {
+            Storage::disk('s3')->delete($oldIcon);
             return;
         }
         return;
