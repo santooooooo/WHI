@@ -15,7 +15,7 @@ final class WriteProfile
         $this->profile = new Profile();
     }
 
-    public function write(int $id, string $name, object $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
+    public function write(int $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         if($isUser) {
@@ -50,7 +50,7 @@ final class WriteProfile
      *
      * @return string | null
      */
-    private function storeIcon(int $id, object $icon)
+    private function storeIcon(int $id, $icon)
     {
         if(!is_null($icon)) {
             $path = Storage::disk('s3')->put('users/'.$id.'/profile', $icon, 'public');

@@ -19,9 +19,9 @@ class ProfileController extends Controller
      */
     public function index(int $id): JsonResponse
     {
-	    $service = new GetProfile();
-	    $profile = $service->getInfo($id);
-	    return response()->json($profile);
+        $service = new GetProfile();
+        $profile = $service->getInfo($id);
+        return response()->json($profile);
     }
 
     /**
@@ -72,7 +72,7 @@ class ProfileController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\ProfileRequest $request
-     * @param  int                      $id
+     * @param  int                               $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(ProfileRequest $request, int $id): JsonResponse
@@ -85,7 +85,9 @@ class ProfileController extends Controller
         $email = $request->input('mail');
         $twitter = $request->input('twitter');
 
-        if($icon->extension() !== 'png' && $icon->extension() !== 'jpg') {
+        if($icon === null) {
+            $icon = null;
+        } elseif($icon->extension() !== 'png' && $icon->extension() !== 'jpg') {
             $icon = null;
         }
 

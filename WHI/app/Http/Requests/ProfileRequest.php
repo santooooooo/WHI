@@ -26,12 +26,12 @@ class ProfileRequest extends FormRequest
     {
         return [
         'name' => 'required|string|max:255',
-        'icon' => 'image|max:10000',
-        'career' => 'string|max:1000',
-        'title' => 'string|max:255',
-        'text' => 'string|max:10000',
-        'email' => 'email|max:255',
-        'twitter' => 'string|max:255',
+        'icon' => 'nullable|image|max:10000',
+        'career' => 'nullable|string|max:1000',
+        'title' => 'nullable|string|max:255',
+        'text' => 'nullable|string|max:10000',
+        'email' => 'nullable|email|max:255',
+        'twitter' => 'nullable|string|max:255',
         ];
     }
 }

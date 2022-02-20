@@ -82,7 +82,8 @@ class ProfileController extends TestCase
 
         $data = [
         'name' => $name,
-        'icon' => UploadedFile::fake()->image('fake.png')->size(10000),
+        'icon' => UploadedFile::fake()->image('fake.jpg')->size(10000),
+        //'icon' => null,
         'career' => Str::random(1000),
         'title' => Str::random(255),
         'text' => Str::random(10000),
