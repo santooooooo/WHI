@@ -33,10 +33,7 @@ class UpdateUserTest extends TestCase
         // 更新するデータ
         $updateName = 'Hello';
         $updateEmail = 'Hello@gmail.com';
-        $updatePassword = 'Hello';
-
-        // 誤ったパスワード
-        //$falsePassword = 'Jamboooooo!!';
+        $updatePassword = 'Hello88';
 
         // ユーザーの情報を更新
         $domain = new UpdateUser();
@@ -64,7 +61,5 @@ class UpdateUserTest extends TestCase
         $domain = new UpdateUser();
         $result = $domain->update($id, $password, $updateName, $updateEmail, $updatePassword);
         $this->assertTrue($result === false);
-
-
     }
 }

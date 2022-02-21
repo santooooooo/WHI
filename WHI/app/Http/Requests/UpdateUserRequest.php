@@ -25,9 +25,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
         'password' => 'required|regex:/^[a-zA-Z0-9]+$/|min:6|string',
-        'newName' => 'required|string',
-        'newEmail' => 'required|email',
-        'newPassword' => 'required|regex:/^[a-zA-Z0-9]+$/|min:6|string'
+        'newName' => 'nullable|string',
+        'newEmail' => 'nullable|email',
+        'newPassword' => 'nullable|regex:/^[a-zA-Z0-9]+$/|min:6|string'
         ];
     }
 }

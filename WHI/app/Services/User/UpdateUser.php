@@ -19,16 +19,21 @@ final class UpdateUser
      *
      * @return int | bool
      */
-    public function update(int $id, string $password, string $newName, string $newEmail, string $newPassword)
+    public function update(int $id, string $password, ?string $newName, ?string $newEmail, ?string $newPassword)
     {
-        // 入力値のチェック
-        $valueCheck = strlen($password) > 0 && strlen($newName) > 0 && strlen($newEmail) > 0 && strlen($newPassword) > 0;
+        // 入力値がnullであった場合、元の値を入れる
+        $user = $this->user->where('id', $id)->first();
+        $newName = $newName ?? $user->name;
+        $newEmail = $newEmail ?? $user->email;
+        $newPassword = $newPassword ?? $password;
+
         // 入力者はユーザーであるかのチェック
         $isUser = $this->isUser($id, $password);
+
         // 新たなメールアドレスが他のユーザーと被らないかのチェック
         $notDoubleEmail = $this->notDoubleEmail($id, $newEmail);
 
-        if($valueCheck && $isUser && $notDoubleEmail) {
+        if($isUser && $notDoubleEmail) {
             $this->user->where('id', $id)->update(
                 [
                 'name' => $newName,
@@ -36,7 +41,6 @@ final class UpdateUser
                 'password' => Hash::make($newPassword)
                 ]
             );
-            $id = $this->user->where('email', $newEmail)->value('id');
             return $id;
         }
         return false;
@@ -51,7 +55,7 @@ final class UpdateUser
         return false;
     }
 
-    private function notDoubleEmail(int $id, $email): bool
+    private function notDoubleEmail(int $id, string $email): bool
     {
         $user = $this->user->where('id', $id)->first();
         if($email === $user->email) {
