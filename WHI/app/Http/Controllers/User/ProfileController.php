@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\WriteProfile;
 use App\Services\User\GetProfile;
+use App\Services\User\DeleteProfile;
 use App\Http\Requests\ProfileRequest;
 
 class ProfileController extends Controller
@@ -69,7 +70,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * プロフィールの更新
      *
      * @param  \App\Http\Requests\ProfileRequest $request
      * @param  int                               $id
@@ -100,13 +101,17 @@ class ProfileController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * プロフィールアイコンを削除
      *
+     * @param  \App\Http\Requests\ProfileRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(ProfileRequest $request, int $id): JsonResponse
     {
-        //
+        $name = $request->input('name');
+        $service = new DeleteProfile();
+        $service->deleteOnlyIcon($id, $name);
+        return response()->json('Success!');
     }
 }

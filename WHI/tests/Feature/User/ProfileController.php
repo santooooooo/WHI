@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends TestCase
 {
@@ -78,7 +79,7 @@ class ProfileController extends TestCase
         $password = 'w44wwwww';
 
         // ユーザーの登録を行うリクエストを送信
-        $response = $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         $data = [
         'name' => $name,
@@ -90,10 +91,11 @@ class ProfileController extends TestCase
         'mail' => $email,
         'twitter' => 'Jamboo',
         ];
+        // プロフィールの更新を行うリクエストを送信
         $response = $this->put('/profile/'.$id, $data);
         $response->assertStatus(200);
 
-        // ユーザーの登録を行うリクエストを送信
+        // プロフィールの取得を行うリクエストを送信
         $response = $this->get('/user/'.$id.'/profile');
 
         // ユーザーのプロフィールが取得できているかチェック
@@ -107,6 +109,57 @@ class ProfileController extends TestCase
         'twitter' => $data['twitter'],
         ];
         $response->assertExactJson($result);
+
+        // ユーザーの退会を行うリクエストを送信
+        $response = $this->delete('/user/'.$id, ['name' => $name]);
+    }
+
+    /**
+     * ユーザーのプロフィールアイコンのみの削除
+     *
+     * @test
+     *
+     * @return void
+     */
+    public function destroy()
+    {
+        //データベースの初期化
+        DB::table('users')->truncate();
+
+        // ユーザー情報
+        $id = 1;
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = 'w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        $data = [
+        'name' => $name,
+        'icon' => UploadedFile::fake()->image('fake.jpg')->size(10000),
+        //'icon' => null,
+        'career' => Str::random(1000),
+        'title' => Str::random(255),
+        'text' => Str::random(10000),
+        'mail' => $email,
+        'twitter' => 'Jamboo',
+        ];
+        // プロフィールの更新を行うリクエストを送信
+        $this->put('/profile/'.$id, $data);
+
+        // ユーザーのプロフィールのアイコンのパスの取得
+        $icon = DB::table('profiles')->where('user_id', $id)->value('icon');
+
+        // プロフィールアイコンのみの削除を行うリクエストの送信
+        $response = $this->delete('/profile/'.$id, ['name' => $name]);
+        $response->assertStatus(200);
+
+        // データベースに登録されているプロフィールアイコンのパスが削除されているかチェック
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'icon' => null]);
+
+        // AmazonS3からアイコンが削除されているかチェック
+        $this->assertTrue(Storage::disk('s3')->missing($icon));
 
         // ユーザーの退会を行うリクエストを送信
         $response = $this->delete('/user/'.$id, ['name' => $name]);

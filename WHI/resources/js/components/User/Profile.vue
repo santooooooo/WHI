@@ -3,11 +3,17 @@
         <h1>プロフィール</h1>
         <v-form v-model="valid" class="white pa-7">
             <div class="mb-5 icon-size">
-                <v-img :src="$store.state.user.icon" class="rounded-circle mb-4"> </v-img>
-
+                <v-img
+                    :src="$store.state.user.icon"
+                    class="rounded-circle mb-4"
+                >
+                </v-img>
+                <v-btn color="red white--text mb-3" @click="deleteProfileIcon"
+                    >現在のアイコンを消去</v-btn
+                >
                 <v-file-input
                     accept="image/*"
-                    label="icon"
+                    label="アイコンを変更"
                     v-model="icon"
                     prepend-icon="mdi-camera"
                     filled
@@ -147,12 +153,29 @@ export default {
                     return;
                 });
 
-            this.$store.commit("setUserIcon", profile.icon);
+const iconPath = profile.icon != null ? profile.icon: 'https://whi.s3.amazonaws.com/asset/FogMan.png'
+            this.$store.commit("setUserIcon", iconPath);
             this.career = profile.career ?? "";
             this.title = profile.title ?? "";
             this.text = profile.text ?? "";
             this.email = profile.email ?? "";
             this.twitter = profile.twitter ?? "";
+        },
+
+        deleteProfileIcon() {
+            axios
+                .delete("/profile/" + this.$store.state.user.id, {
+                    data: { name: this.$store.state.user.name },
+                })
+                .then(function (response) {
+                    location.reload();
+                    return;
+                })
+                .catch(function (error) {
+                    alert(
+                        "サーバー側の問題により、プロフィールの更新が行えません。問題が解決するまでお待ちください。"
+                    );
+                });
         },
     },
     mounted() {
@@ -168,7 +191,7 @@ export default {
 }
 @media (max-width: 699px) {
     .icon-size {
-        width: 80%;
+        width: 90%;
     }
 }
 </style>
