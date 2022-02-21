@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\SignUp;
 use App\Services\User\Resign;
+use App\Services\User\UpdateUser;
 use App\Services\User\WriteProfile;
 use App\Services\User\DeleteProfile;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class BasicController extends Controller
 {
@@ -88,15 +90,26 @@ class BasicController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * ユーザー情報の更新
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\UpdateUserRequest $request
      * @param  int                      $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request,int $id): JsonResponse
     {
-        //
+        $password = $request->input('password');
+        $newName = $request->input('newName');
+        $newEmail = $request->input('newEmail');
+        $newPasswrod = $request->input('newPassword');
+
+        $service = new UpdateUser();
+        $id = $service->update($id, $password, $newName, $newEmail, $newPasswrod);
+        if($id !== false) {
+            $data = [$id, $newName];
+            return response()->json($data);
+        }
+            return response()->json('error');
     }
 
     /**

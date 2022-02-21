@@ -85,4 +85,43 @@ class BasicController extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $id]);
         $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
     }
+
+    /**
+     * ユーザー情報の更新のテスト
+     *
+     * @test
+     * @return void
+     */
+    public function update()
+    {
+        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
+        DB::table('users')->truncate();
+
+        // ユーザー情報
+        $id = 1;
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = 'w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        // 更新するデータ
+        $updateName = 'Hello';
+        $updateEmail = 'Hello@gmail.com';
+        $updatePassword = 'Hello99';
+
+        $data = [
+        'password' => $password,
+        'newName' => $updateName,
+        'newEmail' => $updateEmail,
+        'newPassword' => $updatePassword,
+        ];
+
+        $response = $this->put('/user/'.$id, $data);
+        $response->assertStatus(200);
+
+        // ユーザー用のプロフィールDBが更新されているか確認
+        $this->assertDatabaseHas('users', ['id' => $id, 'name' => $data['newName'], 'email' => $data['newEmail']]);
+    }
 }
