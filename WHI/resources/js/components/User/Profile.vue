@@ -153,7 +153,11 @@ export default {
                     return;
                 });
 
-const iconPath = profile.icon != null ? profile.icon: 'https://whi.s3.amazonaws.com/asset/FogMan.png'
+// 表示するアイコンのURLの取得、なければデフォルト画像のURLを挿入
+            const iconPath =
+                profile.icon != null
+                    ? profile.icon
+                    : "https://whi.s3.amazonaws.com/asset/FogMan.png";
             this.$store.commit("setUserIcon", iconPath);
             this.career = profile.career ?? "";
             this.title = profile.title ?? "";
