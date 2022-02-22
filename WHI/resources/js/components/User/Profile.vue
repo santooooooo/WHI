@@ -153,7 +153,7 @@ export default {
                     return;
                 });
 
-// 表示するアイコンのURLの取得、なければデフォルト画像のURLを挿入
+            // 表示するアイコンのURLの取得、なければデフォルト画像のURLを挿入
             const iconPath =
                 profile.icon != null
                     ? profile.icon

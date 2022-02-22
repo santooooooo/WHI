@@ -60,6 +60,6 @@ class UpdateUserTest extends TestCase
         // もう一人のユーザーが一人目のユーザーと同じEmailで更新しようとする
         $domain = new UpdateUser();
         $result = $domain->update($id, $password, $updateName, $updateEmail, $updatePassword);
-        $this->assertTrue($result === false);
+        $this->assertTrue($result === 'double email');
     }
 }

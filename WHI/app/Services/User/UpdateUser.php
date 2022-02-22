@@ -17,7 +17,7 @@ final class UpdateUser
     /**
      * 既存のユーザーの情報を更新する
      *
-     * @return int | bool
+     * @return string | array
      */
     public function update(int $id, string $password, ?string $newName, ?string $newEmail, ?string $newPassword)
     {
@@ -33,17 +33,20 @@ final class UpdateUser
         // 新たなメールアドレスが他のユーザーと被らないかのチェック
         $notDoubleEmail = $this->notDoubleEmail($id, $newEmail);
 
-        if($isUser && $notDoubleEmail) {
-            $this->user->where('id', $id)->update(
-                [
-                'name' => $newName,
-                'email' => $newEmail,
-                'password' => Hash::make($newPassword)
-                ]
-            );
-            return $id;
+        if($isUser) {
+            if($notDoubleEmail) {
+                    $this->user->where('id', $id)->update(
+                        [
+                        'name' => $newName,
+                        'email' => $newEmail,
+                        'password' => Hash::make($newPassword)
+                        ]
+                    );
+                      return ['id' => $id, 'name' => $newName];
+            }
+            return 'double email';
         }
-        return false;
+        return 'password wrong';
     }
 
     private function isUser(int $id, string $password): bool

@@ -10,9 +10,7 @@
         >
             <v-list-item class="px-2 white--text">
                 <v-list-item-avatar>
-                    <v-img
-                        :src="$store.state.user.icon"
-                    ></v-img>
+                    <v-img :src="$store.state.user.icon"></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-title>{{
@@ -34,7 +32,7 @@
                     class="white--text"
                 >
                     <v-list-item-title>
-                        <div @click="section = item.sectionName">
+                        <div @click="section = item.section">
                             {{ item.title }}
                         </div>
                     </v-list-item-title>
@@ -43,6 +41,7 @@
         </v-navigation-drawer>
 
         <div class="mt-15 ml-16 section">
+            <user-update v-if="section === 'UserUpdate'" />
             <profile v-if="section === 'Profile'" />
         </div>
     </div>
@@ -50,24 +49,27 @@
 
 <script>
 import Profile from "./Profile.vue";
+import UserUpdate from "./UserUpdate.vue";
 
 export default {
     components: {
+        UserUpdate, // ユーザー更新を行う
         Profile, // ユーザーのプロフィール表示・更新を行う
     },
     data() {
         return {
+            // 左端のメニューバーの制御に使用
             drawer: true,
             mini: true,
             // ユーザーページの左側のナビゲーションに表示するアイテム、titleは表示名、sectionNameは表示するComponentの切り替えに使用
             items: [
                 {
-                    title: "ユーザー情報の変更",
-                    sectionName: "changeUserInfo",
+                    title: "ユーザー情報の更新",
+                    section: "UserUpdate",
                 },
                 {
                     title: "プロフィール",
-                    sectionName: "Profile",
+                    section: "Profile",
                 },
             ],
             // 表示するComponentの切り替えに使用

@@ -24,6 +24,7 @@
                 label="password"
                 v-model="password"
                 :rules="passwordRules"
+                type="password"
             ></v-text-field>
             <v-btn color="green white--text" :disabled="!valid" @click="signUp"
                 >登録</v-btn
@@ -43,7 +44,8 @@ export default {
             nameRules: [(value) => !!value || "名前が入力されていません"],
             emailRules: [
                 (value) => !!value || "メールが入力されていません",
-                (value) => /.+@.+\..+/.test(value) || "メールアドレスとして無効です",
+                (value) =>
+                    /.+@.+\..+/.test(value) || "メールアドレスとして無効です",
             ],
             passwordRules: [
                 (value) => !!value || "パスワードが入力されていません",
@@ -68,7 +70,7 @@ export default {
                 .then(function (response) {
                     if (response.data !== "error") {
                         vm.$store.commit("setUserInfo", response.data);
-                        this.$router.push("/mypage");
+                        vm.$router.push("/mypage");
                         return;
                     }
                     //既に使用されているメールアドレスからの登録を行った場合

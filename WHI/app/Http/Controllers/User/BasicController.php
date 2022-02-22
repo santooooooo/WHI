@@ -61,7 +61,7 @@ class BasicController extends Controller
             $profile = new WriteProfile();
             $profile->write($id, $name);
 
-            $data = [$id, $name];
+            $data = ['id' => $id, 'name' => $name];
             return response()->json($data);
         }
             return response()->json('error');
@@ -93,7 +93,7 @@ class BasicController extends Controller
      * ユーザー情報の更新
      *
      * @param  \App\Http\Requests\UpdateUserRequest $request
-     * @param  int                      $id
+     * @param  int                                  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateUserRequest $request,int $id): JsonResponse
@@ -104,12 +104,13 @@ class BasicController extends Controller
         $newPasswrod = $request->input('newPassword');
 
         $service = new UpdateUser();
-        $id = $service->update($id, $password, $newName, $newEmail, $newPasswrod);
-        if($id !== false) {
-            $data = [$id, $newName];
-            return response()->json($data);
+        $result = $service->update($id, $password, $newName, $newEmail, $newPasswrod);
+        if($result === 'password wrong') {
+            return response()->json($result);
+        } elseif($result === 'double email') {
+            return response()->json($result);
         }
-            return response()->json('error');
+            return response()->json($result);
     }
 
     /**

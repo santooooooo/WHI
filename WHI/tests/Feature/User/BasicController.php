@@ -23,6 +23,7 @@ class BasicController extends TestCase
     public function store()
     {
         // ユーザー情報
+        $id = 1;
         $name = 'test';
         $email = 'test@gmail.com';
         $password = 'w44wwwww';
@@ -36,7 +37,7 @@ class BasicController extends TestCase
         //}
 
         // データベースから登録されたユーザー情報を取得
-        $user = User::find(1);
+        $user = User::find($id);
 
         // データベースの情報が元の情報と同じであることを確認
         $result = $name === $user->name && $email === $user->email && Hash::check($password, $user->password);
@@ -45,7 +46,7 @@ class BasicController extends TestCase
         $this->assertTrue($result);
 
         // 返信データが元のユーザーの情報と一致しているか確認
-        $data = [1,$name];
+        $data = ['id' => $id,'name' => $name];
         $response->assertJson($data);
 
         // 新規ユーザー用のプロフィールDBが作成されているか確認
@@ -123,5 +124,29 @@ class BasicController extends TestCase
 
         // ユーザー用のプロフィールDBが更新されているか確認
         $this->assertDatabaseHas('users', ['id' => $id, 'name' => $data['newName'], 'email' => $data['newEmail']]);
+
+        // ユーザー情報
+        $id2 = 2;
+        $name2 = 'test';
+        $email2 = 'test2@gmail.com';
+        $password2 = 'w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $this->post('/user', ['name' => $name2, 'email' => $email2, 'password' => $password2]);
+
+        // 更新するデータ
+        $updateEmail2 = 'Hello@gmail.com';
+
+        $data2 = [
+        'password' => $password2,
+        'newName' => null,
+        'newEmail' => $updateEmail2,
+        'newPassword' => null,
+        ];
+
+        $response = $this->put('/user/'.$id2, $data2);
+        $message = ['double email'];
+        $response->assertExactJson($message);
     }
+
 }
