@@ -19,14 +19,25 @@ class DeleteSection
      */
     public function remove(int $id, string $name, string $sectionName): bool
     {
-
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         $sectionId = $this->section->where('user_id', $id)->where('name', $sectionName)->value('id');
-	var_dump($sectionId);
+
         if($isUser && is_int($sectionId)) {
             $this->section->where('id', $sectionId)->delete();
             return true;
         }
         return false;
+    }
+
+    /**
+     * プロフィールの全てのセクションの削除
+     */
+    public function allRemove(int $id, string $name): void
+    {
+        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
+        if($isUser) {
+            $this->section->where('user_id', $id)->delete();
+            return;
+        }
     }
 }

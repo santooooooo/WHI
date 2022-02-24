@@ -40,6 +40,6 @@ class Section extends Model
      */
     public function user(): object
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

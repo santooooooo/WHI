@@ -20,8 +20,7 @@ class CreateSection
     public function create(int $id, string $name, string $sectionName): bool
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
-
-	$nameCheck = strlen($sectionName) > 0;
+        $nameCheck = strlen($sectionName) > 0;
         if($isUser && $nameCheck) {
             $this->section->create(
                 [

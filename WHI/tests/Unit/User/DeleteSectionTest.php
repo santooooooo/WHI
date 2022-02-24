@@ -4,6 +4,7 @@ namespace Tests\Unit\User;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use App\Services\User\SignUp;
 use App\Services\User\WriteProfile;
 use App\Services\User\CreateSection;
@@ -45,5 +46,44 @@ class DeleteSectionTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertDatabaseMissing('sections', ['user_id' => $id, 'name' => $sectionName]);
+    }
+
+    /**
+     * プロフィールのすべてのセクションの削除のテスト
+     *
+     * @test
+     * @return void
+     */
+    public function allRemove()
+    {
+        //データベースの初期化
+        DB::table('users')->truncate();
+
+        // ユーザー情報
+        $id = 1;
+        $name = 'Jamboo';
+        $email = 'Jamboo@gmail.com';
+        $password = 'Jamboo';
+
+        // ユーザー情報の登録
+        $signup = new SignUp();
+        $signup->record($name, $email, $password);
+
+        // プロフィールの作成
+        $writeProfile = new WriteProfile();
+        $writeProfile->write($id, $name);
+
+        // プロフィールのセクションを2件作成
+        $sectionName = 'test';
+        $createSection = new CreateSection();
+        $createSection->create($id, $name, $sectionName);
+        $createSection->create($id, $name, $sectionName);
+
+        // プロフィールの全てのセクションの削除
+        $domain = new DeleteSection();
+        $domain->allRemove($id, $name);
+
+        // プロフィールの全てのセクションの削除できたか確認
+        $this->assertDatabaseCount('sections', 0);
     }
 }
