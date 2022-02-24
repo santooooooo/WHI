@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
+class Section extends Model
 {
     use HasFactory;
-
 
     /**
      * The attributes that are mass assignable.
@@ -17,12 +16,7 @@ class Profile extends Model
      */
     protected $fillable = [
         'user_id',
-        'icon',
-        'career',
-        'title',
-        'text',
-        'mail',
-        'twitter',
+        'name',
     ];
 
     /**
@@ -41,6 +35,9 @@ class Profile extends Model
     protected $casts = [
     ];
 
+    /**
+     * ユーザーとプロフィールのセクションとのデータの関係
+     */
     public function user(): object
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -42,8 +42,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * ユーザーとプロフィールとのデータの関係
+     */
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id');
+    }
+
+    /**
+     * ユーザーとプロフィールのセクションとのデータの関係
+     */
+    public function sections(): object
+    {
+        return $this->hasMany(Section::class, 'user_id');
     }
 }
