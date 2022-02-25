@@ -53,10 +53,16 @@ export default {
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
             axios
-                .post("/login", {
-                    email: this.email,
-                    password: this.password,
-                })
+                .post(
+                    "/login",
+                    {
+                        email: this.email,
+                        password: this.password,
+                    },
+                    {
+                        headers: { "User-Email": this.email },
+                    }
+                )
                 .then(function (response) {
                     if (response.data !== "error") {
                         vm.$store.commit("setUserInfo", response.data);
