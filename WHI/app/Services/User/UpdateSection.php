@@ -16,10 +16,11 @@ class UpdateSection
 
     /**
      * プロフィールのセクションの更新
+     * @return string | null
      */
-    public function update(int $id, string $name, string $oldName, string $newName): bool
+    public function update(int $id, string $userName, string $oldName, string $newName)
     {
-        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
+        $isUser = $this->user->where('id', $id)->where('name', $userName)->exists();
         $sectionId = $this->section->where('user_id', $id)->where('name', $oldName)->value('id');
         $nameCheck = strlen($newName) > 0;
         if($isUser && is_int($sectionId) && $nameCheck) {
@@ -28,8 +29,8 @@ class UpdateSection
                 'name' => $newName
                 ]
             );
-            return true;
+            return $newName;
         }
-        return false;
+        return null;
     }
 }

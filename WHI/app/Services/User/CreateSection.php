@@ -16,10 +16,11 @@ class CreateSection
 
     /**
      * プロフィールのセクションの保存
+     * @return null | string
      */
-    public function create(int $id, string $name, string $sectionName): bool
+    public function create(int $id, string $userName, string $sectionName)
     {
-        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
+        $isUser = $this->user->where('id', $id)->where('name', $userName)->exists();
         $nameCheck = strlen($sectionName) > 0;
         if($isUser && $nameCheck) {
             $this->section->create(
@@ -28,8 +29,8 @@ class CreateSection
                 'name' => $sectionName,
                 ]
             );
-            return true;
+            return $sectionName;
         }
-        return true;
+        return null;
     }
 }

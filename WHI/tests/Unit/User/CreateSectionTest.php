@@ -37,7 +37,7 @@ class CreateSectionTest extends TestCase
         $sectionName = 'test';
         $domain = new CreateSection();
         $result = $domain->create($id, $name, $sectionName);
-        $this->assertTrue($result);
+        $this->assertTrue($result === $sectionName);
 
         $this->assertDatabaseHas('sections', ['user_id' => $id, 'name' => $sectionName]);
     }

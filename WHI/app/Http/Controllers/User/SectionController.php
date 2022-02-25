@@ -20,7 +20,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        //
+        return 'Hello';
     }
 
     /**
@@ -34,20 +34,28 @@ class SectionController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * プロフィールの新たなセクションの作成
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, int $id): JsonResponse
     {
-        //
+        $userName = $request->input('userName');
+        $sectionName = $request->input('sectionName');
+
+        $service = new CreateSection();
+        $result = $service->create($id, $userName, $sectionName);
+        if(!is_null($result)) {
+            return response()->json($result);
+        }
+        return response()->json('Error');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -58,7 +66,7 @@ class SectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -67,21 +75,30 @@ class SectionController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * プロフィールのセクションの更新
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
-        //
+        $userName = $request->input('userName');
+        $oldSectionName = $request->input('oldSectionName');
+        $newSectionName = $request->input('newSectionName');
+
+        $service = new UpdateSection();
+        $result = $service->update($id, $userName, $oldSectionName, $newSectionName);
+        if(!is_null($result)) {
+            return response()->json($result);
+        }
+        return response()->json('Error');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

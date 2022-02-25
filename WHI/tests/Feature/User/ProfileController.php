@@ -20,7 +20,7 @@ class ProfileController extends TestCase
      *
      * @return void
      */
-    public function store()
+    public function update()
     {
         // ユーザー情報
         $id = 1;

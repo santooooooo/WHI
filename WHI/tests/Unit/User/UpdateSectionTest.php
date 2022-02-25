@@ -47,7 +47,7 @@ class UpdateSectionTest extends TestCase
         $result = $domain->update($id, $name, $sectionName, $newSectionName);
 
         // 結果の確認
-        $this->assertTrue($result);
+        $this->assertTrue($result === $newSectionName);
         $this->assertDatabaseHas('sections', ['user_id' => $id, 'name' => $newSectionName]);
     }
 }
