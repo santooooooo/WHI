@@ -7,9 +7,7 @@
                 </router-link>
                 <v-spacer></v-spacer>
 
-                <v-btn @click.stop="drawer = !drawer"
-                    >Menu</v-btn
-                >
+                <v-btn @click.stop="drawer = !drawer">Menu</v-btn>
             </v-app-bar>
 
             <v-navigation-drawer
@@ -126,9 +124,13 @@ export default {
         userCancel() {
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
+            const headers = {
+                "User-Name": this.$store.state.user.name,
+            };
             axios
                 .delete("/user/" + vm.$store.state.user.id, {
                     data: { name: vm.$store.state.user.name },
+                    headers,
                 })
                 .then(function (response) {
                     if (response.data !== "error") {
@@ -151,8 +153,7 @@ export default {
             this.$router.push("/");
         },
     },
-    mounted() {
-    },
+    mounted() {},
 };
 </script>
 

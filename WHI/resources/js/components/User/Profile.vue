@@ -119,6 +119,7 @@ export default {
             const headers = {
                 "Content-Type": "multipart/form-data",
                 "X-HTTP-Method-Override": "PUT",
+                "User-Name": this.$store.state.user.name,
             };
             axios
                 .post("/profile/" + this.$store.state.user.id, data, {
@@ -167,9 +168,13 @@ export default {
         },
 
         deleteProfileIcon() {
+            const headers = {
+                "User-Name": this.$store.state.user.name,
+            };
             axios
                 .delete("/profile/" + this.$store.state.user.id, {
                     data: { name: this.$store.state.user.name },
+                    headers,
                 })
                 .then(function (response) {
                     location.reload();

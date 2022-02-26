@@ -103,13 +103,20 @@ export default {
         update() {
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
+            const headers = {
+                "User-Name": this.$store.state.user.name,
+            };
             axios
-                .put("/user/" + this.$store.state.user.id, {
-                    password: this.password,
-                    newName: this.newName,
-                    newEmail: this.newEmail,
-                    newPassword: this.newPassword,
-                })
+                .put(
+                    "/user/" + this.$store.state.user.id,
+                    {
+                        password: this.password,
+                        newName: this.newName,
+                        newEmail: this.newEmail,
+                        newPassword: this.newPassword,
+                    },
+                    {headers}
+                )
                 .then(function (response) {
                     if (response.data == "password wrong") {
                         vm.showAlert = "password wrong";
