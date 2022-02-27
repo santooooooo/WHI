@@ -10,17 +10,21 @@ use App\Services\User\CreateSection;
 use App\Services\User\UpdateSection;
 use App\Services\User\DeleteSection;
 use App\Services\User\GetSection;
+use App\Http\Requests\SectionRequest;
+use App\Http\Requests\UpdateSectionRequest;
 
 class SectionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * プロフィールのセクションの取得
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(int $id): JsonResponse
     {
-        return 'Hello';
+        $service = new GetSection($id);
+        $section = $service->index();
+        return response()->json($section);
     }
 
     /**
@@ -36,10 +40,10 @@ class SectionController extends Controller
     /**
      * プロフィールの新たなセクションの作成
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\SectionRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, int $id): JsonResponse
+    public function store(SectionRequest $request, int $id): JsonResponse
     {
         $userName = $request->input('userName');
         $sectionName = $request->input('sectionName');
@@ -77,11 +81,11 @@ class SectionController extends Controller
     /**
      * プロフィールのセクションの更新
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\UpdateSectionRequest $request
      * @param  int                      $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateSectionRequest $request, int $id): JsonResponse
     {
         $userName = $request->input('userName');
         $oldSectionName = $request->input('oldSectionName');
@@ -96,13 +100,19 @@ class SectionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * プロフィールのセクションの削除
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\SectionRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(SectionRequest $request, int $id)
     {
-        //
+        $userName = $request->input('userName');
+        $sectionName = $request->input('sectionName');
+
+        $service = new DeleteSection();
+        $service->remove($id, $userName, $sectionName);
+        return response()->json('Success');
     }
 }

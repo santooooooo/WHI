@@ -22,6 +22,12 @@ class CheckUser
         $method = $request->method();
         $appUrl = env('APP_URL');
 
+        // テストでのリクエストの場合は何もしない
+        $env = env('APP_ENV');
+        if($env === 'testing') {
+            return $next($request);
+        }
+
         // GETリクエストには何もしない
         if($method !== 'GET') {
             // 新規登録かログインである場合は、認証用のデータの作成と保存を行う
