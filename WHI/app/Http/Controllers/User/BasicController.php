@@ -11,6 +11,7 @@ use App\Services\User\Resign;
 use App\Services\User\UpdateUser;
 use App\Services\User\WriteProfile;
 use App\Services\User\DeleteProfile;
+use App\Services\User\DeleteSection;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -126,6 +127,10 @@ class BasicController extends Controller
         // 退会するユーザーのプロフィール削除
         $deleteProfile = new DeleteProfile();
         $deleteProfile->deleteProfile($id, $name);
+
+        // 退会するユーザーのプロフィール削除
+        $deleteSection = new DeleteSection();
+        $deleteSection->allRemove($id, $name);
 
         // ユーザーの退会
         $resign = new Resign();

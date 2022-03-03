@@ -63,6 +63,8 @@ class BasicController extends TestCase
     {
         // このファイル内の全てのテストを同時に行う際のデータベースの初期化
         DB::table('users')->truncate();
+        DB::table('profiles')->truncate();
+        DB::table('sections')->truncate();
 
         // ユーザー情報
         $id = 1;
@@ -73,8 +75,13 @@ class BasicController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // 新規ユーザー用のプロフィールDBが作成されているか確認
-        $this->assertDatabaseHas('profiles', ['user_id' => $id]);
+        // プロフィールのセクションの作成
+        $storeData = [
+        'userName' => $name,
+        'sectionName' => 'test'
+        ];
+        $this->post('/user/'.$id.'/sections', $storeData);
+
 
         // ユーザーの退会を行うリクエストを送信
         $response = $this->delete('/user/'.$id, ['name' => $name]);
@@ -84,6 +91,7 @@ class BasicController extends TestCase
 
         $response->assertStatus(200);
         $this->assertDatabaseMissing('users', ['id' => $id]);
+        $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
         $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
     }
 
