@@ -96,6 +96,7 @@ class SectionController extends TestCase
     {
         // このファイル内の全てのテストを同時に行う際のデータベースの初期化
         DB::table('users')->truncate();
+        DB::table('profiles')->truncate();
         DB::table('sections')->truncate();
 
         // ユーザー情報
@@ -120,7 +121,11 @@ class SectionController extends TestCase
         ];
         $response = $this->delete('/sections/'.$id, $deleteData);
 
+        // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
+        $result = ['Success'];
+        $response->assertExactJson($result, true);
+
         // セクションのDBの確認
         $this->assertDatabaseMissing('sections', ['user_id' => $id, 'name' => $storeData['sectionName']]);
     }
@@ -135,6 +140,7 @@ class SectionController extends TestCase
     {
         // このファイル内の全てのテストを同時に行う際のデータベースの初期化
         DB::table('users')->truncate();
+        DB::table('profiles')->truncate();
         DB::table('sections')->truncate();
 
         // ユーザー情報

@@ -87,13 +87,13 @@
                     >
                         今までのデータがすべて消えてしまいますが、よろしいでしょうか？
                         <v-list-item class="justify-center">
-                            <v-btn @click="userCancel" class="ma-3">
+                            <v-btn @click="userCancel" class="ma-3 red">
                                 <v-list-item-title class="subtitle-1 pa-5">
                                     退会する
                                 </v-list-item-title>
                             </v-btn>
 
-                            <v-btn @click="check" class="ma-3">
+                            <v-btn @click="check" class="ma-3 green">
                                 <v-list-item-title class="subtitle-1 pa-5">
                                     戻る
                                 </v-list-item-title>
