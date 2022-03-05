@@ -20,7 +20,7 @@ class WriteProfileTest extends TestCase
     /**
      * 新たなプロフィールの作成
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -48,9 +48,6 @@ class WriteProfileTest extends TestCase
      */
     public function update()
     {
-        //データベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'Jamboo';

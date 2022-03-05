@@ -16,7 +16,7 @@ class BasicController extends TestCase
     /**
      * ユーザー登録のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -61,11 +61,6 @@ class BasicController extends TestCase
      */
     public function destroy()
     {
-        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
-        DB::table('users')->truncate();
-        DB::table('profiles')->truncate();
-        DB::table('sections')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';
@@ -103,9 +98,6 @@ class BasicController extends TestCase
      */
     public function update()
     {
-        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';

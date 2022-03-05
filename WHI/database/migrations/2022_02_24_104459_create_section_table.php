@@ -17,7 +17,7 @@ class CreateSectionTable extends Migration
         Schema::create(
             'sections', function (Blueprint $table) {
                 $table->id();
-                $table->foreignIdFor(User::class);
+                $table->foreignIdFor(User::class)->references('id')->on('users');
                 $table->string('name');
                 $table->timestamps();
             }

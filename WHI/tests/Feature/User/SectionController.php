@@ -14,7 +14,7 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの作成機能の確認
      *
-     * @test
+     * test
      * @return void
      */
     public function store()
@@ -47,15 +47,11 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの更新機能の確認
      *
-     * @test
+     * test
      * @return void
      */
     public function update()
     {
-        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
-        DB::table('users')->truncate();
-        DB::table('sections')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';
@@ -89,16 +85,11 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの削除機能の確認
      *
-     * @test
+     * test
      * @return void
      */
     public function destroy()
     {
-        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
-        DB::table('users')->truncate();
-        DB::table('profiles')->truncate();
-        DB::table('sections')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';
@@ -138,11 +129,6 @@ class SectionController extends TestCase
      */
     public function index()
     {
-        // このファイル内の全てのテストを同時に行う際のデータベースの初期化
-        DB::table('users')->truncate();
-        DB::table('profiles')->truncate();
-        DB::table('sections')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';

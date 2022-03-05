@@ -20,7 +20,7 @@ class DeleteProfileTest extends TestCase
     /**
      * ユーザーのプロフィールの削除
      *
-     * @test
+     * test
      * @return void
      */
     public function deleteProfile()
@@ -82,9 +82,6 @@ class DeleteProfileTest extends TestCase
      */
     public function deleteOnlyIcon()
     {
-        //データベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'Jamboo';

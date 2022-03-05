@@ -16,7 +16,7 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィールの新規作成
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -64,14 +64,11 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィール表示
      *
-     * @test
+     * test
      * @return void
      */
     public function index()
     {
-        //データベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';
@@ -123,9 +120,6 @@ class ProfileController extends TestCase
      */
     public function destroy()
     {
-        //データベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'test';

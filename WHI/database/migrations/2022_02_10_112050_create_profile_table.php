@@ -17,7 +17,7 @@ class CreateProfileTable extends Migration
         Schema::create(
             'profiles', function (Blueprint $table) {
                 $table->id();
-                $table->foreignIdFor(User::class)->unique();
+                $table->foreignIdFor(User::class)->unique()->references('id')->on('users');
                 $table->string('icon')->nullable();
                 $table->text('career')->nullable();
                 $table->string('title')->nullable();
@@ -36,6 +36,6 @@ class CreateProfileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profile');
+        Schema::dropIfExists('profiles');
     }
 }

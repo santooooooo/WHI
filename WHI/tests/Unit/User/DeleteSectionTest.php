@@ -16,7 +16,7 @@ class DeleteSectionTest extends TestCase
     /**
      * プロフィールのセクションの削除のテスト
      *
-     * @test
+     * test
      * @return void
      */
     public function remove()
@@ -56,9 +56,6 @@ class DeleteSectionTest extends TestCase
      */
     public function allRemove()
     {
-        //データベースの初期化
-        DB::table('users')->truncate();
-
         // ユーザー情報
         $id = 1;
         $name = 'Jamboo';

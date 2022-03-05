@@ -38,15 +38,17 @@ class UpdateUserTest extends TestCase
         // ユーザーの情報を更新
         $domain = new UpdateUser();
         $result = $domain->update($id, $password, $updateName, $updateEmail, $updatePassword);
-        $this->assertTrue($result === $id);
+        $resultCheck = [
+        'id' => $id,
+        'name' => $updateName,
+        ];
+        $this->assertTrue($result === $resultCheck);
 
         // データベースから登録されたユーザー情報を取得
         $user = User::find($id);
 
         // 更新されたデータベースの情報が元の情報と同じであることを確認
         $dataCheck = $updateName === $user->name && $updateEmail === $user->email && Hash::check($updatePassword, $user->password);
-
-        $this->assertTrue($result === $id);
         $this->assertTrue($dataCheck);
 
         // もう一人のユーザー情報
