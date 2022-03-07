@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Section::class, 'user_id');
     }
+
+    /**
+     * ユーザーとプロフィールのセクションとのデータの関係
+     */
+    public function contents(): object
+    {
+        return $this->hasMany(Content::class, 'user_id');
+    }
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace Tests\Unit\User;
+
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\User\SignUp;
