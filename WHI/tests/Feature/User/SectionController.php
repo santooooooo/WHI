@@ -15,6 +15,7 @@ class SectionController extends TestCase
      * プロフィールのセクションの作成機能の確認
      *
      * test
+     *
      * @return void
      */
     public function store()
@@ -29,6 +30,7 @@ class SectionController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $data = [
         'userName' => $name,
         'sectionName' => 'test'
@@ -37,7 +39,7 @@ class SectionController extends TestCase
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $result = [$data['sectionName']];
+        $result = ['id' => $sectionId, 'name' => $data['sectionName']];
         $response->assertExactJson($result, true);
 
         // セクションのDBの確認
@@ -48,6 +50,7 @@ class SectionController extends TestCase
      * プロフィールのセクションの更新機能の確認
      *
      * test
+     *
      * @return void
      */
     public function update()
@@ -62,6 +65,7 @@ class SectionController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $storeData = [
         'userName' => $name,
         'sectionName' => 'test'
@@ -78,7 +82,7 @@ class SectionController extends TestCase
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $result = [$updateData['newSectionName']];
+        $result = ['id' => $sectionId, 'name' => $updateData['newSectionName']];
         $response->assertExactJson($result, true);
     }
 
@@ -86,6 +90,7 @@ class SectionController extends TestCase
      * プロフィールのセクションの削除機能の確認
      *
      * test
+     *
      * @return void
      */
     public function destroy()
@@ -125,6 +130,7 @@ class SectionController extends TestCase
      * プロフィールのセクションの取得機能の確認
      *
      * @test
+     *
      * @return void
      */
     public function index()
@@ -139,6 +145,7 @@ class SectionController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $storeData = [
         'userName' => $name,
         'sectionName' => 'test'
@@ -150,7 +157,8 @@ class SectionController extends TestCase
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $result = [$storeData['sectionName']];
+        $section = ['id' => $sectionId, 'name' => $storeData['sectionName']];
+        $result = [$section];
         $response->assertExactJson($result, true);
     }
 }

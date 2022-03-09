@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Services\User;
 use App\Models\User;
 
-class GetSection
+final class GetSection
 {
     public function __construct(int $id)
     {
@@ -16,11 +16,11 @@ class GetSection
      */
     public function index(): array
     {
-	    $data = [];
-	    $sections = $this->user->sections;
-	    foreach($sections as $section) {
-		    $data[] = $section->name;
-	    }
-	    return $data;
+        $data = [];
+        $sections = $this->user->sections;
+        foreach($sections as $section) {
+            $data[] = ['id' => $section->id, 'name' => $section->name];
+        }
+        return $data;
     }
 }

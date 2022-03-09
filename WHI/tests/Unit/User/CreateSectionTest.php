@@ -35,10 +35,14 @@ class CreateSectionTest extends TestCase
         $writeProfile->write($id, $name);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $sectionName = 'test';
         $domain = new CreateSection();
         $result = $domain->create($id, $name, $sectionName);
-        $this->assertTrue($result === $sectionName);
+
+        // 実行結果の確認
+        $trueData = ['id' => $sectionId, 'name' => $sectionName];
+        $this->assertTrue($result === $trueData);
 
         $this->assertDatabaseHas('sections', ['user_id' => $id, 'name' => $sectionName]);
     }

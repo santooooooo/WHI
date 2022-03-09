@@ -199,7 +199,8 @@ export default {
                 .then(function (response) {
                     if (response.data != null) {
                         const newSection = {
-                            title: response.data,
+                            id: response.data["id"],
+                            title: response.data["name"],
                             section: "Section", // 項目内のデータの表示に使用
                             update: false, // 項目の更新の際に使用
                         };
@@ -236,7 +237,8 @@ export default {
             if (sections != null) {
                 for (const section of sections) {
                     const data = {
-                        title: section,
+                        id: section["id"],
+                        title: section["name"],
                         section: "Section",
                         update: false,
                     };
@@ -304,7 +306,8 @@ export default {
                             if (element.title === sectionName) {
                                 const index = vm.items.indexOf(element);
                                 const updateSection = {
-                                    title: response.data,
+                                    id: response.data["id"],
+                                    title: response.data["name"],
                                     section: "Section",
                                     update: false,
                                 };

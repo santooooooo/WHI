@@ -6,7 +6,7 @@ namespace App\Services\User;
 use App\Models\User;
 use App\Models\Section;
 
-class UpdateSection
+final class UpdateSection
 {
     public function __construct()
     {
@@ -16,7 +16,8 @@ class UpdateSection
 
     /**
      * プロフィールのセクションの更新
-     * @return string | null
+     *
+     * @return array{id: int, name: string} | null
      */
     public function update(int $id, string $userName, string $oldName, string $newName)
     {
@@ -29,7 +30,8 @@ class UpdateSection
                 'name' => $newName
                 ]
             );
-            return $newName;
+            $section = $this->section->where('id', $sectionId)->first();
+            return ['id' => $section->id, 'name' => $section->name];
         }
         return null;
     }

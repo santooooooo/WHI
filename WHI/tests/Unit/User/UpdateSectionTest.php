@@ -37,6 +37,7 @@ class UpdateSectionTest extends TestCase
         $writeProfile->write($id, $name);
 
         // プロフィールの新たなセクションの作成
+        $sectionId = 1;
         $sectionName = 'test';
         $createSection = new CreateSection();
         $createSection->create($id, $name, $sectionName);
@@ -47,7 +48,8 @@ class UpdateSectionTest extends TestCase
         $result = $domain->update($id, $name, $sectionName, $newSectionName);
 
         // 結果の確認
-        $this->assertTrue($result === $newSectionName);
+        $trueData = ['id' => $sectionId, 'name' => $newSectionName];
+        $this->assertTrue($result === $trueData);
         $this->assertDatabaseHas('sections', ['user_id' => $id, 'name' => $newSectionName]);
     }
 }

@@ -6,7 +6,7 @@ namespace App\Services\User;
 use App\Models\User;
 use App\Models\Section;
 
-class DeleteSection
+final class DeleteSection
 {
     public function __construct()
     {

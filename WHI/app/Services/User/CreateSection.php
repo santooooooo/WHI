@@ -6,7 +6,7 @@ namespace App\Services\User;
 use App\Models\User;
 use App\Models\Section;
 
-class CreateSection
+final class CreateSection
 {
     public function __construct()
     {
@@ -23,13 +23,13 @@ class CreateSection
         $isUser = $this->user->where('id', $id)->where('name', $userName)->exists();
         $nameCheck = strlen($sectionName) > 0;
         if($isUser && $nameCheck) {
-            $this->section->create(
+            $section = $this->section->create(
                 [
                 'user_id' => $id,
                 'name' => $sectionName,
                 ]
             );
-            return $sectionName;
+            return ['id' => $section->id, 'name' => $section->name];
         }
         return null;
     }

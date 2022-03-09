@@ -35,15 +35,16 @@ class GetSectionTest extends TestCase
         $writeProfile->write($id, $name);
 
         // プロフィールのセクションを二つ作成
+        $sectionId = 1;
         $sectionName = 'test';
         $createSection = new CreateSection();
         $createSection->create($id, $name, $sectionName);
-        $createSection->create($id, $name, $sectionName);
  
-        $data = [$sectionName, $sectionName];
-
         $domain = new GetSection($id);
         $result = $domain->index();
+
+        $section = ['id' => $sectionId, 'name' => $sectionName];
+        $data = [$section];
         $this->assertTrue($data === $result);
     }
 }
