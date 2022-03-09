@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Section;
 use App\Models\Content;;
 
-final class CreateContent
+final class UpdateContent
 {
     public function __construct()
     {
@@ -17,7 +17,7 @@ final class CreateContent
     }
 
     /**
-     * プロフィールのコンテンツの保存
+     * プロフィールのコンテンツの更新
      *
      * @return null | array{
      * id: int,
@@ -25,23 +25,21 @@ final class CreateContent
      * substance: string,
      * }
      */
-    public function create(int $userId, int $sectionId, string $type, string $substance)
+    public function update(int $userId, int $sectionId,int $contentId, string $substance)
     {
-        $typeCheck = $type === 'url' | $type === 'text' | $type === 'blog';
         $substanceCheck = strlen($substance) > 0;
         $isUser = $this->user->where('id', $userId)->exists();
         $isSection = $this->section->where('id', $sectionId)->where('user_id', $userId)->exists();
+        $isContent = $this->content->where('id', $contentId)->where('user_id', $userId)->where('section_id', $sectionId)->exists();
 
-        if($typeCheck && $substanceCheck && $isUser && $isSection) {
-            $content = $this->content->create(
+        if($substanceCheck && $isUser && $isSection && $isContent) {
+            $this->content->where('id', $contentId)->update(
                 [
-                'user_id' => $userId,
-                'section_id' => $sectionId,
-                'type' => $type,
-                'substance' => $substance,
+                'substance' => $substance
                 ]
             );
-            $data = ['id' => $content->id, 'section_id' => $content->section_id, 'type' => $type, 'substance' => $substance];
+	    $content = $this->content->where('id', $contentId)->first();
+            $data = ['id' => $content->id, 'section_id' => $content->section_id, 'type' => $content->type, 'substance' => $content->substance];
             return $data;
         }
         return null;

@@ -9,17 +9,18 @@ use App\Services\User\SignUp;
 use App\Services\User\WriteProfile;
 use App\Services\User\CreateSection;
 use App\Services\User\CreateContent;
+use App\Services\User\GetContent;
 
-class CreateContentTest extends TestCase
+class GetContentTest extends TestCase
 {
     use RefreshDatabase;
     /**
-     * プロフィールのコンテンツの保存のテスト.
+     * プロフィールの全てのコンテンツの取得のテスト
      *
      * @test
      * @return void
      */
-    public function create()
+    public function index()
     {
         // ユーザー情報
         $userId = 1;
@@ -45,17 +46,18 @@ class CreateContentTest extends TestCase
         $contentId = 1;
         $type = 'blog';
         $substance = 'test';
-        $domain = new CreateContent();
-        $result = $domain->create($userId, $sectionId, $type, $substance);
+        $createContent = new CreateContent();
+        $createContent->create($userId, $sectionId, $type, $substance);
 
-        // 実行後に返されるデータの確認とDBに保存されているかのチェック
-        $trueData = [
-                'id' => $contentId,
-                'section_id' => $sectionId,
-                'type' => $type,
-                'substance' => $substance,
+        // プロフィールの全てのコンテンツの取得
+        $domain = new GetContent($userId);
+        $result = $domain->index();
+
+        // すべてのコンテンツが取得できているかの確認
+        $content = [
+        'id' => $contentId, 'section_id' => $sectionId, 'type' => $type, 'substance' => $substance
         ];
+        $trueData = [$content];
         $this->assertTrue($result === $trueData);
-        $this->assertDatabaseHas('contents', ['user_id' => $userId, 'section_id' => $sectionId, 'type' => $type, 'substance' => $substance]);
     }
 }

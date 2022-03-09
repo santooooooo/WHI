@@ -1,25 +1,26 @@
 <?php
-declare(strict_types=1);
 
 namespace Tests\Unit\User;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use App\Services\User\SignUp;
 use App\Services\User\WriteProfile;
 use App\Services\User\CreateSection;
 use App\Services\User\CreateContent;
+use App\Services\User\DeleteContent;
 
-class CreateContentTest extends TestCase
+class DeleteContentTest extends TestCase
 {
     use RefreshDatabase;
     /**
-     * プロフィールのコンテンツの保存のテスト.
+     * プロフィールのコンテンツの削除のテスト
      *
      * @test
      * @return void
      */
-    public function create()
+    public function remove()
     {
         // ユーザー情報
         $userId = 1;
@@ -45,17 +46,15 @@ class CreateContentTest extends TestCase
         $contentId = 1;
         $type = 'blog';
         $substance = 'test';
-        $domain = new CreateContent();
-        $result = $domain->create($userId, $sectionId, $type, $substance);
+        $createContent = new CreateContent();
+        $createContent->create($userId, $sectionId, $type, $substance);
 
-        // 実行後に返されるデータの確認とDBに保存されているかのチェック
-        $trueData = [
-                'id' => $contentId,
-                'section_id' => $sectionId,
-                'type' => $type,
-                'substance' => $substance,
-        ];
-        $this->assertTrue($result === $trueData);
         $this->assertDatabaseHas('contents', ['user_id' => $userId, 'section_id' => $sectionId, 'type' => $type, 'substance' => $substance]);
+
+        // プロフィールのコンテンツの削除
+        $domain = new DeleteContent();
+        $domain->remove($userId, $sectionId, $contentId);
+
+        $this->assertDatabaseMissing('contents', ['user_id' => $userId, 'section_id' => $sectionId, 'type' => $type, 'substance' => $substance]);
     }
 }
