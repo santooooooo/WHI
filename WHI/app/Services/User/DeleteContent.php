@@ -31,4 +31,16 @@ final class DeleteContent
         }
         return;
     }
+
+    /**
+     * プロフィールの全てのコンテンツの削除
+     */
+    public function allRemove(int $id, string $name): void
+    {
+        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
+        if($isUser) {
+            $this->content->where('user_id', $id)->delete();
+            return;
+        }
+    }
 }

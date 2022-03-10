@@ -12,8 +12,6 @@ final class GetContent
     public function __construct(int $id)
     {
         $this->user = User::find($id);
-        $this->section = new Section();
-        $this->content = new Content();
     }
 
     /**
@@ -24,10 +22,14 @@ final class GetContent
      * section_id: int,
      * type: string,
      * substance: string,
-     * }> | null
+     * }> | void
      */
     public function index()
     {
+        if(is_null($this->user)) {
+            return;
+        }
+
         $contents = $this->user->contents;
         $data = [];
         foreach($contents as $content)

@@ -33,5 +33,6 @@ Route::namespace($nameSpace)->middleware('throttle')->group(
         Route::post('login', 'OtherController@login');
         Route::resource('user.profile', 'ProfileController')->shallow();
         Route::resource('user.sections', 'SectionController')->shallow();
+        Route::resource('user.contents', 'ContentController')->shallow();
     }
 );

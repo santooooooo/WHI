@@ -21,7 +21,7 @@ class CreateContentsTable extends Migration
                 $table->foreignIdFor(User::class)->references('id')->on('users');
                 $table->foreignIdFor(Section::class)->references('id')->on('sections');
                 $table->string('type');
-                $table->string('substance');
+                $table->text('substance');
                 $table->timestamps();
             }
         );
