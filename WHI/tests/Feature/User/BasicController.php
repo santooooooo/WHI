@@ -71,11 +71,21 @@ class BasicController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $storeData = [
         'userName' => $name,
         'sectionName' => 'test'
         ];
         $this->post('/user/'.$id.'/sections', $storeData);
+
+        // プロフィールのコンテンツの作成
+        $contentData = [
+        'userId' => $id,
+        'sectionId' => $sectionId,
+        'type' => 'text',
+        'substance' => 'testtest',
+        ];
+        $this->post('/user/'.$id.'/contents', $contentData);
 
 
         // ユーザーの退会を行うリクエストを送信
@@ -84,16 +94,19 @@ class BasicController extends TestCase
         // 存在しないユーザーの退会を行うリクエストを送信
         //$response = $this->delete('/user/2', ['email' => $email]);
 
+        // リクエスト及びDBの値の確認
         $response->assertStatus(200);
         $this->assertDatabaseMissing('users', ['id' => $id]);
         $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
-        $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
+        $this->assertDatabaseMissing('sections', ['user_id' => $id]);
+        $this->assertDatabaseMissing('contents', ['user_id' => $id]);
     }
 
     /**
      * ユーザー情報の更新のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function update()
