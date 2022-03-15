@@ -58,7 +58,7 @@ class ContentController extends TestCase
     /**
      * プロフィールのコンテンツの取得のテスト
      *
-     * test
+     * @test
      * @return void
      */
     public function index()
@@ -90,13 +90,18 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/contents', $contentData);
 
+        $this->post('/user/'.$id.'/contents', $contentData);
+
+	$this->assertDatabaseCount('contents', 2);
+
         // プロフィールのコンテンツの取得
         $response = $this->get('/user/'.$id.'/contents');
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $content = ['id' => $contentId, 'section_id' => $contentData['sectionId'], 'type' => $contentData['type'], 'substance' => $contentData['substance']];
-        $trueData = [$content];
+        $content = ['id' => $contentId, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
+        $content2 = ['id' => $contentId+1, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
+        $trueData = [$content, $content2];
         $response->assertExactJson($trueData, true);
     }
 
@@ -153,7 +158,7 @@ class ContentController extends TestCase
     /**
      * プロフィールのコンテンツの更新のテスト
      *
-     * @test
+     * test
      * @return void
      */
     public function update()

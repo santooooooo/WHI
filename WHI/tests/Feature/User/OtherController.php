@@ -13,7 +13,7 @@ class OtherController extends TestCase
     /**
      * ユーザーログインのテスト
      *
-     * @test
+     * test
      * @return void
      */
     public function login()
@@ -35,5 +35,28 @@ class OtherController extends TestCase
         $data = ['id' => 1, 'name' => $name];
         $response->assertStatus(200);
         $response->assertJson($data);
+    }
+
+    /**
+     * ユーザーログインのテスト
+     *
+     * @test
+     * @return void
+     */
+    public function ogp()
+    {
+        // 外部サイトのOGPの取得
+        $url = 'https://qiita.com/';
+        $response = $this->post('/ogp', ['url' => $url]);
+
+        // リクエストの成功及びレスポンスの値の確認
+        $response->assertStatus(200);
+        $trueResult = [
+        'title' => 'エンジニアに関する知識を記録・共有するためのサービス - Qiita',
+        'description' => 'Qiitaは、エンジニアに関する知識を記録・共有するためのサービスです。 プログラミングに関するTips、ノウハウ、メモを簡単に記録 &amp; 公開することができます。',
+        'image' => 'https://cdn.qiita.com/assets/qiita-ogp-3b6fcfdd74755a85107071ffc3155898.png',
+        'url' => 'https://qiita.com/'
+        ];
+        $response->assertExactJson($trueResult, true);
     }
 }

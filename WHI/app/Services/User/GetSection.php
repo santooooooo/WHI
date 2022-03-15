@@ -13,9 +13,14 @@ final class GetSection
 
     /**
      * プロフィールのすべてのセクション名の取得
+     * @return array | null
      */
-    public function index(): array
+    public function index()
     {
+        if(is_null($this->user)) {
+            return;
+        }
+
         $data = [];
         $sections = $this->user->sections;
         foreach($sections as $section) {

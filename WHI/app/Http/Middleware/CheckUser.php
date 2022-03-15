@@ -39,6 +39,11 @@ class CheckUser
                 return $next($request)->cookie('auth', $cookie);
             }
 
+            // 外部サイトのOGPの取得には何もしない
+            if($url === $appUrl.'/ogp') {
+                   return $next($request);
+            }
+
             // POSTまたはPUTリクエストに対してheaderからリクエスト先が正しいかチェック
             $name = $request->header('user-name');
             $identification = $request->cookie('auth');

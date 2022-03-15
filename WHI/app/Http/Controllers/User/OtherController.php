@@ -7,14 +7,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\User\Login;
+use App\Services\User\GetOGP;
 use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\OgpRequest;
 
 class OtherController extends Controller
 {
     /**
-     * 新たなユーザーの登録
+     * ユーザーのログイン
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Http\Requests\UserLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(UserLoginRequest $request): JsonResponse
@@ -28,5 +30,22 @@ class OtherController extends Controller
             return response()->json($result);
         }
         return response()->json('error');
+    }
+
+    /**
+     * ユーザーのログイン
+     *
+     * @param  App\Http\Requests\OgpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ogp(OgpRequest $request): JsonResponse
+    {
+        $url = $request->input('url');
+        $service = new getOGP();
+        $result = $service->OGPInfo($url);
+        if(!is_null($result)) {
+            return response()->json($result);
+        }
+        return response()->json('Error');
     }
 }

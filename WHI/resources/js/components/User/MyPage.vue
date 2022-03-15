@@ -44,7 +44,11 @@
                     class="white--text"
                 >
                     <v-list-item-title v-if="!item.update">
-                        <div @click="section = item.section">
+                        <div
+                            @click="
+                                changeSection(item.section, item.id, item.title)
+                            "
+                        >
                             {{ item.title }}
                         </div>
                     </v-list-item-title>
@@ -108,7 +112,12 @@
         <div class="mt-15 ml-16 section">
             <user-update v-if="section === 'UserUpdate'" />
             <profile v-if="section === 'Profile'" />
-            <sections v-if="section === 'Section'" />
+            <sections
+		    v-if="section === 'Section' && contents.length > 0"
+                :section-id="setSectionId"
+                :section-name="setSectionName"
+                :contents="contents"
+            />
         </div>
 
         <v-overlay :absolute="false" :value="overlay">
@@ -165,6 +174,10 @@ export default {
             // 項目の削除のデータの格納に使用
             deleteSectionName: null,
             newSectionName: null,
+            // 項目の表示に使用
+            setSectionId: null,
+            setSectionName: null,
+            contents: [],
         };
     },
     mounted() {
@@ -334,6 +347,47 @@ export default {
             // 削除の確認の表示の制御
             this.drawer = !this.drawer;
             this.overlay = !this.overlay;
+        },
+        // 項目の切り替え及びその項目のデータの受け渡し
+        async changeSection(section, sectionId, sectionName) {
+            // 初期値の設定
+            this.section = null;
+            this.setSectionId = null;
+            this.setSectionName = null;
+            this.contents = [];
+
+            this.section = section;
+            this.setSectionId = sectionId;
+            this.setSectionName = sectionName;
+            await this.getContents();
+        },
+        getContents() {
+            const vm = this;
+            axios
+                .get("/user/" + this.$store.state.user.id + "/contents")
+                .then(function (response) {
+                    if (response.data != null) {
+                        for (const content of response.data) {
+                            if (content["section_id"] === vm.setSectionId) {
+                                const data = {
+                                    id: content["id"],
+                                    sectionId: content["section_id"],
+                                    type: content["type"],
+                                    substance: content["substance"],
+                                    update: false,
+                                };
+                                vm.contents.push(data);
+                            }
+                        }
+                    }
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
         },
     },
 };
