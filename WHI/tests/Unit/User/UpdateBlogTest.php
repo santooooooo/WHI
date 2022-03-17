@@ -8,17 +8,18 @@ use App\Services\User\SignUp;
 use App\Services\User\WriteProfile;
 use App\Services\User\CreateSection;
 use App\Services\User\CreateBlog;
+use App\Services\User\UpdateBlog;
 
-class CreateBlogTest extends TestCase
+class UpdateBlogTest extends TestCase
 {
     use RefreshDatabase;
     /**
-     * コンテンツブログの保存のテスト
+     * コンテンツブログの更新
      *
      * @test
      * @return void
      */
-    public function create()
+    public function update()
     {
         // ユーザー情報
         $userId = 1;
@@ -45,13 +46,16 @@ class CreateBlogTest extends TestCase
         $title = 'blog';
         $text = 'test';
         $domain = new CreateBlog();
-        $result = $domain->create($userId, $sectionId, $title, $text);
-    
-        // 作成されたブログの確認
-        $appUrl = env('APP_URL');
-        $trueResult = $appUrl.'/#/blogs/'.$blogId;
+        $domain->create($userId, $sectionId, $title, $text);
 
-        $this->assertSame($result, $trueResult);
-        $this->assertDatabaseHas('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $title, 'text' => $text]);
+        // ブログの更新
+        $updateTitle = 'Jamboo Blog';
+        $updateText = 'Jamboo!!';
+        $domain = new UpdateBlog();
+        $result = $domain->update($userId, $blogId, $updateTitle, $updateText);
+
+        // ブログの更新の確認
+        $this->assertTrue($result);
+        $this->assertDatabaseHas('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $updateTitle, 'text' => $updateText]);
     }
 }
