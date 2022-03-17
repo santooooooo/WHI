@@ -32,7 +32,7 @@ class Blog extends Model
     /**
      * プロフィールのセクションとブログとのデータの関係
      */
-    public function user(): object
+    public function section(): object
     {
         return $this->belongsTo(Section::class);
     }

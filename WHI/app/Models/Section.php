@@ -42,4 +42,12 @@ class Section extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * プロフィールのセクションとブログのデータの関係
+     */
+    public function blogs(): object
+    {
+        return $this->hasMany(Blog::class, 'section_id');
+    }
 }

@@ -17,12 +17,12 @@ final class DeleteSection
     /**
      * プロフィールのセクションの削除
      */
-    public function remove(int $id, string $name, string $sectionName): bool
+    public function remove(int $userId, int $sectionId): bool
     {
-        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
-        $sectionId = $this->section->where('user_id', $id)->where('name', $sectionName)->value('id');
+        $isUser = $this->user->where('id', $userId)->exists();
+        $isSection = $this->section->where('user_id', $userId)->where('id', $sectionId)->exists();
 
-        if($isUser && is_int($sectionId)) {
+        if($isUser && $isSection) {
             $this->section->where('id', $sectionId)->delete();
             return true;
         }

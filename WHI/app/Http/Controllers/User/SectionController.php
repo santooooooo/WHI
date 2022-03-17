@@ -9,9 +9,11 @@ use Illuminate\Http\JsonResponse;
 use App\Services\User\CreateSection;
 use App\Services\User\UpdateSection;
 use App\Services\User\DeleteSection;
+use App\Services\User\DeleteContent;
 use App\Services\User\GetSection;
 use App\Http\Requests\SectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
+use App\Http\Requests\DeleteSectionRequest;
 
 class SectionController extends Controller
 {
@@ -82,7 +84,7 @@ class SectionController extends Controller
      * プロフィールのセクションの更新
      *
      * @param  \App\Http\Requests\UpdateSectionRequest $request
-     * @param  int                      $id
+     * @param  int                                     $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateSectionRequest $request, int $id): JsonResponse
@@ -102,17 +104,20 @@ class SectionController extends Controller
     /**
      * プロフィールのセクションの削除
      *
-     * @param  int $id
+     * @param  int                               $id
      * @param  \App\Http\Requests\SectionRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(SectionRequest $request, int $id)
+    public function destroy(DeleteSectionRequest $request, int $id): JsonResponse
     {
-        $userName = $request->input('userName');
-        $sectionName = $request->input('sectionName');
+        $sectionId = $id;
+        $userId = $request->input('userId');
 
-        $service = new DeleteSection();
-        $service->remove($id, $userName, $sectionName);
+        $deleteContent = new DeleteContent();
+        $deleteContent->allRemoveInSection($userId, $sectionId);
+
+        $deleteSection = new DeleteSection();
+        $deleteSection->remove($userId, $sectionId);
         return response()->json('Success');
     }
 }

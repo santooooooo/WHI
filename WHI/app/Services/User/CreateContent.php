@@ -5,7 +5,7 @@ namespace App\Services\User;
 
 use App\Models\User;
 use App\Models\Section;
-use App\Models\Content;;
+use App\Models\Content;
 
 final class CreateContent
 {
@@ -21,14 +21,20 @@ final class CreateContent
      *
      * @return null | array{
      * id: int,
+     * section_id: int,
      * type: string,
      * substance: string,
      * }
      */
     public function create(int $userId, int $sectionId, string $type, string $substance)
     {
+        // コンテンツのタイプが正しいかチェック
         $typeCheck = $type === 'url' | $type === 'text' | $type === 'blog';
+
+        // コンテンツの内容が空の文字列データ出ないかのチェック
         $substanceCheck = strlen($substance) > 0;
+
+        // ユーザーとそのユーザーのセクションがあるかのチェック
         $isUser = $this->user->where('id', $userId)->exists();
         $isSection = $this->section->where('id', $sectionId)->where('user_id', $userId)->exists();
 

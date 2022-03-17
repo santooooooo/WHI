@@ -89,14 +89,14 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの削除機能の確認
      *
-     * test
+     * @test
      *
      * @return void
      */
     public function destroy()
     {
         // ユーザー情報
-        $id = 1;
+        $userId = 1;
         $name = 'test';
         $email = 'test@gmail.com';
         $password = 'w44wwwww';
@@ -105,17 +105,27 @@ class SectionController extends TestCase
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $storeData = [
         'userName' => $name,
         'sectionName' => 'test'
         ];
-        $this->post('/user/'.$id.'/sections', $storeData);
+        $this->post('/user/'.$userId.'/sections', $storeData);
 
-        $deleteData = [
-        'userName' => $name,
-        'sectionName' => $storeData['sectionName'],
+        // プロフィールのコンテンツの作成
+        $contentData = [
+        'userId' => $userId,
+        'sectionId' => $sectionId,
+        'type' => 'text',
+        'substance' => 'testtest',
         ];
-        $response = $this->delete('/sections/'.$id, $deleteData);
+        $this->post('/user/'.$userId.'/contents', $contentData);
+
+        // プロフィールのセクションの削除
+        $deleteData = [
+        'userId' => $userId,
+        ];
+        $response = $this->delete('/sections/'.$sectionId, $deleteData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
@@ -123,13 +133,17 @@ class SectionController extends TestCase
         $response->assertExactJson($result, true);
 
         // セクションのDBの確認
-        $this->assertDatabaseMissing('sections', ['user_id' => $id, 'name' => $storeData['sectionName']]);
+        $this->assertDatabaseMissing('sections', ['user_id' => $userId, 'name' => $storeData['sectionName']]);
+
+        // 削除するセクション内のコンテンツを削除できたか確認
+        $deleteContent = ['section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
+        $this->assertDatabaseMissing('contents', $deleteContent);
     }
 
     /**
      * プロフィールのセクションの取得機能の確認
      *
-     * @test
+     * test
      *
      * @return void
      */

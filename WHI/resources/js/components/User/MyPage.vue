@@ -54,7 +54,7 @@
                     </v-list-item-title>
                     <v-btn
                         v-if="item.section === 'Section' && !item.update"
-                        @click="check(item.title)"
+                        @click="check(item.id, item.title)"
                         small
                         class="ml-1 red white--text"
                         >削除</v-btn
@@ -113,7 +113,7 @@
             <user-update v-if="section === 'UserUpdate'" />
             <profile v-if="section === 'Profile'" />
             <sections
-		    v-if="section === 'Section' && contents.length > 0"
+                v-if="section === 'Section' && contents.length > 0"
                 :section-id="setSectionId"
                 :section-name="setSectionName"
                 :contents="contents"
@@ -173,6 +173,8 @@ export default {
             overlay: false,
             // 項目の削除のデータの格納に使用
             deleteSectionName: null,
+            deleteSectionId: null,
+
             newSectionName: null,
             // 項目の表示に使用
             setSectionId: null,
@@ -263,14 +265,13 @@ export default {
         deleteSection() {
             const vm = this;
             const data = {
-                userName: this.$store.state.user.name,
-                sectionName: this.deleteSectionName,
+                userId: this.$store.state.user.id,
             };
             const headers = {
                 "User-Name": this.$store.state.user.name,
             };
             axios
-                .delete("/sections/" + this.$store.state.user.id, {
+                .delete("/sections/" + this.deleteSectionId, {
                     data,
                     headers,
                 })
@@ -286,6 +287,7 @@ export default {
                         vm.drawer = !vm.drawer;
                         vm.overlay = !vm.overlay;
                         // 項目の削除のデータを格納する変数を初期値へ戻す
+                        vm.deleteId = null;
                         vm.deleteSection = null;
                     }
                     return;
@@ -339,9 +341,10 @@ export default {
                 });
         },
         // 項目の削除を本当にするかどうかの確認
-        check(sectionName) {
+        check(sectionId, sectionName) {
             // 引数に値が渡された場合、それを項目の削除の際に使用
-            if (sectionName != null) {
+            if (sectionId != null && sectionName != null) {
+                this.deleteSectionId = sectionId;
                 this.deleteSectionName = sectionName;
             }
             // 削除の確認の表示の制御

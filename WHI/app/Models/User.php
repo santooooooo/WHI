@@ -65,4 +65,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Content::class, 'user_id');
     }
+
+    /**
+     * ユーザーとプロフィールのブログとのデータの関係
+     */
+    public function blogs(): object
+    {
+        return $this->hasMany(Blog::class, 'user_id');
+    }
 }

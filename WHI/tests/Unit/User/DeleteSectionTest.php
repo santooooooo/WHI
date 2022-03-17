@@ -16,13 +16,13 @@ class DeleteSectionTest extends TestCase
     /**
      * プロフィールのセクションの削除のテスト
      *
-     * test
+     * @test
      * @return void
      */
     public function remove()
     {
         // ユーザー情報
-        $id = 1;
+        $userId = 1;
         $name = 'Jamboo';
         $email = 'Jamboo@gmail.com';
         $password = 'Jamboo';
@@ -33,25 +33,27 @@ class DeleteSectionTest extends TestCase
 
         // プロフィールの作成
         $writeProfile = new WriteProfile();
-        $writeProfile->write($id, $name);
+        $writeProfile->write($userId, $name);
 
         // プロフィールのセクションの作成
+        $sectionId = 1;
         $sectionName = 'test';
         $createSection = new CreateSection();
-        $createSection->create($id, $name, $sectionName);
+        $createSection->create($userId, $name, $sectionName);
 
         // プロフィールのセクションの削除
         $domain = new DeleteSection();
-        $result = $domain->remove($id, $name, $sectionName);
+        $result = $domain->remove($userId, $sectionId);
 
         $this->assertTrue($result);
-        $this->assertDatabaseMissing('sections', ['user_id' => $id, 'name' => $sectionName]);
+        $this->assertDatabaseMissing('sections', ['user_id' => $userId, 'name' => $sectionId]);
     }
 
     /**
      * プロフィールのすべてのセクションの削除のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function allRemove()
