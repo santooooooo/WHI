@@ -24,6 +24,7 @@
                 label="経歴"
                 v-model="career"
                 :rules="careerRules"
+                :counter="1000"
                 auto-grow
             ></v-textarea>
 
@@ -31,12 +32,13 @@
                 label="プロフィールタイトル"
                 v-model="title"
                 :rules="textFieldRules"
-                auto-grow
+                :counter="255"
             ></v-text-field>
 
             <v-textarea
                 label="プロフィールの内容"
                 v-model="text"
+                :counter="10000"
                 :rules="textAreaRules"
                 auto-grow
             ></v-textarea>
@@ -51,6 +53,7 @@
                 label="twitter"
                 v-model="twitter"
                 :rules="textFieldRules"
+                :counter="255"
             ></v-text-field>
 
             <v-btn
@@ -67,14 +70,16 @@
 export default {
     data() {
         return {
+            // フォームの制御
             valid: false,
+            // フォームに入る値
             icon: null,
             career: "",
             title: "",
             text: "",
             email: "",
             twitter: "",
-            iconUrl: null,
+            // 入力値のバリデーション
             careerRules: [
                 (value) =>
                     value.length <= 1000 || "最大文字数は文字数が1000字です",
@@ -103,9 +108,6 @@ export default {
     methods: {
         // ユーザーのプロフィールの情報の更新
         updateProfile() {
-            //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
-            //const vm = this;
-
             let data = new FormData();
             data.append("name", this.$store.state.user.name);
             if (this.icon != null) {
@@ -168,6 +170,7 @@ export default {
             this.twitter = profile.twitter ?? "";
         },
 
+        // アイコンの削除
         deleteProfileIcon() {
             const headers = {
                 "User-Id": this.$store.state.user.id,
@@ -189,12 +192,14 @@ export default {
                 });
         },
     },
+    // プロフィール情報の取得
     mounted() {
         this.getProfile();
     },
 };
 </script>
 <style scoped>
+/* 画面幅ごとにアイコン表示のサイズを変更 */
 @media (min-width: 700px) {
     .icon-size {
         width: 20%;

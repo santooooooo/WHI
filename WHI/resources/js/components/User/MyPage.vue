@@ -74,6 +74,7 @@
                         <v-text-field
                             required
                             label="変更名"
+                            :placeholder="item.title"
                             :rules="sectionRules"
                             v-model="newSectionName"
                         >
@@ -174,7 +175,7 @@ export default {
             // 項目の削除のデータの格納に使用
             deleteSectionName: null,
             deleteSectionId: null,
-
+            // 更新する項目の値
             newSectionName: null,
             // 項目の表示に使用
             setSectionId: null,
@@ -367,6 +368,7 @@ export default {
             this.setSectionName = sectionName;
             await this.getContents();
         },
+        // Sections.vueへ渡す用のコンテンツデータを取得
         getContents() {
             const vm = this;
             axios
@@ -403,6 +405,8 @@ export default {
 .theme--light.v-navigation-drawer {
     background: rgba(54, 54, 54, 0.9);
 }
+
+/* 画面幅ごとにセクションメニューの幅を変更 */
 @media (min-width: 700px) {
     .section {
         width: 90%;

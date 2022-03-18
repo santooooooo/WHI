@@ -31,6 +31,7 @@
             <v-textarea
                 :label="type"
                 v-model="content"
+                :counter="10000"
                 :rules="contentRules"
                 auto-grow
                 required
@@ -103,6 +104,7 @@
                     required
                     label="変更内容"
                     :rules="contentRules"
+                    :counter="10000"
                     v-model="updateSubstance"
                 >
                 </v-textarea>
@@ -163,21 +165,37 @@ export default {
         return {
             // フォームのバリデーションに使用
             valid: true,
-            contentRules: [(value) => !!value || "何も入力されていません"],
+            contentRules: [
+                (value) => !!value || "何も入力されていません",
+                (value) => {
+                    if (value != null) {
+                        return (
+                            value.length <= 10000 ||
+                            "最大文字数は文字数が10000字です"
+                        );
+                    }
+                    return true;
+                },
+            ],
+            // コンテンツフォームの値
             content: null,
             type: null,
+            // コンテンツフォームの制御に使用
             items: [{ title: "text" }, { title: "url" }, { title: "ブログ" }],
             form: false,
             addButton: true,
+            // コンテンツの更新する値
             updateSubstance: null,
             // 削除の際の確認表示の制御に使用
             drawer: false,
             overlay: false,
             deleteContentId: null,
+            // 全てのurlのOGPの値
             ogps: [],
         };
     },
     methods: {
+        // コンテンツフォームを開く
         openForm(type) {
             if ((type === "text") | (type === "url")) {
                 this.type = type;
@@ -187,10 +205,12 @@ export default {
             }
             return;
         },
+        // コンテンツフォームを閉じる
         closeForm() {
             this.addButton = !this.addButton;
             this.form = !this.form;
         },
+        // 新たなコンテンツを作成
         create() {
             //　axios.post実行後にthisインスタンスは使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
@@ -247,6 +267,7 @@ export default {
             this.drawer = !this.drawer;
             this.overlay = !this.overlay;
         },
+        // コンテンツを更新
         update(contentId) {
             const vm = this;
             const data = {
@@ -289,6 +310,7 @@ export default {
                     );
                 });
         },
+        // コンテンツを削除
         deleteContent() {
             const vm = this;
             const data = {
@@ -325,6 +347,7 @@ export default {
                     );
                 });
         },
+        // URLのOGPの取得
         getOgp(id, url) {
             //　axios.post実行後にthisインスタンスは使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
@@ -354,6 +377,7 @@ export default {
                     );
                 });
         },
+        // 全てのURLのOGPから特定のIDのOGPのオブジェクトを取得
         getOgpObj(id) {
             let result = null;
             this.ogps.forEach((ogp) => {
@@ -363,6 +387,7 @@ export default {
             });
             return result;
         },
+        // セクションごとのURLの取得するOGPの切り替え
         changeOgp() {
             this.contents.forEach((content) => {
                 if (content.type == "url") {
@@ -371,10 +396,12 @@ export default {
             });
         },
     },
+    // セクションごとのURLの取得するOGPの切り替え
     mounted() {
         this.changeOgp();
     },
     computed: {
+        // OGPのタイトル表示
         ogpTitle() {
             return function (id) {
                 const ogp = this.getOgpObj(id);
@@ -384,6 +411,7 @@ export default {
                 return ogp.title;
             };
         },
+        // OGPのdescription表示
         ogpDescription() {
             return function (id) {
                 const ogp = this.getOgpObj(id);
@@ -393,6 +421,7 @@ export default {
                 return ogp.description;
             };
         },
+        // OGPのurl表示
         ogpUrl() {
             return function (id) {
                 const ogp = this.getOgpObj(id);
@@ -402,6 +431,7 @@ export default {
                 return ogp.url;
             };
         },
+        // OGPの画像表示
         ogpImage() {
             return function (id) {
                 const ogp = this.getOgpObj(id);
@@ -415,6 +445,7 @@ export default {
 };
 </script>
 <style scoped>
+/* ogpの表示が大きくなってもボタンの位置を画面外に出さないようにする */
 * {
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -426,6 +457,8 @@ export default {
 .row > * {
     min-width: 0;
 }
+
+/* 画面幅ごとにOGPの表示を変更 */
 @media (min-width: 800px) {
     .ogp-pozition {
         display: flex;

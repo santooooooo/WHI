@@ -59,11 +59,13 @@
 export default {
     data() {
         return {
-            valid: false,
+            // フォームの値
             newName: "",
             newEmail: "",
             newPassword: "",
             password: "",
+            // フォームのバリデーション
+            valid: false,
             newNameRules: [
                 (value) =>
                     value.length <= 255 || "最大文字数は文字数が255字です",
@@ -96,10 +98,12 @@ export default {
                     (/.+\w+/.test(value) && value.length >= 6) ||
                     "パスワードは半角英数字6文字以上です",
             ],
+            // フォームの送信結果の表示を制御
             showAlert: "",
         };
     },
     methods: {
+        // ユーザー情報の更新
         update() {
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
@@ -116,7 +120,7 @@ export default {
                         newEmail: this.newEmail,
                         newPassword: this.newPassword,
                     },
-                    {headers}
+                    { headers }
                 )
                 .then(function (response) {
                     if (response.data == "password wrong") {
