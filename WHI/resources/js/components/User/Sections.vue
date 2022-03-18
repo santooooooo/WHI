@@ -69,13 +69,11 @@
                 </div>
             </v-list-item-title>
             <v-card
-                max-width="90%"
                 :href="content.substance"
                 v-if="content.type === 'url'"
                 class="black--text ogp-pozition"
             >
                 <v-img
-                    contain
                     class="ogp-img"
                     :src="ogpImage(content.id)"
                 ></v-img>
