@@ -11,7 +11,7 @@ const store = new Vuex.Store({
             storage: {
                 getItem: (key) => Cookies.get(key),
                 setItem: (key, value) =>
-                    Cookies.set(key, value, { expires: 1, secure: false }),
+                    Cookies.set(key, value, { expires: 1, secure: true }),
                 removeItem: (key) => Cookies.remove(key),
             },
         }),

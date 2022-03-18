@@ -27,13 +27,12 @@ final class DeleteContent
 
         if($isUser && $isSection && $isContent) {
             $this->content->where('id', $contentId)->delete();
-            return;
         }
         return;
     }
 
     /**
-     * ユーザー退会時にプロフィールの全てのコンテンツの削除
+     * ユーザー退会時にそのユーザーの全てのコンテンツの削除
      */
     public function allRemove(int $id, string $name): void
     {
