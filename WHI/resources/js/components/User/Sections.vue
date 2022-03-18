@@ -201,6 +201,7 @@ export default {
                 substance: this.content,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios
@@ -254,6 +255,7 @@ export default {
                 substance: this.updateSubstance,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios
@@ -294,6 +296,7 @@ export default {
                 sectionId: this.sectionId,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios

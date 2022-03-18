@@ -37,7 +37,7 @@ class CheckAuthTest extends TestCase
 
         $identification = Auth::find($id)->identification;
         $domain = new CheckAuth();
-        $result = $domain->check($identification, $name);
+        $result = $domain->check($identification, $id, $name);
 
         $this->assertTrue($result);
     }

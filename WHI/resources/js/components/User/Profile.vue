@@ -119,6 +119,7 @@ export default {
             const headers = {
                 "Content-Type": "multipart/form-data",
                 "X-HTTP-Method-Override": "PUT",
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios
@@ -169,6 +170,7 @@ export default {
 
         deleteProfileIcon() {
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios

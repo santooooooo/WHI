@@ -203,6 +203,7 @@ export default {
                 sectionName: this.sectionName,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios
@@ -268,6 +269,7 @@ export default {
                 userId: this.$store.state.user.id,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios
@@ -308,6 +310,7 @@ export default {
                 newSectionName: this.newSectionName,
             };
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios

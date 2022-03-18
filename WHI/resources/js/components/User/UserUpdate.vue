@@ -104,6 +104,7 @@ export default {
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
             const headers = {
+                "User-Id": this.$store.state.user.id,
                 "User-Name": this.$store.state.user.name,
             };
             axios

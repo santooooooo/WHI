@@ -45,10 +45,11 @@ class CheckUser
             }
 
             // POSTまたはPUTリクエストに対してheaderからリクエスト先が正しいかチェック
+            $id = $request->header('user-id');
             $name = $request->header('user-name');
             $identification = $request->cookie('auth');
             $check = new CheckAuth();
-            $result = $check->check($identification, $name);
+            $result = $check->check($identification, $id, $name);
             if($result) {
                 return $next($request);
             }

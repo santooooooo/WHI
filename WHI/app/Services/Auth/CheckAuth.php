@@ -17,12 +17,12 @@ class CheckAuth
     /**
      * リクエストの認証情報の確認
      */
-    public function check(string $identification, string $name): bool
+    public function check(string $identification,int $id, string $name): bool
     {
         $email = $this->auth->where('identification', $identification)->value('email');
         if(!is_null($email)) {
-            $userName = $this->user->where('email', $email)->value('name');
-            return $userName === $name;
+            $user = $this->user->where('email', $email)->first();
+            return $user->id === $id && $user->name === $name ;
         }
         return false;
     }
