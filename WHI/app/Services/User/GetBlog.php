@@ -16,7 +16,12 @@ final class GetBlog
     /**
      * コンテンツブログの取得
      *
-     * @return array | null
+     * @return array{
+     * id: int,
+     * title: string,
+     * text: string,
+     * updated: string,
+     * } | null
      */
     public function index(int $id)
     {
@@ -31,7 +36,7 @@ final class GetBlog
         'id' => $blog->id,
         'title' => $blog->title,
         'text' => $blog->text,
-        'updated' => $updated,
+        'updated' => substr($updated, 0, 10),
         ];
 
         return $data;

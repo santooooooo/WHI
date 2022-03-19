@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SectionController extends TestCase
 {
@@ -121,6 +122,15 @@ class SectionController extends TestCase
         ];
         $this->post('/user/'.$userId.'/contents', $contentData);
 
+        // ブログの作成
+        $blogData = [
+        'userId' => $userId,
+        'sectionId' => $sectionId,
+        'title' => Str::random(255),
+        'text' => Str::random(10000)
+        ];
+        $this->post('/blog/', $blogData);
+
         // プロフィールのセクションの削除
         $deleteData = [
         'userId' => $userId,
@@ -134,10 +144,10 @@ class SectionController extends TestCase
 
         // セクションのDBの確認
         $this->assertDatabaseMissing('sections', ['user_id' => $userId, 'name' => $storeData['sectionName']]);
-
         // 削除するセクション内のコンテンツを削除できたか確認
-        $deleteContent = ['section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
-        $this->assertDatabaseMissing('contents', $deleteContent);
+        $this->assertDatabaseMissing('contents', ['section_id' => $sectionId]);
+        // 削除するセクション内のブログを削除できたか確認
+        $this->assertDatabaseMissing('blogs', ['section_id' => $sectionId]);
     }
 
     /**

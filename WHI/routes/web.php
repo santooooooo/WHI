@@ -35,5 +35,6 @@ Route::namespace($nameSpace)->middleware('throttle')->group(
         Route::resource('user.sections', 'SectionController')->shallow();
         Route::resource('user.contents', 'ContentController')->shallow();
         Route::post('ogp', 'OtherController@ogp');
+        Route::resource('blog', 'BlogController');
     }
 );

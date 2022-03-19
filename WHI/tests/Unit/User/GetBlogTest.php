@@ -63,7 +63,7 @@ class GetBlogTest extends TestCase
         'id' => $blogId,
         'title' => $title,
         'text' => $text,
-        'updated' => $updated,
+        'updated' => substr($updated, 0, 10),
         ];
         $this->assertSame($result, $trueResult);
     }

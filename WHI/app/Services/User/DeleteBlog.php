@@ -20,15 +20,21 @@ final class DeleteBlog
 
     /**
      * ブログの削除
+     *
+     * @return int | null
      */
-    public function remove(int $userId, int $sectionId, int $blogId): void
+    public function remove(int $userId, int $sectionId, int $blogId)
     {
         $isBlog = $this->blog->where('id', $blogId)->where('user_id', $userId)->where('section_id', $sectionId)->exists();
 
         if($isBlog) {
             $this->blog->where('id', $blogId)->delete();
+            $appUrl = env('APP_URL');
+            $blogUrl = $appUrl.'/#/blogs/'.$blogId;
+            $content = $this->content->where('substance', $blogUrl)->first();
+            return $content->id;
         }
-        return;
+        return null;
     }
 
     /**

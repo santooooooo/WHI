@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class BasicController extends TestCase
 {
@@ -62,7 +63,7 @@ class BasicController extends TestCase
     public function destroy()
     {
         // ユーザー情報
-        $id = 1;
+        $userId = 1;
         $name = 'test';
         $email = 'test@gmail.com';
         $password = 'w44wwwww';
@@ -76,30 +77,44 @@ class BasicController extends TestCase
         'userName' => $name,
         'sectionName' => 'test'
         ];
-        $this->post('/user/'.$id.'/sections', $storeData);
+        $this->post('/user/'.$userId.'/sections', $storeData);
 
         // プロフィールのコンテンツの作成
         $contentData = [
-        'userId' => $id,
+        'userId' => $userId,
         'sectionId' => $sectionId,
         'type' => 'text',
         'substance' => 'testtest',
         ];
-        $this->post('/user/'.$id.'/contents', $contentData);
+        $this->post('/user/'.$userId.'/contents', $contentData);
 
+        // ブログの作成
+        $blogData = [
+        'userId' => $userId,
+        'sectionId' => $sectionId,
+        'title' => Str::random(255),
+        'text' => Str::random(10000)
+        ];
+        $response = $this->post('/blog/', $blogData);
 
         // ユーザーの退会を行うリクエストを送信
-        $response = $this->delete('/user/'.$id, ['name' => $name]);
+        $response = $this->delete('/user/'.$userId, ['name' => $name]);
 
         // 存在しないユーザーの退会を行うリクエストを送信
         //$response = $this->delete('/user/2', ['email' => $email]);
 
         // リクエスト及びDBの値の確認
         $response->assertStatus(200);
-        $this->assertDatabaseMissing('users', ['id' => $id]);
-        $this->assertDatabaseMissing('profiles', ['user_id' => $id]);
-        $this->assertDatabaseMissing('sections', ['user_id' => $id]);
-        $this->assertDatabaseMissing('contents', ['user_id' => $id]);
+        // DBからユーザーが削除されているか
+        $this->assertDatabaseMissing('users', ['id' => $userId]);
+        // DBから削除されたユーザーのプロフィールが削除されているか
+        $this->assertDatabaseMissing('profiles', ['user_id' => $userId]);
+        // DBから削除されたユーザーのセクションが削除されているか
+        $this->assertDatabaseMissing('sections', ['user_id' => $userId]);
+        // DBから削除されたユーザーのコンテンツが削除されているか
+        $this->assertDatabaseMissing('contents', ['user_id' => $userId]);
+        // DBから削除されたユーザーのブログが削除されているか
+        $this->assertDatabaseMissing('blogs', ['user_id' => $userId]);
     }
 
     /**

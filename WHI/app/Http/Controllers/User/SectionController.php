@@ -10,6 +10,7 @@ use App\Services\User\CreateSection;
 use App\Services\User\UpdateSection;
 use App\Services\User\DeleteSection;
 use App\Services\User\DeleteContent;
+use App\Services\User\DeleteBlog;
 use App\Services\User\GetSection;
 use App\Http\Requests\SectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
@@ -113,9 +114,15 @@ class SectionController extends Controller
         $sectionId = $id;
         $userId = $request->input('userId');
 
+        // 削除するセクションの全てのブログの削除
+        $deleteContent = new DeleteBlog();
+        $deleteContent->allRemoveInSection($userId, $sectionId);
+
+        // 削除するセクションの全てのコンテンツの削除
         $deleteContent = new DeleteContent();
         $deleteContent->allRemoveInSection($userId, $sectionId);
 
+        // セクションの削除
         $deleteSection = new DeleteSection();
         $deleteSection->remove($userId, $sectionId);
         return response()->json('Success');

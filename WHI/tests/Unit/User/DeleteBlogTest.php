@@ -9,6 +9,7 @@ use App\Services\User\SignUp;
 use App\Services\User\WriteProfile;
 use App\Services\User\CreateSection;
 use App\Services\User\CreateBlog;
+use App\Services\User\CreateContent;
 use App\Services\User\DeleteBlog;
 
 class DeleteBlogTest extends TestCase
@@ -17,7 +18,7 @@ class DeleteBlogTest extends TestCase
     /**
      * ブログの削除のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -50,9 +51,20 @@ class DeleteBlogTest extends TestCase
         $createBlog = new CreateBlog();
         $createBlog->create($userId, $sectionId, $title, $text);
 
+        // プロフィールのコンテンツの作成
+        $contentId = 1;
+        $type = 'blog';
+        $appUrl = env('APP_URL');
+        $substance = $appUrl.'/#/blogs/'.$blogId;
+        $createContent = new CreateContent();
+        $createContent->create($userId, $sectionId, $type, $substance);
+
         // ブログの削除
         $domain = new DeleteBlog();
-        $domain->remove($userId, $sectionId, $blogId);
+        $result = $domain->remove($userId, $sectionId, $blogId);
+
+        // 結果の確認
+        $this->assertSame($result, $contentId);
 
         // ブログの削除の確認
         $this->assertDatabaseMissing('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $title, 'text' => $text]);
@@ -62,6 +74,7 @@ class DeleteBlogTest extends TestCase
      * ユーザー削除時にそのユーザーの全てのブログの削除のテスト
      *
      * test
+     *
      * @return void
      */
     public function allRemove()
@@ -116,7 +129,8 @@ class DeleteBlogTest extends TestCase
     /**
      * ユーザー削除時にそのユーザーの全てのブログの削除のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function allRemoveInSection()

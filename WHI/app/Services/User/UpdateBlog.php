@@ -26,11 +26,10 @@ final class UpdateBlog
         $titleCheck = strlen($title) > 0;
         $textCheck = strlen($text) > 0;
 
-        // ユーザーとそのユーザーのセクションがあるかのチェック
-        $isUser = $this->user->where('id', $userId)->exists();
+        // ユーザーのブログがあるかのチェック
         $isBlog = $this->blog->where('id', $blogId)->where('user_id', $userId)->exists();
 
-        if($titleCheck && $textCheck && $isUser && $isBlog) {
+        if($titleCheck && $textCheck && $isBlog) {
             $this->blog->where('id', $blogId)->update(
                 [
                 'title' => $title,
