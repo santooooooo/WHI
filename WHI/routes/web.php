@@ -29,12 +29,12 @@ Route::get(
 $nameSpace = 'App\Http\Controllers\User';
 Route::namespace($nameSpace)->middleware('throttle')->group(
     function () {
-        Route::resource('user', 'BasicController');
-        Route::post('login', 'OtherController@login');
+        Route::resource('user', 'UserController');
+        Route::post('login', 'UserOtherController@login');
         Route::resource('user.profile', 'ProfileController')->shallow();
         Route::resource('user.sections', 'SectionController')->shallow();
         Route::resource('user.contents', 'ContentController')->shallow();
-        Route::post('ogp', 'OtherController@ogp');
+        Route::post('ogp', 'UserOtherController@ogp');
         Route::resource('blog', 'BlogController');
     }
 );

@@ -18,7 +18,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
-class BasicController extends Controller
+class UserController extends Controller
 {
     public function __construct()
     {

@@ -11,7 +11,7 @@ use App\Services\User\GetOGP;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\OgpRequest;
 
-class OtherController extends Controller
+class UserOtherController extends Controller
 {
     /**
      * ユーザーのログイン

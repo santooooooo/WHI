@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class BasicController extends TestCase
+class UserController extends TestCase
 {
     use RefreshDatabase;
     /**
