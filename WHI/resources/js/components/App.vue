@@ -47,7 +47,7 @@
                 <v-list-item>
                     <v-btn
                         :disabled="$store.state.user.id === null"
-                        to="mypage"
+                        @click="goMypage"
                     >
                         <v-list-item-title class="subtitle-1 pa-5">
                             マイページ
@@ -152,6 +152,9 @@ export default {
         logout() {
             this.$store.commit("resetUserInfo");
             this.$router.push("/");
+        },
+        goMypage() {
+            this.$router.push("/mypage");
         },
     },
     mounted() {},

@@ -70,13 +70,10 @@
             </v-list-item-title>
             <v-card
                 :href="content.substance"
-                v-if="content.type === 'url'"
+                v-if="content.type === 'url' || content.type === 'blog'"
                 class="black--text ogp-pozition"
             >
-                <v-img
-                    class="ogp-img"
-                    :src="ogpImage(content.id)"
-                ></v-img>
+                <v-img class="ogp-img" :src="ogpImage(content.id)"></v-img>
                 <div>
                     <v-card-title>{{ ogpTitle(content.id) }} </v-card-title>
                     <v-card-text>{{ ogpDescription(content.id) }} </v-card-text>
@@ -179,7 +176,7 @@ export default {
             content: null,
             type: null,
             // コンテンツフォームの制御に使用
-            items: [{ title: "text" }, { title: "url" }, { title: "ブログ" }],
+            items: [{ title: "text" }, { title: "url" }, { title: "blog" }],
             form: false,
             addButton: true,
             // コンテンツの更新する値
@@ -200,6 +197,11 @@ export default {
                 this.addButton = !this.addButton;
                 this.form = true;
                 return;
+            } else if (type === "blog") {
+                const newBlogId = 0;
+                return this.$router.push(
+                    "/sections/" + this.sectionId + "/edit-blog/" + newBlogId
+                );
             }
             return;
         },
@@ -369,17 +371,25 @@ export default {
                     return;
                 })
                 .catch(function (error) {
+                    const newOgp = {
+                        id: id,
+                        title: "No data",
+                        description: "No description",
+                        url: url,
+                        image: null,
+                    };
+                    vm.ogps.push(newOgp);
                     // サーバ側から何らかのエラーが発せられた場合
-                    alert(
-                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
-                    );
+                    //alert(
+                    //    "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    //);
                 });
         },
         // 全てのURLのOGPから特定のIDのOGPのオブジェクトを取得
         getOgpObj(id) {
             let result = null;
             this.ogps.forEach((ogp) => {
-                if (ogp.id == id) {
+                if (ogp.id === id) {
                     result = ogp;
                 }
             });
@@ -388,7 +398,7 @@ export default {
         // セクションごとのURLの取得するOGPの切り替え
         changeOgp() {
             this.contents.forEach((content) => {
-                if (content.type == "url") {
+                if (content.type === "url" || content.type === "blog") {
                     this.getOgp(content.id, content.substance);
                 }
             });

@@ -11,9 +11,34 @@ import Vuetify from "vuetify";
 import store from "./Store/index";
 import router from "./router";
 import App from "./components/App.vue";
-import 'vuetify/dist/vuetify.min.css'
+import "vuetify/dist/vuetify.min.css";
+// ブログ用ツールのプラグイン
+import VueMarkdownEditor from "@kangc/v-md-editor";
+import "@kangc/v-md-editor/lib/style/base-editor.css";
+import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
+import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
+import Prism from "prismjs";
+import "prismjs/components/prism-json";
+import enUS from "@kangc/v-md-editor/lib/lang/en-US";
+
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
+import '@kangc/v-md-editor/lib/style/preview.css';
+//import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+import '@kangc/v-md-editor/lib/theme/style/github.css';
+//import hljs from 'highlight.js';
 
 Vue.use(Vuetify);
+
+VueMarkdownEditor.use(vuepressTheme, {
+    Prism,
+});
+
+VMdPreview.use(vuepressTheme, {
+    Prism,
+});
+VueMarkdownEditor.lang.use("en-US", enUS);
+Vue.use(VueMarkdownEditor);
+Vue.use(VMdPreview);
 
 /**
  * The following block of code may be used to automatically register your
@@ -32,7 +57,7 @@ Vue.use(Vuetify);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const opts = {}
+const opts = {};
 
 const app = new Vue({
     el: "#app",
