@@ -63,12 +63,6 @@
                                 ブログを確認する
                             </v-list-item-title>
                         </v-btn>
-
-                        <v-btn @click="back" class="ma-3 green">
-                            <v-list-item-title class="subtitle-1 pa-5">
-                                戻る
-                            </v-list-item-title>
-                        </v-btn>
                     </v-list-item>
                 </v-alert>
             </v-row>
@@ -80,12 +74,14 @@
 export default {
     data() {
         return {
+            // ブログに関する情報
             sectionId: null,
             blogId: null,
-            valid: true,
             title: null,
             text: "",
             updated: null,
+            // フォームのバリデーションに使用
+            valid: true,
             titleRules: [
                 (value) => !!value || "何も入力されていません",
                 (value) => {
@@ -98,10 +94,12 @@ export default {
                     return true;
                 },
             ],
+            // オーバーレイの表示の制御
             overlay: false,
         };
     },
     methods: {
+        // ブログを作成
         create() {
             // ブログの新規作成が妥当であるかチェック
             const blogId = Number(this.blogId);
@@ -147,6 +145,7 @@ export default {
                 .then(function (response) {
                     if (response.data !== null) {
                         const blog = response.data;
+                        vm.blogId = blog["id"];
                         vm.title = blog["title"];
                         vm.text = blog["text"];
                         vm.updated = blog["updated"];
@@ -160,33 +159,35 @@ export default {
                     );
                 });
         },
+        // ブログの更新
         update() {
             console.log("update");
         },
+        // ユーザーページへ飛ばす
         userPage() {
             this.$router.push("/mypage/");
         },
+        // ブログの表示ページへ飛ばす
         checkBlog() {
             console.log("Have not finished yet");
-        },
-        back() {
-            this.overlay = false;
         },
     },
     computed: {},
     mounted() {
-        // アクセス先がユーザーではない場合は、トップページへ移動させる
         if (
             this.$store.state.user.id !== null &&
             this.$store.state.user.name !== null
         ) {
+            // ブログの作成・更新に必要なデータを取得
             this.sectionId = this.$route.params.sectionId;
             this.blogId = this.$route.params.blogId;
+            // 更新の場合、ブログの情報を取得
             if (this.blogId > 0) {
                 this.getBlog();
             }
             return;
         }
+        // アクセス先がユーザーではない場合は、トップページへ移動させる
         return this.$router.push("/");
     },
 };
