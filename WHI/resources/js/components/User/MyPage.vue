@@ -114,7 +114,9 @@
             <user-update v-if="section === 'UserUpdate'" />
             <profile v-if="section === 'Profile'" />
             <sections
-                v-if="section === 'Section' && contents.length > 0"
+                v-if="
+                    section === 'Section' && (contents.length > 0 || noContents)
+                "
                 :section-id="setSectionId"
                 :section-name="setSectionName"
                 :contents="contents"
@@ -181,6 +183,7 @@ export default {
             setSectionId: null,
             setSectionName: null,
             contents: [],
+            noContents: false,
         };
     },
     mounted() {
@@ -362,6 +365,7 @@ export default {
             this.setSectionId = null;
             this.setSectionName = null;
             this.contents = [];
+            this.noContents = false;
 
             this.section = section;
             this.setSectionId = sectionId;
@@ -388,6 +392,7 @@ export default {
                             }
                         }
                     }
+                    vm.noContents = vm.contents.length === 0 ? true : false;
                     return;
                 })
                 .catch(function (error) {

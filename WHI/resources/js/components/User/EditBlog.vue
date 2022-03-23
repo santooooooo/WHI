@@ -24,21 +24,37 @@
             left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save | tip"
         ></v-md-editor>
 
-        <div class="d-flex justify-end">
+        <div class="d-flex justify-end mt-10">
             <v-btn
                 v-if="Number($route.params.blogId) === 0"
                 color="green"
                 :disabled="!valid || text.length === 0"
                 @click="create"
-                class="mt-5 mb-50 white--text"
+                class="white--text"
                 >ブログの追加</v-btn
+            >
+            <v-btn
+                v-if="Number($route.params.blogId) > 0"
+                color="red"
+                :disabled="!valid || text.length === 0"
+                @click="userPage"
+                class="mr-5 white--text"
+                >マイページへ戻る</v-btn
+            >
+            <v-btn
+                v-if="Number($route.params.blogId) > 0"
+                color="blue"
+                :disabled="!valid || text.length === 0"
+                @click="checkBlog"
+                class="mr-5 white--text"
+                >ブログの確認</v-btn
             >
             <v-btn
                 v-if="Number($route.params.blogId) > 0"
                 color="green"
                 :disabled="!valid || text.length === 0"
                 @click="update"
-                class="mt-5 white--text"
+                class="white--text"
                 >ブログの更新</v-btn
             >
         </div>
@@ -54,7 +70,7 @@
                     <v-list-item class="justify-center">
                         <v-btn @click="userPage" class="ma-3 red">
                             <v-list-item-title class="subtitle-1 pa-5">
-                                ユーザーページへ行く
+                                マイページへ戻る
                             </v-list-item-title>
                         </v-btn>
 
@@ -161,7 +177,33 @@ export default {
         },
         // ブログの更新
         update() {
-            console.log("update");
+            const vm = this;
+            const data = {
+                userId: this.$store.state.user.id,
+                title: this.title,
+                text: this.text,
+            };
+            const headers = {
+                "User-Id": this.$store.state.user.id,
+                "User-Name": this.$store.state.user.name,
+            };
+            axios
+                .put("/blog/" + this.blogId, data, {
+                    headers,
+                })
+                .then(function (response) {
+                    // リクエストが正常に実行された際、元の項目名を新たな項目名へ書き換える
+                    if (response.data === "Success") {
+                        vm.overlay = true;
+                    }
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
         },
         // ユーザーページへ飛ばす
         userPage() {
@@ -172,7 +214,6 @@ export default {
             console.log("Have not finished yet");
         },
     },
-    computed: {},
     mounted() {
         if (
             this.$store.state.user.id !== null &&

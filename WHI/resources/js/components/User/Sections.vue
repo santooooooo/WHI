@@ -80,10 +80,15 @@
                     <v-card-text>{{ ogpUrl(content.id) }} </v-card-text>
                 </div>
             </v-card>
-            <div class="d-flex justify-end mt-2" style="box-sizing: inherit">
+
+            <div
+                class="d-flex justify-end mt-2"
+                style="box-sizing: inherit"
+                v-if="content.type !== 'blog'"
+            >
                 <v-btn
                     v-if="!content.update"
-                    @click="check(content.id)"
+                    @click="check(content.id, content.type, content.substance)"
                     class="ml-1 red white--text"
                     >削除</v-btn
                 >
@@ -94,6 +99,23 @@
                     >変更</v-btn
                 >
             </div>
+            <div
+                class="d-flex justify-end mt-2"
+                style="box-sizing: inherit"
+                v-else
+            >
+                <v-btn
+                    @click="check(content.id, content.type, content.substance)"
+                    class="ml-1 red white--text"
+                    >削除</v-btn
+                >
+                <v-btn
+                    @click="updateBlog(content.substance)"
+                    class="ml-1 blue white--text"
+                    >変更</v-btn
+                >
+            </div>
+
             <v-form v-if="content.update" v-model="valid" class="white pa-1">
                 <v-textarea
                     required
@@ -122,9 +144,23 @@
                 <v-alert color="yellow darken-3 white--text" border="top" dark>
                     本当にこのコンテンツのデータを消去しますか？
                     <v-list-item class="justify-center">
-                        <v-btn @click="deleteContent()" class="ma-3 red">
+                        <v-btn
+                            @click="deleteContent()"
+                            class="ma-3 red"
+                            v-if="deleteType !== 'blog'"
+                        >
                             <v-list-item-title class="subtitle-1 pa-5">
                                 削除する
+                            </v-list-item-title>
+                        </v-btn>
+
+                        <v-btn
+                            @click="deleteContentAndBlog()"
+                            class="ma-3 red"
+                            v-else
+                        >
+                            <v-list-item-title class="subtitle-1 pa-5">
+                                ブログを削除する
                             </v-list-item-title>
                         </v-btn>
 
@@ -181,12 +217,15 @@ export default {
             addButton: true,
             // コンテンツの更新する値
             updateSubstance: null,
+            // 全てのurlのOGPの値
+            ogps: [],
+            // コンテンツ・ブログの削除に使用
+            deleteContentId: null,
+            deleteType: null,
+            deleteBlogId: null,
             // 削除の際の確認表示の制御に使用
             drawer: false,
             overlay: false,
-            deleteContentId: null,
-            // 全てのurlのOGPの値
-            ogps: [],
         };
     },
     methods: {
@@ -256,12 +295,14 @@ export default {
                 });
         },
         // コンテンツの削除を本当にするかどうかの確認
-        check(id) {
+        check(id, type, substance) {
             // 変数の初期化
             this.deleteContentId = null;
             // 引数に値が渡された場合、それをコンテンツの削除の際に使用
             if (id != null) {
                 this.deleteContentId = id;
+                this.deleteType = type;
+                this.deleteBlogId = substance.substring(substance.length - 1);
             }
             // 削除の確認の表示の制御
             this.drawer = !this.drawer;
@@ -402,6 +443,51 @@ export default {
                     this.getOgp(content.id, content.substance);
                 }
             });
+        },
+        updateBlog(substance) {
+            const blogId = substance.substring(substance.length - 1);
+            return this.$router.push(
+                "/sections/" + this.sectionId + "/edit-blog/" + blogId
+            );
+        },
+        // ブログとそのコンテンツの削除
+        deleteContentAndBlog() {
+            const vm = this;
+            const data = {
+                userId: this.$store.state.user.id,
+                sectionId: this.sectionId,
+            };
+            const headers = {
+                "User-Id": this.$store.state.user.id,
+                "User-Name": this.$store.state.user.name,
+            };
+            axios
+                .delete("/blog/" + this.deleteBlogId, {
+                    data,
+                    headers,
+                })
+                .then(function (response) {
+                    vm.contents.forEach((element) => {
+                        if (element.id == vm.deleteContentId) {
+                            const index = vm.contents.indexOf(element);
+                            vm.contents.splice(index, 1);
+                        }
+                    });
+                    // 削除の確認表示の消去
+                    vm.drawer = !vm.drawer;
+                    vm.overlay = !vm.overlay;
+                    // 項目の削除のデータを格納する変数を初期値へ戻す
+                    vm.deleteContentId = null;
+                    vm.deleteType = null;
+                    vm.deleteBlogId = null;
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
         },
     },
     // セクションごとのURLの取得するOGPの切り替え
