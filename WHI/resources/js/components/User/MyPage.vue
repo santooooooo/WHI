@@ -182,7 +182,9 @@ export default {
             // 項目の表示に使用
             setSectionId: null,
             setSectionName: null,
+            // 表示するコンテンツ
             contents: [],
+            // コンテンツがない時の処理に使用
             noContents: false,
         };
     },
@@ -392,6 +394,7 @@ export default {
                             }
                         }
                     }
+                    // コンテンツがない場合、noContentsをtrueとすることで、Sectionの表示を可能にする
                     vm.noContents = vm.contents.length === 0 ? true : false;
                     return;
                 })

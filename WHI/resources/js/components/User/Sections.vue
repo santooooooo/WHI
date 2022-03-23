@@ -420,10 +420,6 @@ export default {
                         image: null,
                     };
                     vm.ogps.push(newOgp);
-                    // サーバ側から何らかのエラーが発せられた場合
-                    //alert(
-                    //    "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
-                    //);
                 });
         },
         // 全てのURLのOGPから特定のIDのOGPのオブジェクトを取得
@@ -444,6 +440,7 @@ export default {
                 }
             });
         },
+        // ブログの更新ページへ飛ばす
         updateBlog(substance) {
             const blogId = substance.substring(substance.length - 1);
             return this.$router.push(
