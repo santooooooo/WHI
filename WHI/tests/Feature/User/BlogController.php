@@ -66,7 +66,7 @@ class BlogController extends TestCase
     /**
      * ブログの削除のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -177,7 +177,7 @@ class BlogController extends TestCase
     /**
      * ブログの取得のテスト
      *
-     * test
+     * @test
      * @return void
      */
     public function show()
@@ -217,6 +217,7 @@ class BlogController extends TestCase
         $response->assertStatus(200);
         $trueResult = [
         'id' => $blogId,
+        'user_id' => $userId,
         'title' => $blogData['title'],
         'text' => $blogData['text'],
         'updated' => substr($now, 0, 10),

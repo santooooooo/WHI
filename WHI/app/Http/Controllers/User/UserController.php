@@ -14,6 +14,7 @@ use App\Services\User\DeleteProfile;
 use App\Services\User\DeleteSection;
 use App\Services\User\DeleteContent;
 use App\Services\User\DeleteBlog;
+use App\Services\User\GetUser;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -73,11 +74,13 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
-        //
+        $service = new GetUser();
+        $userData = $service->getInfo($id);
+        return response()->json($userData);
     }
 
     /**

@@ -15,6 +15,9 @@ final class WriteProfile
         $this->profile = new Profile();
     }
 
+    /*
+     * ユーザーのプロフィールの保存または更新
+     */
     public function write(int $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
@@ -53,7 +56,16 @@ final class WriteProfile
     private function storeIcon(int $id, $newIcon)
     {
         $oldIcon = $this->profile->where('user_id', $id)->value('icon');
+        $env = env('APP_ENV');
         if(!is_null($newIcon)) {
+
+            // テストの時はテスト用のディレクトリへ保存する
+            if($env === 'testing') {
+                $path = Storage::disk('s3')->put('/test/users/'.$id.'/profile', $newIcon, 'public');
+                return $path;
+            }
+
+            // アイコンの保存
             $path = Storage::disk('s3')->put('users/'.$id.'/profile', $newIcon, 'public');
             return $path;
         } elseif(!is_null($oldIcon)) {

@@ -34,6 +34,7 @@ final class GetBlog
         $updated = (new Carbon($blog->updated_at))->toDateTimeString();
         $data = [
         'id' => $blog->id,
+        'user_id' => $blog->user_id,
         'title' => $blog->title,
         'text' => $blog->text,
         'updated' => substr($updated, 0, 10),

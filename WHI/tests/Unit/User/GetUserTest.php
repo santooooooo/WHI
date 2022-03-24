@@ -6,18 +6,18 @@ namespace Tests\Unit\User;
 use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Services\User\GetProfile;
+use App\Services\User\GetUser;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Services\User\WriteProfile;
 use App\Services\User\SignUp;
 use App\Services\User\DeleteProfile;
 
-class GetProfileTest extends TestCase
+class GetUserTest extends TestCase
 {
     use RefreshDatabase;
     /**
-     * ユーザーのプロフィールの取得のテスト
+     * ユーザー情報の取得のテスト
      *
      * @test
      * @return void
@@ -42,8 +42,6 @@ class GetProfileTest extends TestCase
         // プロフィール情報
         $data = [
         'icon' => UploadedFile::fake()->image('fake.png'),
-        // ファイルじゃない情報
-        //'icon' => '/var/www/public/',
         'career' => Str::random(10000),
         'title' => Str::random(255),
         'text' => Str::random(10000),
@@ -54,17 +52,13 @@ class GetProfileTest extends TestCase
         $writeProfile->write($id, $name, $data['icon'], $data['career'], $data['title'], $data['text'], $data['mail'], $data['twitter']);
 
         // ユーザーのプロフィールの取得
-        $domain = new GetProfile();
+        $domain = new GetUser();
         $result = $domain->getInfo($id);
 
         // ユーザーのプロフィールが取得できているのかチェック
         $icon = DB::table('profiles')->where('user_id', $id)->value('icon');
         $this->assertSame('https://whi.s3.amazonaws.com/'.$icon, $result['icon']);
-        $this->assertSame($data['career'], $result['career']);
-        $this->assertSame($data['title'], $result['title']);
-        $this->assertSame($data['text'], $result['text']);
-        $this->assertSame($data['mail'], $result['mail']);
-        $this->assertSame($data['twitter'], $result['twitter']);
+        $this->assertSame($name, $result['name']);
 
         // テスト用の画像の消去
         $deleteProfile = new DeleteProfile();

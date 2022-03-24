@@ -30,22 +30,17 @@
                 color="green"
                 :disabled="!valid || text.length === 0"
                 @click="create"
-                class="white--text"
+                class="white--text mr-5"
                 >ブログの追加</v-btn
             >
-            <v-btn
-                v-if="Number($route.params.blogId) > 0"
-                color="red"
-                :disabled="!valid || text.length === 0"
-                @click="userPage"
-                class="mr-5 white--text"
+            <v-btn color="red" @click="userPage" class="mr-5 white--text"
                 >マイページへ戻る</v-btn
             >
             <v-btn
                 v-if="Number($route.params.blogId) > 0"
                 color="blue"
                 :disabled="!valid || text.length === 0"
-                @click="checkBlog"
+                @click="checkBlog(blogId)"
                 class="mr-5 white--text"
                 >ブログの確認</v-btn
             >
@@ -74,7 +69,7 @@
                             </v-list-item-title>
                         </v-btn>
 
-                        <v-btn @click="checkBlog" class="ma-3 blue">
+                        <v-btn @click="checkBlog(blogId)" class="ma-3 blue">
                             <v-list-item-title class="subtitle-1 pa-5">
                                 ブログを確認する
                             </v-list-item-title>
@@ -209,9 +204,11 @@ export default {
         userPage() {
             this.$router.push("/mypage/");
         },
-        // ブログの表示ページへ飛ばす
-        checkBlog() {
-            console.log("Have not finished yet");
+        // ブログの表示ペーiす
+        checkBlog(id) {
+            return this.$router.push(
+                "/blogs/" + id
+            );
         },
     },
     mounted() {

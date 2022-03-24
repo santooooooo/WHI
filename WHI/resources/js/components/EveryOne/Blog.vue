@@ -1,7 +1,18 @@
 <template>
     <div class="white--text pa-5">
-        <h1>{{ title }}</h1>
-        <p v-if="updated !== null">更新日: {{ updated }}</p>
+        <v-list-item class="px-2 white--text">
+            <v-list-item-avatar>
+                <v-img :src="icon"></v-img>
+            </v-list-item-avatar>
+            <div>
+                <v-list-item-title>{{ name }}</v-list-item-title>
+                <v-list-item-subtitle class="white--text" v-if="updated !== null"
+                    >更新日: {{ updated }}</v-list-item-subtitle
+                >
+            </div>
+        </v-list-item>
+
+        <h1 style="font-size: 2.4rem;">{{ title }}</h1>
         <v-md-preview :text="text"></v-md-preview>
     </div>
 </template>
@@ -10,13 +21,18 @@
 export default {
     data() {
         return {
+            // ブログ情報
             id: null,
             title: null,
             text: "",
             updated: null,
+            // ブログに表示するユーザー情報
+            name: null,
+            icon: null,
         };
     },
     methods: {
+        // ブログ情報の取得
         getBlog(id) {
             const vm = this;
             axios
@@ -24,9 +40,31 @@ export default {
                 .then(function (response) {
                     if (response.data !== null) {
                         const blog = response.data;
+                        const userId = blog["user_id"];
                         vm.title = blog["title"];
                         vm.text = blog["text"];
                         vm.updated = blog["updated"];
+
+                        vm.getUserInfo(userId, vm);
+                    }
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
+        },
+        // ブログに表示するユーザー情報の取得
+        getUserInfo(id, vm) {
+            axios
+                .get("/user/" + id)
+                .then(function (response) {
+                    if (response.data !== null) {
+                        const user = response.data;
+                        vm.name = user["name"];
+                        vm.icon = user["icon"];
                     }
                     return;
                 })

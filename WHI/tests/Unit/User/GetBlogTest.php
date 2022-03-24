@@ -61,6 +61,7 @@ class GetBlogTest extends TestCase
 	$updated = (new Carbon($blog->updated_at))->toDateTimeString();
         $trueResult = [
         'id' => $blogId,
+        'user_id' => $userId,
         'title' => $title,
         'text' => $text,
         'updated' => substr($updated, 0, 10),

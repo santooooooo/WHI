@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Profile;
 
-final class GetProfile
+final class GetUser
 {
     public function __construct()
     {
@@ -16,15 +16,19 @@ final class GetProfile
     }
 
     /*
-     * ユーザーのプロフィールの取得
-     * @return array<string, string>
+     * ユーザー情報の取得
+     * @return array {
+     * id: int,
+     * name: string,
+     * icon: string,
+     * } | null
      */
-    public function getInfo(int $id): array
+    public function getInfo(int $id)
     {
         $isUser = $this->user->where('id', $id)->exists();
         if($isUser) {
-            $eloquent = $this->profile->where('user_id', $id)->get();
-            $profile = $eloquent[0];
+            $user = $this->user->where('id', $id)->first();
+            $profile = $this->profile->where('user_id', $id)->first();
 
             if(!is_null($profile->icon)) {
                 $icon = $this->getIcon($profile->icon);
@@ -33,16 +37,13 @@ final class GetProfile
             }
 
             $data = [
+            'name' => $user->name,
             'icon' => $icon,
-            'career' => $profile->career,
-            'title' => $profile->title,
-            'text' => $profile->text,
-            'mail' => $profile->mail,
-            'twitter' => $profile->twitter,
             ];
-
+        
             return $data;
         }
+        return null;
     }
 
     /*

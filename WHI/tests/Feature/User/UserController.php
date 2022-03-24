@@ -57,7 +57,8 @@ class UserController extends TestCase
     /**
      * ユーザー退会のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function destroy()
@@ -177,4 +178,32 @@ class UserController extends TestCase
         $response->assertExactJson($message);
     }
 
+    /**
+     * ユーザー情報の取得のテスト
+     *
+     * @test
+     *
+     * @return void
+     */
+    public function show()
+    {
+        // ユーザー情報
+        $userId = 1;
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = 'w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        // ユーザーの取得を行うリクエストを送信
+        $response = $this->get('/user/'.$userId);
+
+        // リクエストの結果の確認
+        $trueData = [
+            'name' => $name,
+            'icon' => null,
+        ];
+        $response->assertExactJson($trueData, true);
+    }
 }
