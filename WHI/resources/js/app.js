@@ -21,10 +21,10 @@ import Prism from "prismjs";
 import "prismjs/components/prism-json";
 import enUS from "@kangc/v-md-editor/lib/lang/en-US";
 
-import VMdPreview from '@kangc/v-md-editor/lib/preview';
-import '@kangc/v-md-editor/lib/style/preview.css';
+import VMdPreview from "@kangc/v-md-editor/lib/preview";
+import "@kangc/v-md-editor/lib/style/preview.css";
 //import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
-import '@kangc/v-md-editor/lib/theme/style/github.css';
+import "@kangc/v-md-editor/lib/theme/style/github.css";
 //import hljs from 'highlight.js';
 
 Vue.use(Vuetify);

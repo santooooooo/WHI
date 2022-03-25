@@ -206,9 +206,7 @@ export default {
         },
         // ブログの表示ペーiす
         checkBlog(id) {
-            return this.$router.push(
-                "/blogs/" + id
-            );
+            return this.$router.push("/blogs/" + id);
         },
     },
     mounted() {
@@ -230,3 +228,10 @@ export default {
     },
 };
 </script>
+
+<style>
+div .v-application .warning {
+    background-color: rgba(255, 229, 100, 0.3) !important;
+    border-color: #e7c000 !important;
+}
+</style>
