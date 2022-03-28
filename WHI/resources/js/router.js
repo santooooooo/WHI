@@ -8,6 +8,7 @@ import Login from "./components/EveryOne/Login.vue";
 import MyPage from "./components/User/MyPage.vue";
 import EditBlog from "./components/User/EditBlog.vue";
 import Blog from "./components/EveryOne/Blog.vue";
+import PRpage from "./components/EveryOne/PRpage.vue";
 
 const routes = [
     { path: "/", component: Home },
@@ -16,6 +17,7 @@ const routes = [
     { path: "/mypage", component: MyPage },
     { path: "/sections/:sectionId/edit-blog/:blogId", component: EditBlog },
     { path: "/blogs/:id", component: Blog },
+    { path: "/PRpage/:id", component: PRpage },
 ];
 
 const router = new VueRouter({

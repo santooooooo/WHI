@@ -2,9 +2,13 @@
     <v-app style="background-color: black">
         <div class="white--text">
             <v-app-bar class="black text-h3 pa-6 ma-3" dark>
-                <router-link to="/" class="text-decoration-none white--text">
-                    <div class="header-font font-weight-bold">WHI?</div>
-                </router-link>
+                <div
+                    @click="topPage"
+                    class="header-font font-weight-bold"
+                    style="cursor: pointer"
+                >
+                    WHI?
+                </div>
                 <v-spacer></v-spacer>
 
                 <v-btn @click.stop="drawer = !drawer">Menu</v-btn>
@@ -19,28 +23,24 @@
                 style="background-color: rgba(100, 100, 100, 0.6)"
             >
                 <v-list-item>
-                    <v-btn :disabled="$store.state.user.id !== null">
-                        <router-link
-                            to="signup"
-                            class="text-decoration-none black--text"
-                        >
-                            <v-list-item-title class="subtitle-1 pa-5">
-                                新規登録
-                            </v-list-item-title>
-                        </router-link>
+                    <v-btn
+                        @click="signup"
+                        :disabled="$store.state.user.id !== null"
+                    >
+                        <v-list-item-title class="subtitle-1 pa-5">
+                            新規登録
+                        </v-list-item-title>
                     </v-btn>
                 </v-list-item>
 
                 <v-list-item>
-                    <v-btn :disabled="$store.state.user.id !== null">
-                        <router-link
-                            to="login"
-                            class="text-decoration-none black--text"
-                        >
-                            <v-list-item-title class="subtitle-1 pa-5">
-                                ログイン
-                            </v-list-item-title>
-                        </router-link>
+                    <v-btn
+                        @click="login"
+                        :disabled="$store.state.user.id !== null"
+                    >
+                        <v-list-item-title class="subtitle-1 pa-5">
+                            ログイン
+                        </v-list-item-title>
                     </v-btn>
                 </v-list-item>
 
@@ -148,6 +148,15 @@ export default {
                         "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
+        },
+        topPage() {
+            this.$router.push("/");
+        },
+        signup() {
+            this.$router.push("/signup");
+        },
+        login() {
+            this.$router.push("/login");
         },
         logout() {
             this.$store.commit("resetUserInfo");

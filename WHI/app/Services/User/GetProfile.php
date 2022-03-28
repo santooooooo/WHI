@@ -17,14 +17,13 @@ final class GetProfile
 
     /*
      * ユーザーのプロフィールの取得
-     * @return array<string, string>
+     * @return array<string, string> | null
      */
-    public function getInfo(int $id): array
+    public function getInfo(int $id)
     {
         $isUser = $this->user->where('id', $id)->exists();
         if($isUser) {
-            $eloquent = $this->profile->where('user_id', $id)->get();
-            $profile = $eloquent[0];
+            $profile = $this->profile->where('user_id', $id)->first();
 
             if(!is_null($profile->icon)) {
                 $icon = $this->getIcon($profile->icon);
@@ -43,6 +42,7 @@ final class GetProfile
 
             return $data;
         }
+        return null;
     }
 
     /*
