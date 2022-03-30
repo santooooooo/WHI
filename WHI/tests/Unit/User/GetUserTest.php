@@ -58,6 +58,7 @@ class GetUserTest extends TestCase
         // ユーザーのプロフィールが取得できているのかチェック
         $icon = DB::table('profiles')->where('user_id', $id)->value('icon');
         $this->assertSame('https://whi.s3.amazonaws.com/'.$icon, $result['icon']);
+        $this->assertSame($id, $result['id']);
         $this->assertSame($name, $result['name']);
 
         // テスト用の画像の消去

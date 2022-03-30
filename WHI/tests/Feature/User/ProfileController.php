@@ -16,7 +16,7 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィールの新規作成
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -41,7 +41,7 @@ class ProfileController extends TestCase
         'career' => Str::random(1000),
         'title' => Str::random(255),
         'text' => Str::random(10000),
-        'mail' => $email,
+        'email' => $email,
         'twitter' => 'Jamboo',
         ];
         $response = $this->put('/profile/'.$id, $data);
@@ -55,7 +55,7 @@ class ProfileController extends TestCase
 
         // データベースに登録されているかのチェック
         $this->assertDatabaseCount('profiles', 1);
-        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career']]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career'], 'mail' => $data['email']]);
 
         // ユーザーの退会を行うリクエストを送信
         $response = $this->delete('/user/'.$id, ['name' => $name]);
@@ -114,7 +114,7 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィールアイコンのみの削除
      *
-     * @test
+     * test
      *
      * @return void
      */

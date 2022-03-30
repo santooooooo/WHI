@@ -83,7 +83,7 @@ class ProfileController extends Controller
         $career = $request->input('career');
         $title = $request->input('title');
         $text = $request->input('text');
-        $email = $request->input('mail');
+        $email = $request->input('email');
         $twitter = $request->input('twitter');
 
         if($icon === null) {

@@ -77,7 +77,7 @@
                 <div>
                     <v-card-title>{{ ogpTitle(content.id) }} </v-card-title>
                     <v-card-text>{{ ogpDescription(content.id) }} </v-card-text>
-                    <v-card-text>{{ ogpUrl(content.id) }} </v-card-text>
+                    <v-card-text>{{ content.substance }} </v-card-text>
                 </div>
             </v-card>
 
@@ -404,7 +404,6 @@ export default {
                             id: id,
                             title: ogpInfo["title"],
                             description: ogpInfo["description"],
-                            url: ogpInfo["url"],
                             image: ogpInfo["image"],
                         };
                         vm.ogps.push(newOgp);
@@ -416,7 +415,6 @@ export default {
                         id: id,
                         title: "No data",
                         description: "No description",
-                        url: url,
                         image: null,
                     };
                     vm.ogps.push(newOgp);
@@ -510,16 +508,6 @@ export default {
                     return null;
                 }
                 return ogp.description;
-            };
-        },
-        // OGPのurl表示
-        ogpUrl() {
-            return function (id) {
-                const ogp = this.getOgpObj(id);
-                if (ogp === null) {
-                    return null;
-                }
-                return ogp.url;
             };
         },
         // OGPの画像表示

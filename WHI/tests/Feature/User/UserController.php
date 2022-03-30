@@ -201,6 +201,7 @@ class UserController extends TestCase
 
         // リクエストの結果の確認
         $trueData = [
+            'id' => $userId,
             'name' => $name,
             'icon' => null,
         ];

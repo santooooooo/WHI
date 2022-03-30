@@ -52,6 +52,7 @@
             <v-text-field
                 label="twitter"
                 v-model="twitter"
+                placeholder="@以降のユーザー名"
                 :rules="textFieldRules"
                 :counter="255"
             ></v-text-field>
@@ -166,7 +167,7 @@ export default {
             this.career = profile.career ?? "";
             this.title = profile.title ?? "";
             this.text = profile.text ?? "";
-            this.email = profile.email ?? "";
+            this.email = profile.mail ?? "";
             this.twitter = profile.twitter ?? "";
         },
 

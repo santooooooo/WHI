@@ -37,6 +37,7 @@ final class GetUser
             }
 
             $data = [
+            'id' => $user->id,
             'name' => $user->name,
             'icon' => $icon,
             ];
