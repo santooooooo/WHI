@@ -23,6 +23,13 @@
             <v-btn color="green white--text" :disabled="!valid" @click="login"
                 >ログイン</v-btn
             >
+            <p
+                class="blue--text"
+                style="cursor: pointer"
+                @click="forgetPasswordPage"
+            >
+                パスワードを忘れた方はこちら
+            </p>
         </v-form>
     </v-container>
 </template>
@@ -31,9 +38,11 @@
 export default {
     data() {
         return {
-            valid: false,
+            // フォームの値
             email: "",
             password: "",
+            // フォームのバリデーションに使用
+            valid: false,
             emailRules: [
                 (v) => !!v || "メールが入力されていません",
                 (v) => /.+@.+\..+/.test(v) || "メールアドレスとして無効です",
@@ -44,6 +53,7 @@ export default {
                     (/.+\w+/.test(value) && value.length >= 6) ||
                     "パスワードは半角英数字6文字以上です",
             ],
+            // フォームのエラーを知らせる表示の制御に使用
             showAlert: false,
         };
     },
@@ -79,6 +89,11 @@ export default {
                         "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
+        },
+        // パスワードを忘れた方用のページへ飛ばす
+        forgetPasswordPage() {
+            this.$router.push("/forget-password");
+            return;
         },
     },
 };

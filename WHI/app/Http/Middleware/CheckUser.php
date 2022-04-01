@@ -40,7 +40,7 @@ class CheckUser
             }
 
             // 外部サイトのOGPの取得には何もしない
-            if($url === $appUrl.'/ogp') {
+            if($url === $appUrl.'/ogp' || $url === $appUrl.'/checkId' || $url === $appUrl.'/resetPasword' || $url === $appUrl.'/sendEmail') {
                    return $next($request);
             }
 

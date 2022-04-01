@@ -35,6 +35,7 @@ class CheckAuthTest extends TestCase
         $domain = new SignUp();
         $domain->record($name, $email, $password);
 
+        // 認証情報のチェック
         $identification = Auth::find($id)->identification;
         $domain = new CheckAuth();
         $result = $domain->check($identification, $id, $name);

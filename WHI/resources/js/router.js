@@ -9,6 +9,8 @@ import MyPage from "./components/User/MyPage.vue";
 import EditBlog from "./components/User/EditBlog.vue";
 import Blog from "./components/EveryOne/Blog.vue";
 import PRpage from "./components/EveryOne/PRpage.vue";
+import ResetPassword from "./components/EveryOne/ResetPassword.vue";
+import ForgetPassword from "./components/EveryOne/ForgetPassword.vue";
 
 const routes = [
     { path: "/", component: Home },
@@ -18,6 +20,8 @@ const routes = [
     { path: "/sections/:sectionId/edit-blog/:blogId", component: EditBlog },
     { path: "/blogs/:id", component: Blog },
     { path: "/PRpage/:id", component: PRpage },
+    { path: "/reset-password", component: ResetPassword },
+    { path: "/forget-password", component: ForgetPassword },
 ];
 
 const router = new VueRouter({

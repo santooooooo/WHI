@@ -6,6 +6,7 @@ namespace Tests\Feature\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Services\Auth\SetResetPasswordAuth;
 
 class UserOtherController extends TestCase
 {
@@ -14,6 +15,7 @@ class UserOtherController extends TestCase
      * ユーザーログインのテスト
      *
      * test
+     *
      * @return void
      */
     public function login()
@@ -38,9 +40,10 @@ class UserOtherController extends TestCase
     }
 
     /**
-     * ユーザーログインのテスト
+     * OGP取得のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function ogp()
@@ -58,5 +61,26 @@ class UserOtherController extends TestCase
         'url' => 'https://qiita.com/'
         ];
         $response->assertExactJson($trueResult, true);
+    }
+
+    /**
+     * パスワードの再設定用のIDの確認のテスト
+     *
+     * @test
+     * @return void
+     */
+    public function checkId()
+    {
+        // idの作成
+        $email = 'santo.shunsuke@gmail.com';
+        $auth = new SetResetPasswordAuth();
+        $identification = $auth->set($email);
+
+        // idの確認
+        $response = $this->post('/checkId', ['id' => $identification]);
+
+        // リクエストの成功及びレスポンスの値の確認
+        $response->assertStatus(200);
+        $response->assertExactJson([$email], true);
     }
 }
