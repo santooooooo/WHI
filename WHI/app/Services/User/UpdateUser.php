@@ -13,7 +13,6 @@ final class UpdateUser
         $this->user = new User();
     }
 
-
     /**
      * 既存のユーザーの情報を更新する
      *

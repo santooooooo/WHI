@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendForgetPasswordUrl;
 use App\Services\Auth\SetResetPasswordAuth;
 use App\Services\Auth\CheckResetPasswordAuth;
+use App\Services\User\ResetPassword;
+use App\Http\Requests\CheckUserEmailRequest;
+use App\Http\Requests\CheckIdRequest;
+use App\Http\Requests\ResetPasswordRequest;
 
 class UserOtherController extends Controller
 {
@@ -37,7 +41,7 @@ class UserOtherController extends Controller
     }
 
     /**
-     * ユーザーのログイン
+     * OGPの取得
      *
      * @param  App\Http\Requests\OgpRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -55,10 +59,10 @@ class UserOtherController extends Controller
     /**
      * パスワードの再設定用のURLの送信
      *
-     * @param  App\Http\Requests\UserLoginRequest $request
+     * @param  App\Http\Requests\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendEmail(Request $request): JsonResponse
+    public function sendEmail(CheckUserEmailRequest $request): JsonResponse
     {
         $email = $request->input('email');
         $auth = new SetResetPasswordAuth();
@@ -70,10 +74,10 @@ class UserOtherController extends Controller
     /**
      * パスワードの再設定用のIDの確認
      *
-     * @param  App\Http\Requests\UserLoginRequest $request
+     * @param  App\Http\Requests\CheckIdRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function checkId(Request $request): JsonResponse
+    public function checkId(CheckIdRequest $request): JsonResponse
     {
         $id = $request->input('id');
         $checkId = new CheckResetPasswordAuth();
@@ -85,12 +89,20 @@ class UserOtherController extends Controller
     }
 
     /**
-     * パスワードの再設定用のIDの確認
+     * パスワードの再設定
      *
-     * @param  App\Http\Requests\UserLoginRequest $request
+     * @param  App\Http\Requests\ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function resetPassword(Request $request): JsonResponse
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $domain = new ResetPassword();
+        $result = $domain->update($email, $password);
+        if($result) {
+            return response()->json('Success');
+        }
+        return response()->json('Error');
     }
 }

@@ -26,7 +26,7 @@ class UserLoginRequest extends FormRequest
     {
         return [
         'email' => 'required|email',
-        'password' => 'required|regex:/^[a-zA-Z0-9]+$/|min:6|string'
+        'password' => 'required|regex:/^[a-zA-Z0-9@%!$]+$/|min:6|string'
         ];
     }
 }

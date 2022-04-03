@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\User;
 
@@ -28,7 +29,7 @@ class UpdateUserTest extends TestCase
 
         // ユーザー情報の登録
         $signUp = new SignUp();
-        $result = $signUp->record($name, $email, $password);
+        $signUp->record($name, $email, $password);
 
         // 更新するデータ
         $updateName = 'Hello';

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendForgetPasswordUrl extends Mailable
+final class SendForgetPasswordUrl extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,7 +28,7 @@ class SendForgetPasswordUrl extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_FROM_ADDRESS'), 'WHI?')->view('email')->with(
+        return $this->from(env('MAIL_FROM_ADDRESS'), 'WHI?')->view('email')->subject('パスワードの再設定について')->with(
             [
             'identification' => $this->identification
             ]

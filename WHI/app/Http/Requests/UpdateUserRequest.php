@@ -24,10 +24,10 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-        'password' => 'required|regex:/^[a-zA-Z0-9]+$/|min:6|string',
+        'password' => 'required|regex:/^[a-zA-Z0-9@%!$]+$/|min:6|string',
         'newName' => 'nullable|string',
         'newEmail' => 'nullable|email',
-        'newPassword' => 'nullable|regex:/^[a-zA-Z0-9]+$/|min:6|string'
+        'newPassword' => 'nullable|regex:/^[a-zA-Z0-9@%!$]+$/|min:6|string'
         ];
     }
 }

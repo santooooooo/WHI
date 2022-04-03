@@ -21,7 +21,7 @@
             ></v-text-field>
             <v-text-field
                 required
-                label="password"
+                label="password(英数字と@%!$から6文字以上)"
                 v-model="password"
                 :rules="passwordRules"
                 type="password"
@@ -91,8 +91,6 @@ export default {
                     );
                 });
         },
-    },
-    mounted() {
     },
 };
 </script>

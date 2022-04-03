@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Services\Auth\SetResetPasswordAuth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserOtherController extends TestCase
 {
@@ -26,7 +28,7 @@ class UserOtherController extends TestCase
         $password = 'w44wwwww';
 
         // ユーザーの登録を行うリクエストを送信
-        $response = $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
         // 誤ったユーザー情報の使用
         //$falseEmail = 'testssssss@gmail.com';
@@ -66,7 +68,8 @@ class UserOtherController extends TestCase
     /**
      * パスワードの再設定用のIDの確認のテスト
      *
-     * @test
+     * test
+     *
      * @return void
      */
     public function checkId()
@@ -82,5 +85,34 @@ class UserOtherController extends TestCase
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
         $response->assertExactJson([$email], true);
+    }
+
+    /**
+     * パスワードの再設定のテスト
+     *
+     * @test
+     * @return void
+     */
+    public function resetPassword()
+    {
+        // ユーザー情報
+        $id = 1;
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = '@%!$w44wwwww';
+
+        // ユーザーの登録を行うリクエストを送信
+        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+
+        // パスワード再設定を行うリクエストを送信
+        $updatePassword = 'w44wwwww@%!$';
+        $response = $this->post('/resetPassword', ['email' => $email, 'password' => $updatePassword]);
+
+        // リクエストの成功及びレスポンスの値の確認
+        $response->assertStatus(200);
+        $response->assertExactJson(['Success'], true);
+        // パスワードが更新されたか確認
+        $user = User::find($id);
+        $this->assertTrue(Hash::check($updatePassword, $user->password));
     }
 }

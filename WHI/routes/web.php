@@ -38,5 +38,6 @@ Route::namespace($nameSpace)->middleware('throttle')->group(
         Route::resource('blog', 'BlogController');
         Route::post('sendEmail', 'UserOtherController@sendEmail');
         Route::post('checkId', 'UserOtherController@checkId');
+        Route::post('resetPassword', 'UserOtherController@resetPassword');
     }
 );
