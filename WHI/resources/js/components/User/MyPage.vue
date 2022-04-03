@@ -27,6 +27,13 @@
             <v-list dense>
                 <v-list-item link class="white--text">
                     <v-list-item-title>
+                        <div @click="goPRpage">
+                            PRページの確認
+                        </div>
+                    </v-list-item-title>
+                </v-list-item>
+                <v-list-item link class="white--text">
+                    <v-list-item-title>
                         <div @click="section = 'UserUpdate'">
                             ユーザー情報の更新
                         </div>
@@ -404,6 +411,9 @@ export default {
                         "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
+        },
+        goPRpage() {
+            return this.$router.push("/PRpage/"+this.$store.state.user.id);
         },
     },
 };

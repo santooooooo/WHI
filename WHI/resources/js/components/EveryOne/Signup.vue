@@ -37,10 +37,12 @@
 export default {
     data() {
         return {
-            valid: false,
+            // フォームの値
             name: "",
             email: "",
             password: "",
+            // フォームの値のバリデーションに使用
+            valid: false,
             nameRules: [(value) => !!value || "名前が入力されていません"],
             emailRules: [
                 (value) => !!value || "メールが入力されていません",
@@ -53,6 +55,7 @@ export default {
                     (/.+\w+/.test(value) && value.length >= 6) ||
                     "パスワードは半角英数字6文字以上です",
             ],
+            // フォームのエラー表示の制御
             showAlert: false,
         };
     },

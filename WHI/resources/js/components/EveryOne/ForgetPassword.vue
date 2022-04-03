@@ -41,6 +41,7 @@ export default {
     methods: {
         // パスワード再設定用のURLが記載されているメールを送信
         sendEmail() {
+            this.valid = !this.valid;
             //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
             const vm = this;
             axios
@@ -51,6 +52,7 @@ export default {
                     if (response.data === "Success") {
                         //既に使用されているメールアドレスからの登録を行った場合
                         vm.success = !vm.success;
+                        vm.valid = !vm.valid;
                     }
                     return;
                 })

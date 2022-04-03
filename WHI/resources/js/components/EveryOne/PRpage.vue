@@ -1,5 +1,5 @@
 <template>
-    <div class="white--text pa-5">
+    <v-container class="white--text pa-5">
         <div class="profile-top ml-auto mr-auto">
             <div class="mb-5 icon-size">
                 <v-img :src="iconPath" class="rounded-xl mb-4"> </v-img>
@@ -33,58 +33,66 @@
             <v-expansion-panel v-for="section in sections" :key="section.id">
                 <v-expansion-panel-header
                     class="white black--text"
+                    style="font-size: 1.4rem"
                     @click="getContentsInSection(section.id)"
                 >
                     {{ section.title }}
                 </v-expansion-panel-header>
-                <v-expansion-panel-content class="black white--text">
-                    <v-list-item
-                        v-for="content in showContnts"
-                        :key="content.id"
-                        class="ml-3 mt-2 mb-2 pt-3 white--text row"
-                        style="display: grid"
-                    >
-                        <v-list-item-title
-                            v-if="content.type === 'text'"
-                            max-width="100%"
-                            style="white-space: pre-line"
+                <transition name="fade">
+                    <v-expansion-panel-content class="black white--text">
+                        <v-list-item
+                            v-for="content in showContnts"
+                            :key="content.id"
+                            class="ml-3 mt-2 mb-2 pt-3 white--text row"
+                            style="display: grid"
                         >
-                            <div>
-                                {{ content.substance }}
-                            </div>
-                        </v-list-item-title>
-                        <v-card
-                            :href="content.substance"
-                            v-else
-                            class="black--text ogp-pozition"
-                        >
-                            <v-img
-                                class="ogp-img"
-                                :src="ogpImage(content.type, content.id)"
-                            ></v-img>
-                            <div>
-                                <v-card-title
-                                    >{{ ogpTitle(content.type, content.id) }}
-                                </v-card-title>
-                                <v-card-text
-                                    >{{
-                                        ogpDescription(content.type, content.id)
-                                    }}
-                                </v-card-text>
-                                <v-card-text
-                                    >{{ content.substance }}
-                                </v-card-text>
-                            </div>
-                        </v-card>
-                    </v-list-item>
-                    <v-pagination
-                        v-model="page"
-                        :length="pageLength"
-                    ></v-pagination>
-                </v-expansion-panel-content>
+                            <v-list-item-title
+                                v-if="content.type === 'text'"
+                                max-width="100%"
+                                style="white-space: pre-line"
+                            >
+                                <div>
+                                    {{ content.substance }}
+                                </div>
+                            </v-list-item-title>
+                            <v-card
+                                :href="content.substance"
+                                v-else
+                                class="black--text ogp-pozition"
+                            >
+                                <v-img
+                                    class="ogp-img"
+                                    :src="ogpImage(content.type, content.id)"
+                                ></v-img>
+                                <div>
+                                    <v-card-title
+                                        >{{
+                                            ogpTitle(content.type, content.id)
+                                        }}
+                                    </v-card-title>
+                                    <v-card-text
+                                        >{{
+                                            ogpDescription(
+                                                content.type,
+                                                content.id
+                                            )
+                                        }}
+                                    </v-card-text>
+                                    <v-card-text
+                                        >{{ content.substance }}
+                                    </v-card-text>
+                                </div>
+                            </v-card>
+                        </v-list-item>
+                        <v-pagination
+                            v-model="page"
+                            :length="pageLength"
+                        ></v-pagination>
+                    </v-expansion-panel-content>
+                </transition>
             </v-expansion-panel>
         </v-expansion-panels>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -342,6 +350,7 @@ export default {
 .row > * {
     min-width: 0;
 }
+/* 画面幅ごとにOGPの表示を変更 */
 @media (min-width: 700px) {
     .profile-top {
         display: flex;
@@ -364,5 +373,14 @@ export default {
         max-width: 100%;
     }
 }
-/* 画面幅ごとにOGPの表示を変更 */
+
+.fade-enter-active,
+.fade-leave-active {
+    will-change: opacity;
+    transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
 </style>

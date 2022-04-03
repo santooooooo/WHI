@@ -5,7 +5,7 @@
             <div class="mb-5 icon-size">
                 <v-img
                     :src="$store.state.user.icon"
-                    class="rounded-circle mb-4"
+                    class="rounded-xl mb-4"
                 >
                 </v-img>
                 <v-btn color="red white--text mb-3" @click="deleteProfileIcon"

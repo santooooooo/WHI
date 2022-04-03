@@ -68,13 +68,14 @@
 export default {
     data() {
         return {
-            valid: false,
-            idAlert: false,
+            // フォームの値
             identification: "",
             email: null,
             passwordForm: false,
             password: "",
             passwordCheck: "",
+            // フォームの値のバリデーションに使用
+            valid: false,
             identificationRules: [
                 (value) => !!value || "IDが入力されていません",
                 (value) =>
@@ -87,6 +88,8 @@ export default {
                     (/.+\w+/.test(value) && value.length >= 6) ||
                     "パスワードは半角英数字6文字以上です",
             ],
+            // エラー表示の制御
+            idAlert: false,
             passwordAlert: false,
             userAlert: false,
         };
