@@ -9,7 +9,7 @@
 <p>【再設定用ID】※IDの有効時間は10分です。上記のIDはパスワード再設定ページで使用します。</p>
 <p>{{ $identification }}</p>
 <p style="color: red;">パスワード再設定ページは下のURLからお願いします。</p>
-<a href="http://localhost/#/reset-password">http://localhost/#/reset-password</a>
+<a href="{{ env('APP_URL') }}/#/reset-password">{{ env('APP_URL') }}/#/reset-password</a>
 </div>
 </body>
 </html>

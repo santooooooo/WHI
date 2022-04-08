@@ -24,22 +24,22 @@ final class GetOGP
      */
     public function OGPInfo(string $url)
     {
-	    if(str_starts_with($url, 'http://') | str_starts_with($url, 'https://')) {
-        $info = $this->embed->get($url);
-        $metas = $info->getMetas();
+        if(str_starts_with($url, 'http://') | str_starts_with($url, 'https://')) {
+            $info = $this->embed->get($url);
+            $metas = $info->getMetas();
 
-        $title = $metas->get('og:title');
-        $description = $metas->get('og:description');
-        $image = $metas->get('og:image');
-        $url = $metas->get('og:url');
-        $data = [
-        'title' => $title[0],
-        'description' => $description[0],
-        'image' => $image[0],
-        'url' => $url[0],
-        ];
-        return $data;
-	    }
-	    return null;
+            $title = $metas->get('og:title');
+            $description = $metas->get('og:description');
+            $image = $metas->get('og:image');
+            $ogpUrl = $metas->get('og:url');
+            $data = [
+            'title' => $title[0] ?? null,
+            'description' => $description[0] ?? null,
+            'image' => $image[0] ?? null,
+            'url' => $ogpUrl[0] ?? $url,
+            ];
+            return $data;
+        }
+        return null;
     }
 }

@@ -6,7 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
 <link rel="icon" type="image/png" href="https://whi.s3.amazonaws.com/asset/Icon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="https://whi.s3.amazonaws.com/asset/Icon.png">
-<meta property="og:url" content="" />
+<meta property="og:url" content="{{ env('APP_URL') }}" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="WHI?" />
 <meta property="og:description" content="Web上でお手軽にPRページが作成可能。あなたの自己PRお助けします。" />

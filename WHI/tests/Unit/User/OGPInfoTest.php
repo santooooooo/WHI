@@ -16,7 +16,7 @@ class OGPInfoTest extends TestCase
      */
     public function OGPInfo()
     {
-        $url = 'https://qiita.com/';
+        $url = 'https://whiq.net';
         $domain = new GetOGP();
         $result = $domain->OGPInfo($url);
 

@@ -65,6 +65,7 @@
                         <v-btn
                             color="orange"
                             class="text-decoration-none white--text"
+                            @click="example"
                             >利用例を見る</v-btn
                         >
                         <v-btn color="green"
@@ -90,6 +91,11 @@ export default {
     },
     mounted() {
         this.show = true;
+    },
+    methods: {
+        example() {
+            return this.$router.push("/PRpage/1");
+        },
     },
 };
 </script>
