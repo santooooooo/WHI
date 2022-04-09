@@ -4,7 +4,7 @@
             <div class="mb-5 icon-size">
                 <v-img :src="iconPath" class="rounded-xl mb-4"> </v-img>
             </div>
-            <div class="ml-6">
+            <div class="mx-auto">
                 <h1 class="white--text">{{ name }}</h1>
                 <div>
                     <v-btn :href="`mailto: ${email}`" class="black"
@@ -42,7 +42,7 @@
                     <v-list-item
                         v-for="content in showContnts"
                         :key="content.id"
-                        class="ml-3 mt-2 mb-2 pt-3 white--text row"
+                        class="mx-auto mt-2 mb-2 pt-3 white--text row"
                         style="display: grid"
                     >
                         <v-list-item-title
