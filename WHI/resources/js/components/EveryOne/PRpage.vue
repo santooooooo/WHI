@@ -56,22 +56,40 @@
                         </v-list-item-title>
                         <v-card
                             :href="content.substance"
-                            v-else
+                            v-if="content.type === 'url'"
                             class="black--text ogp-pozition"
                         >
                             <v-img
                                 class="ogp-img"
-                                :src="ogpImage(content.type, content.id)"
+                                :src="ogpImage(content.id)"
                             ></v-img>
                             <div>
                                 <v-card-title
-                                    >{{ ogpTitle(content.type, content.id) }}
+                                    >{{ ogpTitle(content.id) }}
                                 </v-card-title>
                                 <v-card-text
                                     >{{
-                                        ogpDescription(content.type, content.id)
+                                        ogpDescription(content.id)
                                     }}
                                 </v-card-text>
+                                <v-card-text
+                                    >{{ content.substance }}
+                                </v-card-text>
+                            </div>
+                        </v-card>
+                        <v-card
+                            :href="content.substance"
+                            v-if="content.type === 'blog'"
+                            class="black--text ogp-pozition"
+                        >
+                            <v-img
+                                class="ogp-img"
+                                src="https://whi.s3.amazonaws.com/asset/BlogImage.png"
+                            ></v-img>
+                            <div>
+                                <v-card-title
+                                    >{{ blogTitle(content.id) }}
+                                </v-card-title>
                                 <v-card-text
                                     >{{ content.substance }}
                                 </v-card-text>
@@ -105,8 +123,10 @@ export default {
             sections: [],
             // コンテンツ
             contents: [],
-            // コンテンツのOGP
+            // コンテンツのすべてのOGP
             ogps: [],
+            // 全てのブログのデータ
+            blogs: [],
             showOgp: { id: 0, title: "", description: "", image: "", url: "" },
             // 表示数の制御
             page: 1,
@@ -275,13 +295,51 @@ export default {
             this.contents.forEach((content) => {
                 if (content.sectionId === sectionId) {
                     this.contentsInSection.push(content);
-                    if (content.type === "url" || content.type === "blog") {
+                    if (content.type === "url") {
                         this.getOgp(content.id, content.substance);
+                    }
+                    if (content.type === "blog") {
+                        this.getBlog(content.id, content.substance);
                     }
                 }
             });
             this.pageLength = Math.ceil(this.contentsInSection.length / 3);
             this.isClose = sectionId;
+        },
+        // ブログ情報の取得
+        getBlog(contentId, url) {
+            this.blogs = [];
+            const vm = this;
+            const blogId = url.substring(url.length - 1);
+            axios
+                .get("/blog/" + blogId)
+                .then(function (response) {
+                    if (response.data !== null) {
+                        const blog = response.data;
+                        const newBlog = {
+                            id: contentId,
+                            title: blog["title"],
+                        };
+                        vm.blogs.push(newBlog);
+                    }
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
+        },
+        // 全てのブログから特定のIDのブログのオブジェクトを取得
+        getBlogObj(id) {
+            let result = null;
+            this.blogs.forEach((blog) => {
+                if (blog.id === id) {
+                    result = blog;
+                }
+            });
+            return result;
         },
     },
     computed: {
@@ -295,23 +353,33 @@ export default {
         },
         // OGPのタイトル表示
         ogpTitle() {
-            return function (type, id) {
+            return function (id) {
                 const ogp = this.getOgpObj(id);
                 return ogp.title;
             };
         },
         // OGPのdescription表示
         ogpDescription() {
-            return function (type, id) {
+            return function (id) {
                 const ogp = this.getOgpObj(id);
                 return ogp.description;
             };
         },
         // OGPの画像表示
         ogpImage() {
-            return function (type, id) {
+            return function (id) {
                 const ogp = this.getOgpObj(id);
                 return ogp.image;
+            };
+        },
+        // ブログのタイトル表示
+        blogTitle() {
+            return function (id) {
+                const blog = this.getBlogObj(id);
+                if (blog === null) {
+                    return null;
+                }
+                return blog.title;
             };
         },
     },
