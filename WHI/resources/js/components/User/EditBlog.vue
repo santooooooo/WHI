@@ -133,7 +133,10 @@ export default {
             axios
                 .post("/blog/", data, { headers })
                 .then(function (response) {
-                    if (response.data === "Success") {
+                    if (response.data !== "") {
+                        vm.blogId = response.data.substring(
+                            response.data.length - 1
+                        );
                         vm.overlay = true;
                     }
                     return;
@@ -141,7 +144,7 @@ export default {
                 .catch(function (error) {
                     // サーバ側から何らかのエラーが発せられた場合
                     alert(
-                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                        "サーバー側の問題により、ブログの作成が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
         },
@@ -166,7 +169,7 @@ export default {
                 .catch(function (error) {
                     // サーバ側から何らかのエラーが発せられた場合
                     alert(
-                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                        "サーバー側の問題により、現在ブログの取得が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
         },
@@ -196,7 +199,7 @@ export default {
                 .catch(function (error) {
                     // サーバ側から何らかのエラーが発せられた場合
                     alert(
-                        "サーバー側の問題により、現在新規登録が行えません。問題の対処が完了するまでお待ちください。"
+                        "サーバー側の問題により、現在ブログの更新が行えません。問題の対処が完了するまでお待ちください。"
                     );
                 });
         },

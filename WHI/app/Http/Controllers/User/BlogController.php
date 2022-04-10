@@ -58,7 +58,7 @@ class BlogController extends Controller
         $createContent = new CreateContent();
         $createContent->create($userId, $sectionId, $type, $substance);
 
-        return response()->json('Success');
+        return response()->json($substance);
     }
 
     /**
