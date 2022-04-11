@@ -1,35 +1,23 @@
 # About WHI?
 ![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/composer-2.2.1-black)
-
 ![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/Laravel-8.77.1-red)
-
 ![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/npm-8.3.0-blue)
+![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/Vue-2.6.12-bluegreen)
 
-![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/Vue-2.6.12-green)
 
+## Backend
 
-## About Laravel
+### 基本的な構造
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 開発方法
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 使用している外部サービス
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Frontend
 
-## Learning Laravel
+### 使用している外部コンポーネント
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### ER図
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
