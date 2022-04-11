@@ -1,9 +1,12 @@
 # About WHI?
-![https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/composer-2.2.1-black)
 
 ![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/Laravel-8.77.1-red)
 
-![https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/npm-8.3.0-blue)
+
+![https://img.shields.io/badge/Laravel-8.77.1-red](https://img.shields.io/badge/Vue-2.6.12-green)
+
 
 ## About Laravel
 
