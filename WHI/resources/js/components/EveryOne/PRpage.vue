@@ -4,7 +4,7 @@
             <div class="mb-5 icon-size">
                 <v-img :src="iconPath" class="rounded-xl mb-4"> </v-img>
             </div>
-            <div class="mx-auto">
+            <div class="icon-margin">
                 <h1 class="white--text">{{ name }}</h1>
                 <div>
                     <v-btn :href="`mailto: ${email}`" class="black"
@@ -68,9 +68,7 @@
                                     >{{ ogpTitle(content.id) }}
                                 </v-card-title>
                                 <v-card-text
-                                    >{{
-                                        ogpDescription(content.id)
-                                    }}
+                                    >{{ ogpDescription(content.id) }}
                                 </v-card-text>
                                 <v-card-text
                                     >{{ content.substance }}
@@ -425,6 +423,9 @@ export default {
     .ogp-img {
         max-width: 50%;
     }
+    .icon-margin {
+        margin: 0 0 0 3%;
+    }
 }
 @media (max-width: 699px) {
     .icon-size {
@@ -432,6 +433,9 @@ export default {
     }
     .ogp-img {
         max-width: 100%;
+    }
+    .icon-margin {
+        margin: 0 auto;
     }
 }
 </style>
