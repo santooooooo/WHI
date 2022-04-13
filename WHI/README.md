@@ -25,8 +25,15 @@ Modelはデータベースのテーブルの状態や依存関係の実装を行
 [AmazonS3](https://aws.amazon.com/jp/s3/)
 
 ## Frontend
+### 基本的な構造(`resources/js/components/`)
+- `EveryOne/` : ログインフォームやBlog表示ページなど誰でもアクセスできるコンポーネント
+- `User/` : PRページの作成やユーザー情報の変更などユーザーでなくてはアクセスできないコンポーネント
 
-### 使用している外部コンポーネント
+### 使用しているツール
+- `Vuex` : ユーザー情報をコンポーネント間で共有するために使用
+- `Vuetify` : アプリ内のフォームなどの整形や装飾に使用
+- `[vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate)` : Vuexのデータがリロードしても消えなくするために使用
+- `[vue-markdown-editor](https://github.com/code-farmer-i/vue-markdown-editor)` : ブログの作成や表示に使用
 
 ## Database
 

@@ -8,3 +8,6 @@
 
 ## URL
 [https://whiq.net](https://whiq.net)
+
+## このアプリの詳細
+このアプリで使用している技術や構成については[こちら](https://github.com/santooooooo/WHI/tree/main/WHI)から
