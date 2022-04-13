@@ -10,7 +10,8 @@
 ### 基本的な構造
 ![https://whi.s3.amazonaws.com/asset/WHI%3FBackend.svg](https://whi.s3.amazonaws.com/asset/WHI%3FBackend.svg)
 
-*なぜServiceを設けたか*
+**なぜServiceを設けたか**
+
 Modelはデータベースのテーブルの状態や依存関係の実装を行うだけにとどめ、ServiceにBackendの実装を行ったほうがデータベースとビジネスロジックが分離でき、コードが分かりやすくなるほかにテストも行いやすくなると思ったから。
 
 ### 開発方法
