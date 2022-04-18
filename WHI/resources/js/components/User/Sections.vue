@@ -78,7 +78,6 @@
                     <v-card-title
                         ><v-img
                             :src="ogpFavicon(content.id)"
-                            max-width="3%"
                             class="mr-2 ogp-favicon-size"
                         ></v-img
                         >{{ ogpTitle(content.id) }}
@@ -636,7 +635,7 @@ export default {
         max-height: 17rem;
     }
     .ogp-favicon-size {
-        max-width: 3%;
+        max-width: 2rem;
     }
 }
 @media (max-width: 799px) {
