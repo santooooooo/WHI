@@ -65,6 +65,11 @@
                             ></v-img>
                             <div>
                                 <v-card-title
+                                    ><v-img
+                                        :src="ogpFavicon(content.id)"
+                                        max-width="3%"
+                                        class="mr-2 ogp-favicon-size"
+                                    ></v-img
                                     >{{ ogpTitle(content.id) }}
                                 </v-card-title>
                                 <v-card-text
@@ -253,6 +258,7 @@ export default {
                             title: ogpInfo["title"],
                             description: ogpInfo["description"],
                             image: ogpInfo["image"],
+                            favicon: ogpInfo["favicon"],
                         };
                         vm.ogps.push(newOgp);
                     }
@@ -264,6 +270,7 @@ export default {
                         title: "No data",
                         description: "No description",
                         image: null,
+                        favicon: null,
                     };
                     vm.ogps.push(newOgp);
                 });
@@ -370,6 +377,16 @@ export default {
                 return ogp.image;
             };
         },
+        // ogpのfavicon表示
+        ogpFavicon() {
+            return function (id) {
+                const ogp = this.getOgpObj(id);
+                if (ogp === null) {
+                    return null;
+                }
+                return ogp.favicon;
+            };
+        },
         // ブログのタイトル表示
         blogTitle() {
             return function (id) {
@@ -421,10 +438,14 @@ export default {
         display: flex;
     }
     .ogp-img {
-        max-width: 50%;
+        max-width: 30%;
+        max-height: 17rem;
     }
     .icon-margin {
         margin: 0 0 0 3%;
+    }
+    .ogp-favicon-size {
+        max-width: 3%;
     }
 }
 @media (max-width: 699px) {
@@ -436,6 +457,10 @@ export default {
     }
     .icon-margin {
         margin: 0 auto;
+    }
+    .ogp-favicon-size {
+        min-width: 10%;
+        max-width: 12%;
     }
 }
 </style>

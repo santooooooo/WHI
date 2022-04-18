@@ -32,11 +32,13 @@ final class GetOGP
             $description = $metas->get('og:description');
             $image = $metas->get('og:image');
             $ogpUrl = $metas->get('og:url');
+            $ogpFavicon = $info->favicon->__toString();
             $data = [
             'title' => $title[0] ?? null,
             'description' => $description[0] ?? null,
             'image' => $image[0] ?? null,
             'url' => $ogpUrl[0] ?? $url,
+            'favicon' => $ogpFavicon ?? null,
             ];
             return $data;
         }

@@ -75,7 +75,14 @@
             >
                 <v-img class="ogp-img" :src="ogpImage(content.id)"></v-img>
                 <div>
-                    <v-card-title>{{ ogpTitle(content.id) }} </v-card-title>
+                    <v-card-title
+                        ><v-img
+                            :src="ogpFavicon(content.id)"
+                            max-width="3%"
+                            class="mr-2 ogp-favicon-size"
+                        ></v-img
+                        >{{ ogpTitle(content.id) }}
+                    </v-card-title>
                     <v-card-text>{{ ogpDescription(content.id) }} </v-card-text>
                     <v-card-text>{{ content.substance }} </v-card-text>
                 </div>
@@ -422,6 +429,7 @@ export default {
                             title: ogpInfo["title"],
                             description: ogpInfo["description"],
                             image: ogpInfo["image"],
+                            favicon: ogpInfo["favicon"],
                         };
                         vm.ogps.push(newOgp);
                     }
@@ -433,6 +441,7 @@ export default {
                         title: "No data",
                         description: "No description",
                         image: null,
+                        favicon: null,
                     };
                     vm.ogps.push(newOgp);
                 });
@@ -580,6 +589,16 @@ export default {
                 return ogp.image;
             };
         },
+        // ogpのfavicon表示
+        ogpFavicon() {
+            return function (id) {
+                const ogp = this.getOgpObj(id);
+                if (ogp === null) {
+                    return null;
+                }
+                return ogp.favicon;
+            };
+        },
         // ブログのタイトル表示
         blogTitle() {
             return function (id) {
@@ -613,12 +632,20 @@ export default {
         display: flex;
     }
     .ogp-img {
-        max-width: 50%;
+        max-width: 30%;
+        max-height: 17rem;
+    }
+    .ogp-favicon-size {
+        max-width: 3%;
     }
 }
 @media (max-width: 799px) {
     .ogp-img {
         max-width: 100%;
+    }
+    .ogp-favicon-size {
+        min-width: 10%;
+        max-width: 12%;
     }
 }
 </style>
