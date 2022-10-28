@@ -20,8 +20,14 @@ Route::get(
     }
 );
 
+Route::get(
+    '/no', function () {
+        return view('welcome');
+    }
+)->name('login');
+
 $nameSpace = 'App\Http\Controllers\User';
-Route::namespace($nameSpace)->middleware('throttle:api')->group(
+Route::namespace($nameSpace)->middleware('throttle')->group(
     function () {
         Route::resource('user', 'UserController');
         Route::post('login', 'UserOtherController@login');

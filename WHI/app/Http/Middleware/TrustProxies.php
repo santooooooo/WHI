@@ -10,9 +10,13 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    // herokuアップロード用
+    protected $proxies = '*';
+    // ローカル環境用
+    //protected $proxies;
 
     /**
      * The headers that should be used to detect proxies.
