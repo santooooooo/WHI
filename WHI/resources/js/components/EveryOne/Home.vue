@@ -21,7 +21,7 @@
                                 >mdi-file-account</v-icon
                             >
                             <v-card-title
-                                >テキストの入力だけで自己PRページが手軽に作成可能</v-card-title
+                                >テキストの入力だけで自己PRページが手軽に作成可能!</v-card-title
                             >
                         </v-card>
 
