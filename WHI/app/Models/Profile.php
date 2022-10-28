@@ -41,12 +41,10 @@ class Profile extends Model
     protected $casts = [
     ];
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:app/Models/Profile.php
     public function user(): object
     {
         return $this->belongsTo(User::class, 'user_id');
-========
+    }
     /**
      * ユーザーとプロフィールとのデータの関係
      */
@@ -77,11 +75,5 @@ class Profile extends Model
     public function blogs(): object
     {
         return $this->hasMany(Blog::class, 'user_id');
->>>>>>>> 9f31d8ffd8cfc187ad9f6fe11517da0668da0f0a:WHI/app/Models/User.php
-=======
-    public function user(): object
-    {
-        return $this->belongsTo(User::class, 'user_id');
->>>>>>> 9f31d8ffd8cfc187ad9f6fe11517da0668da0f0a
     }
 }
