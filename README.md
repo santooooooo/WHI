@@ -7,7 +7,7 @@
 3. PRページに表示する項目を変化させるなどカスタマイズが可能
 
 ## URL
-[https://whiq.net](https://whiq.net)
+[https://who-am-ai.herokuapp.com](https://who-am-ai.herokuapp.com)
 
 ## このアプリの詳細
 このアプリで使用している技術や構成については[こちら](https://github.com/santooooooo/WHI/tree/main/WHI)から
