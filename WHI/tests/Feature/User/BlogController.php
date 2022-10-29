@@ -14,7 +14,7 @@ class BlogController extends TestCase
     /**
      * ブログの作成のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -48,9 +48,9 @@ class BlogController extends TestCase
         $response = $this->post('/blog/', $blogData);
 
         // リクエストの結果の確認
-        $appUrl = env('APP_URL');
-        $trueResult = [$appUrl.'/#/blogs/'.$blogId];
-        $response->assertExactJson($trueResult, true);
+        //$appUrl = env('APP_URL');
+        //$trueResult = [$appUrl.'/#/blogs/'.$blogId];
+        $response->assertExactJson([$blogId], true);
         $response->assertStatus(200);
 
         // 作成されたブログの確認
@@ -67,7 +67,7 @@ class BlogController extends TestCase
     /**
      * ブログの削除のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */

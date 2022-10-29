@@ -133,10 +133,8 @@ export default {
             axios
                 .post("/blog/", data, { headers })
                 .then(function (response) {
-                    if (response.data !== "") {
-                        vm.blogId = response.data.substring(
-                            response.data.length - 1
-                        );
+                    if (response.data > 0) {
+                        vm.blogId = response.data;
                         vm.overlay = true;
                     }
                     return;

@@ -42,9 +42,7 @@ final class CreateBlog
                 'text' => $text,
                 ]
             );
-            $appUrl = env('APP_URL');
-            $blogUrl = $appUrl.'/#/blogs/'.$blog->id;
-            return $blogUrl;
+            return $blog->id;
         }
         return null;
     }

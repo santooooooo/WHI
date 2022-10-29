@@ -325,7 +325,9 @@ export default {
             if (id != null) {
                 this.deleteContentId = id;
                 this.deleteType = type;
-                this.deleteBlogId = substance.substring(substance.length - 1);
+                // BlogのURLからBlogのIDを取得
+                const substanceArray = substance.split("/");
+                this.deleteBlogId = substanceArray[5];
             }
             // 削除の確認の表示の制御
             this.drawer = !this.drawer;
@@ -473,7 +475,9 @@ export default {
         },
         // ブログの更新ページへ飛ばす
         updateBlog(substance) {
-            const blogId = substance.substring(substance.length - 1);
+            // BlogのURLからBlogのIDを取得
+            const substanceArray = substance.split("/");
+            const blogId = substanceArray[5];
             return this.$router.push(
                 "/sections/" + this.sectionId + "/edit-blog/" + blogId
             );
@@ -518,9 +522,13 @@ export default {
                 });
         },
         // ブログ情報の取得
-        getBlog(contentId, url) {
+        getBlog(contentId, substance) {
             const vm = this;
-            const blogId = url.substring(url.length - 1);
+
+            // BlogのURLからBlogのIDを取得
+            const substanceArray = substance.split("/");
+            const blogId = substanceArray[5];
+
             axios
                 .get("/blog/" + blogId)
                 .then(function (response) {

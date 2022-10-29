@@ -12,9 +12,9 @@ class ContentController extends TestCase
 {
     use RefreshDatabase;
     /**
-     * プロフィールのコンテンツの作成のテスト
+     * セクションのコンテンツの作成のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class ContentController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // プロフィールのセクションの作成
+        // セクションの作成
         $sectionId = 1;
         $data = [
         'userName' => $name,
@@ -37,7 +37,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/sections', $data);
 
-        // プロフィールのコンテンツの作成
+        // セクションのコンテンツの作成
         $contentId = 1;
         $contentData = [
         'userId' => $id,
@@ -57,9 +57,9 @@ class ContentController extends TestCase
     }
 
     /**
-     * プロフィールのコンテンツの取得のテスト
+     * セクションのコンテンツの取得のテスト
      *
-     * @test
+     * test
      * @return void
      */
     public function index()
@@ -73,7 +73,7 @@ class ContentController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // プロフィールのセクションの作成
+        // セクションの作成
         $sectionId = 1;
         $data = [
         'userName' => $name,
@@ -81,7 +81,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/sections', $data);
 
-        // プロフィールのコンテンツの作成
+        // セクションのコンテンツの作成
         $contentId = 1;
         $contentData = [
         'userId' => $id,
@@ -107,7 +107,7 @@ class ContentController extends TestCase
     }
 
     /**
-     * プロフィールのコンテンツの削除のテスト
+     * セクションのコンテンツの削除のテスト
      *
      * test
      * @return void
@@ -123,7 +123,7 @@ class ContentController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // プロフィールのセクションの作成
+        // セクションの作成
         $sectionId = 1;
         $data = [
         'userName' => $name,
@@ -131,7 +131,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/sections', $data);
 
-        // プロフィールのコンテンツの作成
+        // セクションのコンテンツの作成
         $contentId = 1;
         $contentData = [
         'userId' => $id,
@@ -141,7 +141,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/contents', $contentData);
 
-        // プロフィールのコンテンツの削除
+        // セクションのコンテンツの削除
         $deleteData = [
         'userId' => $id,
         'sectionId' => $sectionId,
@@ -157,7 +157,7 @@ class ContentController extends TestCase
     }
 
     /**
-     * プロフィールのコンテンツの更新のテスト
+     * セクションのコンテンツの更新のテスト
      *
      * test
      * @return void
@@ -173,7 +173,7 @@ class ContentController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // プロフィールのセクションの作成
+        // セクションの作成
         $sectionId = 1;
         $data = [
         'userName' => $name,
@@ -181,7 +181,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/sections', $data);
 
-        // プロフィールのコンテンツの作成
+        // セクションのコンテンツの作成
         $contentId = 1;
         $contentData = [
         'userId' => $id,
@@ -191,7 +191,7 @@ class ContentController extends TestCase
         ];
         $this->post('/user/'.$id.'/contents', $contentData);
 
-        // プロフィールのコンテンツの更新
+        // セクションのコンテンツの更新
         $updateData = [
         'userId' => $id,
         'sectionId' => $sectionId,

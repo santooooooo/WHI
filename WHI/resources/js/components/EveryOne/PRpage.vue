@@ -314,7 +314,9 @@ export default {
         getBlog(contentId, url) {
             this.blogs = [];
             const vm = this;
-            const blogId = url.substring(url.length - 1);
+            // BlogのURLからBlogのIDを取得
+            const urlArray = url.split("/");
+            const blogId = urlArray[5];
             axios
                 .get("/blog/" + blogId)
                 .then(function (response) {

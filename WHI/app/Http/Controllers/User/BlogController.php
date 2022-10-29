@@ -55,8 +55,10 @@ class BlogController extends Controller
         $substance = $createBlog->create($userId, $sectionId, $title, $text);
         $type = 'blog';
 
+        $appUrl = env('APP_URL');
+        $blogUrl = $appUrl.'/#/blogs/'.$substance;
         $createContent = new CreateContent();
-        $createContent->create($userId, $sectionId, $type, $substance);
+	$createContent->create($userId, $sectionId, $type, $blogUrl);
 
         return response()->json($substance);
     }

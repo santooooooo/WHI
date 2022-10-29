@@ -47,12 +47,9 @@ class CreateBlogTest extends TestCase
         $text = 'test';
         $domain = new CreateBlog();
         $result = $domain->create($userId, $sectionId, $title, $text);
-    
-        // 作成されたブログの確認
-        $appUrl = env('APP_URL');
-        $trueResult = $appUrl.'/#/blogs/'.$blogId;
 
-        $this->assertSame($result, $trueResult);
+        // 作成されたブログの確認
+        $this->assertSame($result, $blogId);
         $this->assertDatabaseHas('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $title, 'text' => $text]);
     }
 }

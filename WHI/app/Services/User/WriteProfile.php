@@ -22,6 +22,7 @@ final class WriteProfile
     {
         $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
         if($isUser) {
+            // 新しいユーザーであった場合、内容が空のプロフィール欄を作成
             $isNew = !$this->profile->where('user_id', $id)->exists();
             if($isNew) {
                 $this->profile->create(

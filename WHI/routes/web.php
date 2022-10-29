@@ -23,13 +23,13 @@ Route::get(
 $nameSpace = 'App\Http\Controllers\User';
 Route::namespace($nameSpace)->middleware('throttle:api')->group(
     function () {
-        Route::resource('user', 'UserController');
-        Route::post('login', 'UserOtherController@login');
-        Route::resource('user.profile', 'ProfileController')->shallow();
-        Route::resource('user.sections', 'SectionController')->shallow();
-        Route::resource('user.contents', 'ContentController')->shallow();
+        Route::resource('user', 'UserController')->middleware('user.auth');
+        Route::post('login', 'UserOtherController@login')->middleware('user.auth');
+        Route::resource('user.profile', 'ProfileController')->shallow()->middleware('user.auth');
+        Route::resource('user.sections', 'SectionController')->shallow()->middleware('user.auth');
+        Route::resource('user.contents', 'ContentController')->shallow()->middleware('user.auth');
         Route::post('ogp', 'UserOtherController@ogp');
-        Route::resource('blog', 'BlogController');
+        Route::resource('blog', 'BlogController')->middleware('user.auth');
         Route::post('sendEmail', 'UserOtherController@sendEmail');
         Route::post('checkId', 'UserOtherController@checkId');
         Route::post('resetPassword', 'UserOtherController@resetPassword');

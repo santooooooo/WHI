@@ -16,7 +16,7 @@ class UserOtherController extends TestCase
     /**
      * ユーザーログインのテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -44,7 +44,7 @@ class UserOtherController extends TestCase
     /**
      * OGP取得のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */

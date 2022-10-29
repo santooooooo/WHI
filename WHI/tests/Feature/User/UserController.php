@@ -17,7 +17,7 @@ class UserController extends TestCase
     /**
      * ユーザー登録のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -181,7 +181,7 @@ class UserController extends TestCase
     /**
      * ユーザー情報の取得のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */

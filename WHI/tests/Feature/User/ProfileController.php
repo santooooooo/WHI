@@ -14,7 +14,7 @@ class ProfileController extends TestCase
 {
     use RefreshDatabase;
     /**
-     * ユーザーのプロフィールの新規作成
+     * ユーザーのプロフィールの更新
      *
      * @test
      *
