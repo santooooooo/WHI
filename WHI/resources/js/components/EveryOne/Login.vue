@@ -23,13 +23,15 @@
             <v-btn color="green white--text" :disabled="!valid" @click="login"
                 >ログイン</v-btn
             >
-            <p
+
+            <!-- p
                 class="blue--text"
                 style="cursor: pointer"
                 @click="forgetPasswordPage"
-            >
-                パスワードを忘れた方はこちら
-            </p>
+            -->
+		    <!-- パスワードを忘れた方はこちら ---->
+            <!-- /p -->
+
         </v-form>
     </v-container>
 </template>
