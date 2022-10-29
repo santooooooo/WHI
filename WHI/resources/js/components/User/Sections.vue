@@ -306,7 +306,7 @@ export default {
                         vm.form = !vm.form;
                         vm.addButton = !vm.addButton;
 
-                        vm.changeOgp();
+                        vm.changeContents();
                     }
                     return;
                 })
@@ -365,7 +365,7 @@ export default {
                                 vm.contents.splice(index, 1, updateContent);
                             }
                         });
-                        vm.changeOgp();
+                        vm.changeContents();
                     }
                     return;
                 })
@@ -457,17 +457,12 @@ export default {
             });
             return result;
         },
-        // セクションごとのURLの取得するOGPの切り替え
-        changeOgp() {
+        // セクションごとのOGPとブログの切り替え
+        changeContents() {
             this.contents.forEach((content) => {
                 if (content.type === "url") {
                     this.getOgp(content.id, content.substance);
                 }
-            });
-        },
-        //セクションごとのブログの情報の切り替え
-        changeBlog() {
-            this.contents.forEach((content) => {
                 if (content.type === "blog") {
                     this.getBlog(content.id, content.substance);
                 }
@@ -562,8 +557,7 @@ export default {
     },
     // セクションごとのURLの取得するOGPとブログ情報の切り替え
     mounted() {
-        this.changeOgp();
-        this.changeBlog();
+        this.changeContents();
     },
     computed: {
         // OGPのタイトル表示
