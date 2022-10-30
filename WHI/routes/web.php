@@ -50,7 +50,7 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
 	// パスワードの再設定用のIDのリクエストに関する処理
         Route::post('checkId', 'UserOtherController@checkId');
 
-	// のパスワードの再設定のリクエストに関する処理
+	// パスワードの再設定のパスワードの再設定のリクエストに関する処理
         Route::post('resetPassword', 'UserOtherController@resetPassword');
     }
 );
