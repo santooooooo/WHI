@@ -39,7 +39,7 @@ class CheckUser
                 return $next($request)->cookie('auth', $cookie);
             }
 
-            // POSTまたはPUTリクエストに対してheaderからリクエスト先が正しいかチェック
+            // リクエストに対してcookieとheaderをもとにリクエスト先が正しいユーザーかチェック
             $id = $request->header('user-id');
             $name = $request->header('user-name');
             $identification = $request->cookie('auth');

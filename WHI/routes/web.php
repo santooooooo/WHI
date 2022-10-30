@@ -23,15 +23,34 @@ Route::get(
 $nameSpace = 'App\Http\Controllers\User';
 Route::namespace($nameSpace)->middleware('throttle:api')->group(
     function () {
+	// ユーザーのリクエストに関する処理
         Route::resource('user', 'UserController')->middleware('user.auth');
+
+	// ユーザーのログインのリクエストに関する処理
         Route::post('login', 'UserOtherController@login')->middleware('user.auth');
+
+	// プロフィールのリクエストに関する処理
         Route::resource('user.profile', 'ProfileController')->shallow()->middleware('user.auth');
+
+	// セクションのリクエストに関する処理
         Route::resource('user.sections', 'SectionController')->shallow()->middleware('user.auth');
+
+	// セクション内のコンテンツのリクエストに関する処理
         Route::resource('user.contents', 'ContentController')->shallow()->middleware('user.auth');
+
+	// OGPのリクエストに関する処理
         Route::post('ogp', 'UserOtherController@ogp');
+
+	// ブログのリクエストに関する処理
         Route::resource('blog', 'BlogController')->middleware('user.auth');
+
+	// パスワードリセットのためのメール送信のリクエストに関する処理
         Route::post('sendEmail', 'UserOtherController@sendEmail');
+
+	// パスワードの再設定用のIDのリクエストに関する処理
         Route::post('checkId', 'UserOtherController@checkId');
+
+	// のパスワードの再設定のリクエストに関する処理
         Route::post('resetPassword', 'UserOtherController@resetPassword');
     }
 );
