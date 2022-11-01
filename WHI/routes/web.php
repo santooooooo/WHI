@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// User go to top-page specifying no word in URL
 Route::get(
     '/', function () {
         return view('home');
