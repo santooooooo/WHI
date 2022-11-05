@@ -53,8 +53,5 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
 
 	// パスワードの再設定のパスワードの再設定のリクエストに関する処理
         Route::post('resetPassword', 'UserOtherController@resetPassword');
-
-	// 日本語入力の乱れがなぜ起きるか？??????
-	// にほんにほｎにほにｈにｎｊふぃえでｗｊふぃでｗｊｆでｗｊでｗでｄにほｎにほにｈにｎでｄにほｎにほにｈにｎ
     }
 );
