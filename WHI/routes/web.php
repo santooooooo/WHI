@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// User go to top-page specifying no word in URL
+// パスに指定がない場合、トップページを表示する
 Route::get(
     '/', function () {
         return view('home');
