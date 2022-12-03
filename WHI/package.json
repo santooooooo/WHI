@@ -26,7 +26,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "@kangc/v-md-editor": "^2.1.7",
+        "@kangc/v-md-editor": "^1.7.8",
         "@popperjs/core": "^2.10.2",
         "axios": "^0.21",
         "bootstrap": "^5.1.3",
