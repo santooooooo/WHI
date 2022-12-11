@@ -44,7 +44,7 @@ class BlogController extends Controller
      * @param  \App\Http\Requests\StoreBlogRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function Store(StoreBlogRequest $request): JsonResponse
+    public function store(StoreBlogRequest $request): JsonResponse
     {
         $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');

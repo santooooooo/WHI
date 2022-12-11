@@ -38,14 +38,6 @@
             >
             <v-btn
                 v-if="Number($route.params.blogId) > 0"
-                color="blue"
-                :disabled="!valid || text.length === 0"
-                @click="checkBlog(blogId)"
-                class="mr-5 white--text"
-                >ブログの確認</v-btn
-            >
-            <v-btn
-                v-if="Number($route.params.blogId) > 0"
                 color="green"
                 :disabled="!valid || text.length === 0"
                 @click="update"

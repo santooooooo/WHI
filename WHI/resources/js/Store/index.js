@@ -25,9 +25,6 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        testLog(state) {
-            console.log(state.test);
-        },
     },
     mutations: {
         setUserInfo(state, userInfo) {
