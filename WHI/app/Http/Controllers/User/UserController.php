@@ -140,29 +140,34 @@ class UserController extends Controller
      * @param  \App\Http\Requests\DestroyUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(int $id, DestroyUserRequest $request): JsonResponse
+    public function destroy(DestroyUserRequest $request): JsonResponse
     {
         $name = $request->input('name');
 
         // 退会するユーザーのプロフィール削除
         $deleteProfile = new DeleteProfile();
-        $deleteProfile->deleteProfile($id, $name);
+        $deleteProfile->deleteProfile($this->auth->id, $this->auth->name);
 
         // 退会するユーザーのすべてのコンテンツブログ削除
         $deleteBlog = new DeleteBlog();
-        $deleteBlog->allRemove($id);
+        $deleteBlog->allRemove($this->auth->id);
 
         // 退会するユーザーのすべてのコンテンツ削除
         $deleteContent = new DeleteContent();
-        $deleteContent->allRemove($id, $name);
+        $deleteContent->allRemove($this->auth->id, $name);
 
         // 退会するユーザーのすべてのセクション削除
         $deleteSection = new DeleteSection();
-        $deleteSection->allRemove($id, $name);
+        $deleteSection->allRemove($this->auth->id, $name);
 
         // ユーザーの退会
         $resign = new Resign();
-        $resign->remove($id, $name);
+        $resign->remove($this->auth->id, $name);
+
+        // 認証用のセッションデータの削除
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json('Success'); 
     }

@@ -25,10 +25,10 @@ $nameSpace = 'App\Http\Controllers\User';
 Route::namespace($nameSpace)->middleware('throttle:api')->group(
     function () {
 	// ユーザーのリクエストに関する処理
-        Route::resource('user', 'UserController')->middleware('user.auth');
+        Route::resource('user', 'UserController');
 
 	// ユーザーのログインのリクエストに関する処理
-        Route::post('login', 'UserOtherController@login')->middleware('user.auth');
+        Route::post('login', 'UserOtherController@login');
 
 	// ユーザーのログインのリクエストに関する処理
         Route::post('logout', 'UserOtherController@logout');

@@ -57,7 +57,7 @@ class UserOtherController extends Controller
      * @param  App\Http\Requests\UserLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(UserLoginRequest $request): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
         $request->session()->invalidate();

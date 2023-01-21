@@ -17,7 +17,7 @@ class UserOtherController extends TestCase
     /**
      * ユーザーログインのテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -46,26 +46,21 @@ class UserOtherController extends TestCase
     /**
      * ユーザーlogoutのテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
     public function logout()
     {
-        // ユーザー情報
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
+        // ユーザーの作成
+        $user = User::factory()->create();
 
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+        // ログアウト
+        $response = $this->actingAs($user)->post('/logout');
 
-        //$this->post('/login', ['email' => $email, 'password' => $password]);
-
-        $this->post('/logout');
-
+        $response->assertStatus(200);
         $data = ['ログアウトしました。'];
-        //$response->assertExactJson($data, true);
+        $response->assertExactJson($data, true);
         $this->assertGuest();
     }
 
