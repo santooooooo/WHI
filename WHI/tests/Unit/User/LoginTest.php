@@ -8,6 +8,9 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Services\User\Login;
 use App\Services\User\SignUp;
+use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class LoginTest extends TestCase
 {
@@ -20,23 +23,22 @@ class LoginTest extends TestCase
      */
     public function execute()
     {
-        // ユーザー情報
-        $name = 'Jamboo';
-        $email = 'Jamboo@gmail.com';
-        $password = 'Jamboo';
-
-        // ユーザー情報の登録
-        $signUp = new SignUp();
-        $signUp->record($name, $email, $password);
+        $password = Str::random(10);
+        $user = User::factory()->state(
+            [
+            'password' => Hash::make($password)
+            ]
+        )->create();
 
         // 誤ったデータの入力
         //$falseEmail = 'Jamboooooo@gmail.com';
         //$falsePassword = 'Jamboo00';
 
         $domain = new Login();
-        $test = $domain->execute($email, $password);
-        $data = ['id' => 1, 'name' => $name];
+        $test = $domain->execute($user->email, $password);
+        $data = ['id' => $user->id, 'name' => $user->name];
 
+        $this->assertDatabaseCount('users', 1);
         $this->assertTrue($data === $test);
     }
 }

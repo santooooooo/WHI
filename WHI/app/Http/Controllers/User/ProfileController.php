@@ -10,9 +10,22 @@ use App\Services\User\WriteProfile;
 use App\Services\User\GetProfile;
 use App\Services\User\DeleteProfile;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+
+    // ユーザーの認証データの取得
+    public function __construct()
+    {
+        $this->middleware(
+            function ($request, $next) {
+                $this->auth = Auth::user();
+                return $next($request);
+            }
+        );
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -76,7 +89,7 @@ class ProfileController extends Controller
      * @param  int                               $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ProfileRequest $request, int $id): JsonResponse
+    public function update(ProfileRequest $request): JsonResponse
     {
         $name = $request->input('name');
         $icon = $request->file('icon');
@@ -93,7 +106,7 @@ class ProfileController extends Controller
         }
 
         $service = new WriteProfile();
-        $result = $service->write($id, $name, $icon, $career, $title, $text, $email, $twitter);
+        $result = $service->write($this->auth->id, $name, $icon, $career, $title, $text, $email, $twitter);
         if($result) {
             return response()->json('Success!');
         }
@@ -104,7 +117,7 @@ class ProfileController extends Controller
      * プロフィールアイコンを削除
      *
      * @param  \App\Http\Requests\ProfileRequest $request
-     * @param  int $id
+     * @param  int                               $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(ProfileRequest $request, int $id): JsonResponse

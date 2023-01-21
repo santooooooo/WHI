@@ -15,25 +15,21 @@ final class Login
 
     public function execute(string $email, string $password): array
     {
-        $check = $this->isUser($email, $password);
-        if($check) {
-            return $this->userInfo($email);
+        $userInfo = $this->isUser($email, $password);
+        if(!$userInfo) {
+            return [];
+        } else {
+            return $userInfo;
         }
-        return [];
     }
 
-    private function isUser(string $email, string $password): bool
+    private function isUser(string $email, string $password)
     {
         $user = $this->user->where('email', $email)->first();
-        if(is_object($user)) {
-            return Hash::check($password, $user->password);
+        if(is_object($user) && Hash::check($password, $user->password)) {
+            return ['id' => $user->id, 'name' => $user->name];
+        } else {
+            return false;
         }
-        return false;
-    }
-
-    private function userInfo(string $email): array
-    {
-        $user = $this->user->where('email', $email)->first();
-        return ['id' => $user->id, 'name' => $user->name];
     }
 }

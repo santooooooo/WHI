@@ -9,6 +9,7 @@ use Tests\TestCase;
 use App\Services\Auth\SetResetPasswordAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserOtherController extends TestCase
 {
@@ -22,6 +23,35 @@ class UserOtherController extends TestCase
      */
     public function login()
     {
+        // テスト用のユーザーデータの作成
+        $password = Str::random(10);
+        $user = User::factory()->state(
+            [
+            'password' => Hash::make($password)
+            ]
+        )->create();
+
+        // 誤ったユーザー情報の使用
+        //$falseEmail = 'testssssss@gmail.com';
+        //$falsePassword = 'w44wwwwwddddd';
+
+        $response = $this->post('/login', ['email' => $user->email, 'password' => $password]);
+
+        $data = ['id' => $user->id, 'name' => $user->name];
+        $response->assertStatus(200);
+        $response->assertJson($data);
+        $this->assertAuthenticated();
+    }
+
+    /**
+     * ユーザーlogoutのテスト
+     *
+     * test
+     *
+     * @return void
+     */
+    public function logout()
+    {
         // ユーザー情報
         $name = 'test';
         $email = 'test@gmail.com';
@@ -30,15 +60,13 @@ class UserOtherController extends TestCase
         // ユーザーの登録を行うリクエストを送信
         $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
 
-        // 誤ったユーザー情報の使用
-        //$falseEmail = 'testssssss@gmail.com';
-        //$falsePassword = 'w44wwwwwddddd';
+        //$this->post('/login', ['email' => $email, 'password' => $password]);
 
-        $response = $this->post('/login', ['email' => $email, 'password' => $password]);
+        $this->post('/logout');
 
-        $data = ['id' => 1, 'name' => $name];
-        $response->assertStatus(200);
-        $response->assertJson($data);
+        $data = ['ログアウトしました。'];
+        //$response->assertExactJson($data, true);
+        $this->assertGuest();
     }
 
     /**
@@ -92,6 +120,7 @@ class UserOtherController extends TestCase
      * パスワードの再設定のテスト
      *
      * test
+     *
      * @return void
      */
     public function resetPassword()

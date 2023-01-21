@@ -18,6 +18,7 @@ use App\Services\User\ResetPassword;
 use App\Http\Requests\CheckUserEmailRequest;
 use App\Http\Requests\CheckIdRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserOtherController extends Controller
 {
@@ -35,9 +36,32 @@ class UserOtherController extends Controller
 
         $result = $domain->execute($email, $password);
         if(count($result) > 0) {
-            return response()->json($result);
+
+            // ユーザーの認証用のセッションデータの作成
+            $credentials = ['id' => $result['id'], 'name' => $result['name'], 'password' => $password];
+            if(Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return response()->json($result);
+            } else {
+                return response()->json('認証用データが作成できませんでした。', 500);
+            }
+        } else {
+            return response()->json('入力情報に不備があります', 400);
         }
-        return response()->json('error');
+    }
+
+    /**
+     * ユーザーのログアウト
+     *
+     * @param  App\Http\Requests\UserLoginRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(UserLoginRequest $request): JsonResponse
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response()->json('ログアウトしました。', 200);
     }
 
     /**

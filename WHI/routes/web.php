@@ -30,6 +30,9 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
 	// ユーザーのログインのリクエストに関する処理
         Route::post('login', 'UserOtherController@login')->middleware('user.auth');
 
+	// ユーザーのログインのリクエストに関する処理
+        Route::post('logout', 'UserOtherController@logout');
+
 	// プロフィールのリクエストに関する処理
         Route::resource('user.profile', 'ProfileController')->shallow()->middleware('user.auth');
 
