@@ -34,7 +34,7 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
         Route::post('logout', 'UserOtherController@logout');
 
 	// プロフィールのリクエストに関する処理
-        Route::resource('user.profile', 'ProfileController')->shallow()->middleware('user.auth');
+        Route::resource('user.profile', 'ProfileController')->shallow();
 
 	// セクションのリクエストに関する処理
         Route::resource('user.sections', 'SectionController')->shallow()->middleware('user.auth');

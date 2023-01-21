@@ -91,7 +91,6 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request): JsonResponse
     {
-        $name = $request->input('name');
         $icon = $request->file('icon');
         $career = $request->input('career');
         $title = $request->input('title');
@@ -106,7 +105,7 @@ class ProfileController extends Controller
         }
 
         $service = new WriteProfile();
-        $result = $service->write($this->auth->id, $name, $icon, $career, $title, $text, $email, $twitter);
+        $result = $service->write($this->auth->id, $icon, $career, $title, $text, $email, $twitter);
         if($result) {
             return response()->json('Success!');
         }

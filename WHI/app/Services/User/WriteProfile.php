@@ -18,9 +18,9 @@ final class WriteProfile
     /*
      * ユーザーのプロフィールの保存または更新
      */
-    public function write(int $id, string $name, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
+    public function write(int $id, $icon = null, string $carrer = null, string $title = null, string $text = null, string $mail = null, string $twitter = null): bool
     {
-        $isUser = $this->user->where('id', $id)->where('name', $name)->exists();
+        $isUser = $this->user->where('id', $id)->exists();
         if($isUser) {
             // 新しいユーザーであった場合、内容が空のプロフィール欄を作成
             $isNew = !$this->profile->where('user_id', $id)->exists();

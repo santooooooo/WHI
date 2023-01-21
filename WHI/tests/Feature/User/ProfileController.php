@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
+use App\Models\Profile;
 
 class ProfileController extends TestCase
 {
@@ -22,29 +24,21 @@ class ProfileController extends TestCase
      */
     public function update()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $response = $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => null]);
+        // ユーザー情報の作成と初期プロフィールの作成
+        $user = User::factory()->create();
+        Profile::factory()->for($user)->create();
 
         $data = [
-        'name' => $name,
         'icon' => UploadedFile::fake()->image('fake.png')->size(10000),
         // 画像以外のファイル
         //'icon' => UploadedFile::fake()->image('fake.png.js'),
         'career' => Str::random(1000),
         'title' => Str::random(255),
         'text' => Str::random(10000),
-        'email' => $email,
+        'email' => $user->email,
         'twitter' => 'Jamboo',
         ];
-        $response = $this->put('/profile/'.$id, $data);
+        $response = $this->actingAs($user)->put('/profile/'.$user->id, $data);
 
         // リクエストが正常に実行されているかチェック
         $response->assertStatus(200);
@@ -54,11 +48,10 @@ class ProfileController extends TestCase
         $response->assertExactJson($result, true);
 
         // データベースに登録されているかのチェック
-        $this->assertDatabaseCount('profiles', 1);
-        $this->assertDatabaseHas('profiles', ['user_id' => $id, 'career' => $data['career'], 'mail' => $data['email']]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $user->id, 'career' => $data['career'], 'mail' => $data['email']]);
 
-        // ユーザーの退会を行うリクエストを送信
-        $response = $this->delete('/user/'.$id, ['name' => $name]);
+        // テスト用のファイルをS3から削除するためにユーザーの退会を行うリクエストを送信
+        $this->delete('/user/'.$user->id, ['name' => $user->name]);
     }
 
     /**
