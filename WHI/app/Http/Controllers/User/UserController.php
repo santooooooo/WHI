@@ -18,12 +18,20 @@ use App\Services\User\GetUser;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(
+            function ($request, $next) {
+                $this->auth = Auth::user();
+                return $next($request);
+            }
+        );
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -101,7 +109,7 @@ class UserController extends Controller
      * @param  int                                  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateUserRequest $request,int $id): JsonResponse
+    public function update(UpdateUserRequest $request): JsonResponse
     {
         $password = $request->input('password');
         $newName = $request->input('newName');
@@ -109,13 +117,20 @@ class UserController extends Controller
         $newPasswrod = $request->input('newPassword');
 
         $service = new UpdateUser();
-        $result = $service->update($id, $password, $newName, $newEmail, $newPasswrod);
+        $result = $service->update($this->auth->id, $password, $newName, $newEmail, $newPasswrod);
         if($result === 'password wrong') {
             return response()->json($result);
+
         } elseif($result === 'double email') {
             return response()->json($result);
-        }
+
+	} else {
+            // ユーザーの認証用のセッションデータの更新
+	    $this->auth->name =  $result['name'];
+	    $this->auth->password =  $result['password'];
+
             return response()->json($result);
+	}
     }
 
     /**

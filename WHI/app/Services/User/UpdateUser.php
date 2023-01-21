@@ -41,7 +41,8 @@ final class UpdateUser
                         'password' => Hash::make($newPassword)
                         ]
                     );
-                      return ['id' => $id, 'name' => $newName];
+                    $user = $this->user->where('id', $id)->first();
+                    return ['id' => $user->id, 'name' => $user->name, 'password' => $user->password];
             }
             return 'double email';
         }

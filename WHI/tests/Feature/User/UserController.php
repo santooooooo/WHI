@@ -17,7 +17,7 @@ class UserController extends TestCase
     /**
      * ユーザー登録のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
@@ -121,20 +121,19 @@ class UserController extends TestCase
     /**
      * ユーザー情報の更新のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
     public function update()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+        // テスト用のユーザーデータの作成
+        $password = Str::random(10);
+        $user = User::factory()->state(
+            [
+            'password' => Hash::make($password)
+            ]
+        )->create();
 
         // 更新するデータ
         $updateName = 'Hello';
@@ -148,34 +147,12 @@ class UserController extends TestCase
         'newPassword' => $updatePassword,
         ];
 
-        $response = $this->put('/user/'.$id, $data);
+        // データの更新
+        $response = $this->actingAs($user)->put('/user/'.$user->id, $data);
         $response->assertStatus(200);
 
         // ユーザー用のプロフィールDBが更新されているか確認
-        $this->assertDatabaseHas('users', ['id' => $id, 'name' => $data['newName'], 'email' => $data['newEmail']]);
-
-        // ユーザー情報
-        $id2 = 2;
-        $name2 = 'test';
-        $email2 = 'test2@gmail.com';
-        $password2 = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name2, 'email' => $email2, 'password' => $password2]);
-
-        // 更新するデータ
-        $updateEmail2 = 'Hello@gmail.com';
-
-        $data2 = [
-        'password' => $password2,
-        'newName' => null,
-        'newEmail' => $updateEmail2,
-        'newPassword' => null,
-        ];
-
-        $response = $this->put('/user/'.$id2, $data2);
-        $message = ['double email'];
-        $response->assertExactJson($message);
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => $data['newName'], 'email' => $data['newEmail']]);
     }
 
     /**

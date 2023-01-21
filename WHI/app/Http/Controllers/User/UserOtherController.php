@@ -45,6 +45,7 @@ class UserOtherController extends Controller
             } else {
                 return response()->json('認証用データが作成できませんでした。', 500);
             }
+
         } else {
             return response()->json('入力情報に不備があります', 400);
         }
