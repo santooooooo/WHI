@@ -59,7 +59,7 @@ class UserOtherController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        Auth::guard('web')->logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return response()->json('ログアウトしました。', 200);

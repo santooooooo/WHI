@@ -119,11 +119,11 @@ class ProfileController extends Controller
      * @param  int                               $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(ProfileRequest $request, int $id): JsonResponse
+    public function destroy(ProfileRequest $request): JsonResponse
     {
         $name = $request->input('name');
         $service = new DeleteProfile();
-        $service->deleteOnlyIcon($id, $name);
+        $service->deleteOnlyIcon($this->auth->id, $name);
         return response()->json('Success!');
     }
 }

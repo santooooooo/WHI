@@ -142,8 +142,6 @@ class UserController extends Controller
      */
     public function destroy(DestroyUserRequest $request): JsonResponse
     {
-        $name = $request->input('name');
-
         // 退会するユーザーのプロフィール削除
         $deleteProfile = new DeleteProfile();
         $deleteProfile->deleteProfile($this->auth->id, $this->auth->name);
@@ -154,15 +152,15 @@ class UserController extends Controller
 
         // 退会するユーザーのすべてのコンテンツ削除
         $deleteContent = new DeleteContent();
-        $deleteContent->allRemove($this->auth->id, $name);
+        $deleteContent->allRemove($this->auth->id, $this->auth->name);
 
         // 退会するユーザーのすべてのセクション削除
         $deleteSection = new DeleteSection();
-        $deleteSection->allRemove($this->auth->id, $name);
+        $deleteSection->allRemove($this->auth->id, $this->auth->name);
 
         // ユーザーの退会
         $resign = new Resign();
-        $resign->remove($this->auth->id, $name);
+        $resign->remove($this->auth->id, $this->auth->name);
 
         // 認証用のセッションデータの削除
         Auth::logout();
