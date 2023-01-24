@@ -24,7 +24,6 @@ class DeleteContentRequest extends FormRequest
     public function rules()
     {
         return [
-        'userId' => 'required|int',
         'sectionId' => 'required|int',
         ];
     }

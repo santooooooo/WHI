@@ -37,7 +37,7 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
         Route::resource('user.profile', 'ProfileController')->shallow();
 
 	// セクションのリクエストに関する処理
-        Route::resource('user.sections', 'SectionController')->shallow()->middleware('user.auth');
+        Route::resource('user.sections', 'SectionController')->shallow();
 
 	// セクション内のコンテンツのリクエストに関する処理
         Route::resource('user.contents', 'ContentController')->shallow()->middleware('user.auth');

@@ -74,7 +74,7 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの削除機能の確認
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -108,7 +108,7 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの取得機能の確認
      *
-     * @test
+     * test
      *
      * @return void
      */

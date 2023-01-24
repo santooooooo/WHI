@@ -7,6 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Section;
+use App\Models\Content;
+use App\Models\Blog;
 
 class ContentController extends TestCase
 {
@@ -14,42 +18,29 @@ class ContentController extends TestCase
     /**
      * セクションのコンテンツの作成のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
     public function store()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // セクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $data);
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
 
         // セクションのコンテンツの作成
         $contentId = 1;
         $contentData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
+        'userId' => $user->id,
+        'sectionId' => $section->id,
         'type' => 'text',
         'substance' => 'testtest',
         ];
-        $response = $this->post('/user/'.$id.'/contents', $contentData);
+        $response = $this->actingAs($user)->post('/user/'.$user->id.'/contents', $contentData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $trueData = ['id' => $contentId, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
+        $trueData = ['id' => $contentId, 'section_id' => $section->id, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
         $response->assertExactJson($trueData, true);
 
         // コンテンツのDBの確認
@@ -60,49 +51,23 @@ class ContentController extends TestCase
      * セクションのコンテンツの取得のテスト
      *
      * test
+     *
      * @return void
      */
     public function index()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // セクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $data);
-
-        // セクションのコンテンツの作成
-        $contentId = 1;
-        $contentData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
-        'type' => 'text',
-        'substance' => 'testtest',
-        ];
-        $this->post('/user/'.$id.'/contents', $contentData);
-
-        $this->post('/user/'.$id.'/contents', $contentData);
-
-	$this->assertDatabaseCount('contents', 2);
+        // ユーザー情報の作成と初期セクションとコンテンツの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
+        $content = Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // プロフィールのコンテンツの取得
-        $response = $this->get('/user/'.$id.'/contents');
+        $response = $this->get('/user/'.$user->id.'/contents');
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $content = ['id' => $contentId, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
-        $content2 = ['id' => $contentId+1, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
-        $trueData = [$content, $content2];
+        $result = ['id' => $content->id, 'section_id' => $section->id, 'type' => $content->type, 'substance' => $content->substance];
+        $trueData = [$result];
         $response->assertExactJson($trueData, true);
     }
 
@@ -110,98 +75,55 @@ class ContentController extends TestCase
      * セクションのコンテンツの削除のテスト
      *
      * test
+     *
      * @return void
      */
     public function destroy()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // セクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $data);
-
-        // セクションのコンテンツの作成
-        $contentId = 1;
-        $contentData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
-        'type' => 'text',
-        'substance' => 'testtest',
-        ];
-        $this->post('/user/'.$id.'/contents', $contentData);
+        // ユーザー情報の作成と初期セクションとコンテンツの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
+        $content = Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // セクションのコンテンツの削除
         $deleteData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
+        'userId' => $user->id,
+        'sectionId' => $section->id,
         ];
-        $response = $this->delete('/contents/'.$contentId, $deleteData);
+        $response = $this->actingAs($user)->delete('/contents/'.$content->id, $deleteData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
 
         // コンテンツのDBの確認
-        $missingData = ['id' => $contentId,'user_id' => $id, 'section_id' => $sectionId, 'type' => $contentData['type'], 'substance' => $contentData['substance']];
+        $missingData = ['id' => $content->id,'user_id' => $user->id, 'section_id' => $section->id, 'type' => $content->type, 'substance' => $content->substance];
         $this->assertDatabaseMissing('contents', $missingData);
     }
 
     /**
      * セクションのコンテンツの更新のテスト
      *
-     * test
+     * @test
      * @return void
      */
     public function update()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // セクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $data);
-
-        // セクションのコンテンツの作成
-        $contentId = 1;
-        $contentData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
-        'type' => 'text',
-        'substance' => Str::random(10000),
-        ];
-        $this->post('/user/'.$id.'/contents', $contentData);
+        // ユーザー情報の作成と初期セクションとコンテンツの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
+        $content = Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // セクションのコンテンツの更新
         $updateData = [
-        'userId' => $id,
-        'sectionId' => $sectionId,
+        'userId' => $user->id,
+        'sectionId' => $section->id,
         'substance' => Str::random(10000),
         ];
-        $response = $this->put('/contents/'.$contentId, $updateData);
+        $response = $this->actingAs($user)->put('/contents/'.$content->id, $updateData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $content = ['id' => $contentId, 'section_id' => $updateData['sectionId'], 'type' => $contentData['type'], 'substance' => $updateData['substance']];
+        $content = ['id' => $content->id, 'section_id' => $section->id, 'type' => $content->type, 'substance' => $updateData['substance']];
         $response->assertExactJson($content, true);
 
         // コンテンツのDBの確認

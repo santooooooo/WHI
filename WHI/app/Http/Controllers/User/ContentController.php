@@ -13,9 +13,21 @@ use App\Services\User\DeleteContent;
 use App\Http\Requests\StoreContentRequest;
 use App\Http\Requests\DeleteContentRequest;
 use App\Http\Requests\UpdateContentRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ContentController extends Controller
 {
+    // ユーザーの認証データの取得
+    public function __construct()
+    {
+        $this->middleware(
+            function ($request, $next) {
+                $this->auth = Auth::user();
+                return $next($request);
+            }
+        );
+    }
+
     /**
      * プロフィールのコンテンツの取得
      *
@@ -46,13 +58,12 @@ class ContentController extends Controller
      */
     public function store(StoreContentRequest $request):JsonResponse
     {
-        $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');
         $type = $request->input('type');
         $substance = $request->input('substance');
 
         $service = new CreateContent();
-        $result = $service->create($userId, $sectionId, $type, $substance);
+        $result = $service->create($this->auth->id, $sectionId, $type, $substance);
         if(!is_null($result)) {
             return response()->json($result);
         }
@@ -90,13 +101,12 @@ class ContentController extends Controller
      */
     public function update(UpdateContentRequest $request, int $id)
     {
-        $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');
         $contentId = $id;
         $substance = $request->input('substance');
 
         $service = new UpdateContent();
-        $result = $service->update($userId, $sectionId, $contentId, $substance);
+        $result = $service->update($this->auth->id, $sectionId, $contentId, $substance);
         if(!is_null($result)) {
             return response()->json($result);
         }
@@ -112,11 +122,10 @@ class ContentController extends Controller
      */
     public function destroy(DeleteContentRequest $request, int $id)
     {
-        $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');
         $contentId = $id;
 
         $service = new DeleteContent();
-        $service->remove($userId, $sectionId, $contentId);
+        $service->remove($this->auth->id, $sectionId, $contentId);
     }
 }
