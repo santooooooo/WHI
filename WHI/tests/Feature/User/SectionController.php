@@ -7,6 +7,10 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Section;
+use App\Models\Content;
+use App\Models\Blog;
 
 class SectionController extends TestCase
 {
@@ -15,28 +19,21 @@ class SectionController extends TestCase
     /**
      * プロフィールのセクションの作成機能の確認
      *
-     * @test
+     * test
      *
      * @return void
      */
     public function store()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
 
         // プロフィールのセクションの作成
         $sectionId = 1;
         $data = [
-        'userName' => $name,
         'sectionName' => 'test'
         ];
-        $response = $this->post('/user/'.$id.'/sections', $data);
+        $response = $this->actingAs($user)->post('/user/'.$user->id.'/sections', $data);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
@@ -44,7 +41,7 @@ class SectionController extends TestCase
         $response->assertExactJson($result, true);
 
         // セクションのDBの確認
-        $this->assertDatabaseHas('sections', ['user_id' => $id, 'name' => $data['sectionName']]);
+        $this->assertDatabaseHas('sections', ['user_id' => $user->id, 'name' => $data['sectionName']]);
     }
 
     /**
@@ -56,34 +53,21 @@ class SectionController extends TestCase
      */
     public function update()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $storeData = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $storeData);
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
+	$section = Section::factory()->for($user)->create();
 
         // プロフィールのセクションの更新
         $updateData = [
-        'userName' => $name,
-        'oldSectionName' => $storeData['sectionName'],
+        'userName' => $user->name,
+        'oldSectionName' => $section->name,
         'newSectionName' => 'Jamboo'
         ];
-        $response = $this->put('/sections/'.$id, $updateData);
+        $response = $this->actingAs($user)->put('/sections/'.$user->id, $updateData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $result = ['id' => $sectionId, 'name' => $updateData['newSectionName']];
+        $result = ['id' => $section->id, 'name' => $updateData['newSectionName']];
         $response->assertExactJson($result, true);
     }
 
@@ -96,46 +80,17 @@ class SectionController extends TestCase
      */
     public function destroy()
     {
-        // ユーザー情報
-        $userId = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $storeData = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$userId.'/sections', $storeData);
-
-        // プロフィールのコンテンツの作成
-        $contentData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
-        'type' => 'text',
-        'substance' => 'testtest',
-        ];
-        $this->post('/user/'.$userId.'/contents', $contentData);
-
-        // ブログの作成
-        $blogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
-        'title' => Str::random(255),
-        'text' => Str::random(10000)
-        ];
-        $this->post('/blog/', $blogData);
+        // ユーザー情報の作成と初期セクションとコンテンツとブログの作成
+        $user = User::factory()->create();
+	$section = Section::factory()->for($user)->create();
+	Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
+	Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // プロフィールのセクションの削除
         $deleteData = [
-        'userId' => $userId,
+        'userId' => $user->id,
         ];
-        $response = $this->delete('/sections/'.$sectionId, $deleteData);
+        $response = $this->actingAs($user)->delete('/sections/'.$section->id, $deleteData);
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
@@ -143,45 +98,32 @@ class SectionController extends TestCase
         $response->assertExactJson($result, true);
 
         // セクションのDBの確認
-        $this->assertDatabaseMissing('sections', ['user_id' => $userId, 'name' => $storeData['sectionName']]);
+        $this->assertDatabaseMissing('sections', ['user_id' => $user->id, 'name' => $section->name]);
         // 削除するセクション内のコンテンツを削除できたか確認
-        $this->assertDatabaseMissing('contents', ['section_id' => $sectionId]);
+        $this->assertDatabaseMissing('contents', ['section_id' => $section->id]);
         // 削除するセクション内のブログを削除できたか確認
-        $this->assertDatabaseMissing('blogs', ['section_id' => $sectionId]);
+        $this->assertDatabaseMissing('blogs', ['section_id' => $section->id]);
     }
 
     /**
      * プロフィールのセクションの取得機能の確認
      *
-     * test
+     * @test
      *
      * @return void
      */
     public function index()
     {
-        // ユーザー情報
-        $id = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $storeData = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$id.'/sections', $storeData);
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
+	$section = Section::factory()->for($user)->create();
 
         // プロフィールのセクションの取得
-        $response = $this->get('/user/'.$id.'/sections');
+        $response = $this->get('/user/'.$user->id.'/sections');
 
         // リクエストの成功及びレスポンスの値の確認
         $response->assertStatus(200);
-        $section = ['id' => $sectionId, 'name' => $storeData['sectionName']];
+        $section = ['id' => $section->id, 'name' => $section->name];
         $result = [$section];
         $response->assertExactJson($result, true);
     }

@@ -24,7 +24,6 @@ class SectionRequest extends FormRequest
     public function rules()
     {
         return [
-        'userName' => 'required|string',
         'sectionName' => 'required|string',
         ];
     }
