@@ -7,6 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Section;
+use App\Models\Content;
+use App\Models\Blog;
 
 class BlogController extends TestCase
 {
@@ -20,32 +24,19 @@ class BlogController extends TestCase
      */
     public function store()
     {
-        // ユーザー情報
-        $userId = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$userId.'/sections', $data);
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
 
         // ブログの作成
         $blogId = 1;
         $blogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
+        'userId' => $user->id,
+        'sectionId' => $section->id,
         'title' => Str::random(255),
         'text' => Str::random(10000)
         ];
-        $response = $this->post('/blog/', $blogData);
+        $response = $this->actingAs($user)->post('/blog/', $blogData);
 
         // リクエストの結果の確認
         //$appUrl = env('APP_URL');
@@ -54,12 +45,12 @@ class BlogController extends TestCase
         $response->assertStatus(200);
 
         // 作成されたブログの確認
-        $this->assertDatabaseHas('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $blogData['title'], 'text' => $blogData['text']]);
+        $this->assertDatabaseHas('blogs', ['user_id' => $user->id, 'section_id' => $section->id, 'title' => $blogData['title'], 'text' => $blogData['text']]);
 
         // 作成されたコンテンツの確認
         $appUrl = env('APP_URL');
         $blogUrl = $appUrl.'/#/blogs/'.$blogId;
-        $content = ['section_id' => $sectionId, 'type' => 'blog', 'substance' => $blogUrl];
+        $content = ['section_id' => $section->id, 'type' => 'blog', 'substance' => $blogUrl];
 
         $this->assertDatabaseHas('contents', $content);
     }
@@ -67,45 +58,32 @@ class BlogController extends TestCase
     /**
      * ブログの削除のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
     public function destroy()
     {
-        // ユーザー情報
-        $userId = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
+        // ユーザー情報の作成と初期セクションの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
 
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$userId.'/sections', $data);
-
-        // ブログの作成
+        // ブログの作成、ブログの削除時にコンテンツの削除を行う場合、ブログの作成機能を通じたブログのURL情報が必要なため、Factoryを使用しない
         $blogId = 1;
         $blogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
-        'title' => 'test',
+        'userId' => $user->id,
+        'sectionId' => $section->id,
+        'title' => Str::random(255),
         'text' => Str::random(10000)
         ];
-        $this->post('/blog/', $blogData);
+        $this->actingAs($user)->post('/blog/', $blogData);
 
         // ブログの削除
         $deleteBlogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
+        'userId' => $user->id,
+        'sectionId' => $section->id,
         ];
-        $response = $this->delete('/blog/'.$blogId, $deleteBlogData);
+        $response = $this->actingAs($user)->delete('/blog/'.$blogId, $deleteBlogData);
 
         // リクエストの結果の確認
         $response->assertStatus(200);
@@ -113,12 +91,12 @@ class BlogController extends TestCase
         $response->assertExactJson($trueResult, true);
 
         // ブログが削除されているか確認
-        $this->assertDatabaseMissing('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $blogData['title'], 'text' => $blogData['text']]);
+        $this->assertDatabaseMissing('blogs', ['user_id' => $user->id, 'section_id' => $section->id, 'title' => $blogData['title'], 'text' => $blogData['text']]);
 
         // コンテンツが削除されているか確認
         $appUrl = env('APP_URL');
         $blogUrl = $appUrl.'/#/blogs/'.$blogId;
-        $content = ['section_id' => $sectionId, 'type' => 'blog', 'substance' => $blogUrl];
+        $content = ['section_id' => $section->id, 'type' => 'blog', 'substance' => $blogUrl];
         $this->assertDatabaseMissing('contents', $content);
     }
 
@@ -131,40 +109,18 @@ class BlogController extends TestCase
      */
     public function update()
     {
-        // ユーザー情報
-        $userId = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$userId.'/sections', $data);
-
-        // ブログの作成
-        $blogId = 1;
-        $blogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
-        'title' => 'test',
-        'text' => Str::random(10000)
-        ];
-        $this->post('/blog/', $blogData);
+        // ユーザー情報の作成と初期セクションとブログの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
+        $blog = Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // ブログの更新
         $updateBlogData = [
-        'userId' => $userId,
+        'userId' => $user->id,
         'title' => Str::random(255),
         'text' => Str::random(10000)
         ];
-        $response = $this->put('/blog/'.$blogId, $updateBlogData);
+        $response = $this->actingAs($user)->put('/blog/'.$blog->id, $updateBlogData);
 
         // リクエストの結果の確認
         $response->assertStatus(200);
@@ -172,56 +128,34 @@ class BlogController extends TestCase
         $response->assertExactJson($trueResult, true);
 
         // 更新されたブログの確認
-        $this->assertDatabaseHas('blogs', ['user_id' => $userId, 'section_id' => $sectionId, 'title' => $updateBlogData['title'], 'text' => $updateBlogData['text']]);
+        $this->assertDatabaseHas('blogs', ['user_id' => $user->id, 'section_id' => $section->id, 'title' => $updateBlogData['title'], 'text' => $updateBlogData['text']]);
     }
 
     /**
      * ブログの取得のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
     public function show()
     {
-        // ユーザー情報
-        $userId = 1;
-        $name = 'test';
-        $email = 'test@gmail.com';
-        $password = 'w44wwwww';
-
-        // ユーザーの登録を行うリクエストを送信
-        $this->post('/user', ['name' => $name, 'email' => $email, 'password' => $password]);
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $data = [
-        'userName' => $name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$userId.'/sections', $data);
-
-        // ブログの作成
-        $blogId = 1;
-        $blogData = [
-        'userId' => $userId,
-        'sectionId' => $sectionId,
-        'title' => 'test',
-        'text' => Str::random(10000)
-        ];
-        $this->post('/blog/', $blogData);
+        // ユーザー情報の作成と初期セクションとブログの作成
+        $user = User::factory()->create();
+        $section = Section::factory()->for($user)->create();
+        $blog = Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // ブログの取得
-        $response = $this->get('/blog/'.$blogId);
+        $response = $this->get('/blog/'.$blog->id);
 
         // リクエストの結果の確認
         $now = now()->toDateTimeString();
         $response->assertStatus(200);
         $trueResult = [
-        'id' => $blogId,
-        'user_id' => $userId,
-        'title' => $blogData['title'],
-        'text' => $blogData['text'],
+        'id' => $blog->id,
+        'user_id' => $user->id,
+        'title' => $blog->title,
+        'text' => $blog->text,
         'updated' => substr($now, 0, 10),
         ];
         $response->assertExactJson($trueResult, true);

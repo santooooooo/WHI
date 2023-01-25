@@ -15,9 +15,23 @@ use App\Services\User\GetBlog;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\DeleteBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
+    /**
+     * ユーザーの認証データの取得
+     */
+    public function __construct()
+    {
+        $this->middleware(
+            function ($request, $next) {
+                $this->auth = Auth::user();
+                return $next($request);
+            }
+        );
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,19 +60,18 @@ class BlogController extends Controller
      */
     public function store(StoreBlogRequest $request): JsonResponse
     {
-        $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');
         $title = $request->input('title');
         $text = $request->input('text');
 
         $createBlog = new CreateBlog();
-        $substance = $createBlog->create($userId, $sectionId, $title, $text);
+        $substance = $createBlog->create($this->auth->id, $sectionId, $title, $text);
         $type = 'blog';
 
         $appUrl = env('APP_URL');
         $blogUrl = $appUrl.'/#/blogs/'.$substance;
         $createContent = new CreateContent();
-	$createContent->create($userId, $sectionId, $type, $blogUrl);
+        $createContent->create($this->auth->id, $sectionId, $type, $blogUrl);
 
         return response()->json($substance);
     }
@@ -97,13 +110,12 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, int $blogId): JsonResponse
     {
-        $userId = $request->input('userId');
         $title = $request->input('title');
         $text = $request->input('text');
 
         // ブログの更新
         $domain = new UpdateBlog();
-        $result = $domain->update($userId, $blogId, $title, $text);
+        $result = $domain->update($this->auth->id, $blogId, $title, $text);
         if($result) {
             return response()->json('Success');
         }
@@ -117,12 +129,11 @@ class BlogController extends Controller
      */
     public function destroy(DeleteBlogRequest $request, int $blogId):JsonResponse
     {
-        $userId = $request->input('userId');
         $sectionId = $request->input('sectionId');
 
         // ブログの削除
         $deleteBlog = new DeleteBlog();
-        $contentId = $deleteBlog->remove($userId, $sectionId, $blogId);
+        $contentId = $deleteBlog->remove($this->auth->id, $sectionId, $blogId);
 
         // ブログが存在しないときの処理
         if(is_null($contentId)) {
@@ -131,7 +142,7 @@ class BlogController extends Controller
 
         // ブログのURLが格納されていたコンテンツの削除
         $deleteContent = new DeleteContent();
-        $deleteContent->remove($userId, $sectionId, $contentId);
+        $deleteContent->remove($this->auth->id, $sectionId, $contentId);
         return response()->json('Success');
     }
 }
