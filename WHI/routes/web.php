@@ -40,13 +40,13 @@ Route::namespace($nameSpace)->middleware('throttle:api')->group(
         Route::resource('user.sections', 'SectionController')->shallow();
 
 	// セクション内のコンテンツのリクエストに関する処理
-        Route::resource('user.contents', 'ContentController')->shallow()->middleware('user.auth');
+        Route::resource('user.contents', 'ContentController')->shallow();
 
 	// OGPのリクエストに関する処理
         Route::post('ogp', 'UserOtherController@ogp');
 
 	// ブログのリクエストに関する処理
-        Route::resource('blog', 'BlogController')->middleware('user.auth');
+        Route::resource('blog', 'BlogController');
 
 	// パスワードリセットのためのメール送信のリクエストに関する処理
         Route::post('sendEmail', 'UserOtherController@sendEmail');

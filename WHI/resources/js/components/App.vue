@@ -159,8 +159,21 @@ export default {
             this.$router.push("/login");
         },
         logout() {
-            this.$store.commit("resetUserInfo");
-            this.$router.push("/");
+            //　axios.post実行後に作成・取得したthisインスタンスではVuexの機能を使用できないため、ここでthisインスタンスを作成・取得
+            const vm = this;
+            axios
+                .post("/logout", {})
+                .then(function (response) {
+                    vm.$store.commit("resetUserInfo");
+                    vm.$router.push("/");
+                    return;
+                })
+                .catch(function (error) {
+                    // サーバ側から何らかのエラーが発せられた場合
+                    alert(
+                        "サーバー側の問題により、現在退会が行えません。問題の対処が完了するまでお待ちください。"
+                    );
+                });
         },
         goMypage() {
             this.$router.push("/mypage");
