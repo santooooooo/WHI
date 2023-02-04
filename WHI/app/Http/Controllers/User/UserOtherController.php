@@ -12,6 +12,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\OgpRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendForgetPasswordUrl;
+use App\Services\User\SendEmail;
 use App\Services\Auth\SetResetPasswordAuth;
 use App\Services\Auth\CheckResetPasswordAuth;
 use App\Services\User\ResetPassword;
@@ -92,8 +93,17 @@ class UserOtherController extends Controller
         $email = $request->input('email');
         $auth = new SetResetPasswordAuth();
         $identification = $auth->set($email);
-        Mail::to($email)->send(new SendForgetPasswordUrl($identification));
-        return response()->json('Success');
+	// 正規のユーザーでない場合、メールの送信はしない
+        if($identification === false) {
+               return response()->json('Error');
+        }
+
+        $sendEmail = new SendEmail($email, $identification);
+        if($sendEmail->sendEmail()) {
+               return response()->json('Success');
+        } else {
+               return response()->json('Error');
+        }
     }
 
     /**

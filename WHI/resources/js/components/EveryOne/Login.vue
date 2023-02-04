@@ -24,15 +24,16 @@
                 >ログイン</v-btn
             >
 
-            <!-- p
+            <p
                 class="blue--text"
                 style="cursor: pointer"
                 @click="forgetPasswordPage"
-            -->
-		    <!-- パスワードを忘れた方はこちら ---->
-            <!-- /p -->
+            >
+                パスワードを忘れた方はこちら
+            </p>
 
-        </v-form>
+            <p></p
+        ></v-form>
     </v-container>
 </template>
 
