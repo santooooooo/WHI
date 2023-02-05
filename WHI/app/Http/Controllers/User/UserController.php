@@ -68,8 +68,17 @@ class UserController extends Controller
         $service = new SignUp();
         $id = $service->record($name, $email, $password);
         if($id !== 0) {
-            $data = ['id' => $id, 'name' => $name];
-            return response()->json($data);
+            // ユーザーの認証用のセッションデータの作成
+            $credentials = ['id' => $id, 'name' => $name, 'password' => $password];
+            if(Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+
+                // ユーザーの情報を返す
+                $data = ['id' => $id, 'name' => $name];
+                return response()->json($data, 200);
+            } else {
+                return response()->json('認証用データが作成できませんでした。', 500);
+            }
         }
             return response()->json('Error');
     }

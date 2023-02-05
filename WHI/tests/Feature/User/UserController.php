@@ -47,8 +47,10 @@ class UserController extends TestCase
         // データベースの情報が元の情報と同じであることを確認
         $result = $name === $user->name && $email === $user->email && Hash::check($password, $user->password);
 
+        // リクエストが正常になされているか及び認証機能が正常に動いているか
         $response->assertStatus(200);
         $this->assertTrue($result);
+        $this->assertAuthenticated();
 
         // 返信データが元のユーザーの情報と一致しているか確認
         $data = ['id' => $id,'name' => $name];
@@ -71,8 +73,8 @@ class UserController extends TestCase
         $user = User::factory()->create();
         Profile::factory()->for($user)->create();
         $section = Section::factory()->for($user)->create();
-	Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
-	Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
+        Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
+        Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // ユーザーの退会を行うリクエストを送信
         $response = $this->actingAs($user)->delete('/user/'.$user->id);
