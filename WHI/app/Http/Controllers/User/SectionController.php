@@ -15,6 +15,7 @@ use App\Services\User\GetSection;
 use App\Http\Requests\SectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Services\User\DestroySection;
 
 class SectionController extends Controller
 {
@@ -114,24 +115,16 @@ class SectionController extends Controller
     /**
      * プロフィールのセクションの削除
      *
-     * @param  int                               $id
+     * @param  int $sectionId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $sectionId): JsonResponse
     {
-        $sectionId = $id;
-
-        // 削除するセクションの全てのブログの削除
-        $deleteContent = new DeleteBlog();
-        $deleteContent->allRemoveInSection($this->auth->id, $sectionId);
-
-        // 削除するセクションの全てのコンテンツの削除
-        $deleteContent = new DeleteContent();
-        $deleteContent->allRemoveInSection($this->auth->id, $sectionId);
-
-        // セクションの削除
-        $deleteSection = new DeleteSection();
-        $deleteSection->remove($this->auth->id, $sectionId);
-        return response()->json('Success');
+        $destroySection = new DestroySection($this->auth->id, $sectionId);
+        if($destroySection->destroy()) {
+               return response()->json('Success');
+        } else {
+               return response()->json('Error');
+        }
     }
 }

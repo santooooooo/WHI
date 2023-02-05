@@ -28,7 +28,7 @@ final class DestroyUser
     }
 
     /**
-     * 既存のユーザーの情報を更新する
+     * 既存のユーザーの情報を削除する
      */
     public function destroy(): bool
     {

@@ -100,9 +100,9 @@ class SectionController extends TestCase
         // セクションのDBの確認
         $this->assertDatabaseMissing('sections', ['user_id' => $user->id, 'name' => $section->name]);
         // 削除するセクション内のコンテンツを削除できたか確認
-        $this->assertDatabaseMissing('contents', ['section_id' => $section->id]);
+        $this->assertDatabaseMissing('contents', ['user_id' => $user->id, 'section_id' => $section->id]);
         // 削除するセクション内のブログを削除できたか確認
-        $this->assertDatabaseMissing('blogs', ['section_id' => $section->id]);
+        $this->assertDatabaseMissing('blogs', ['user_id' => $user->id, 'section_id' => $section->id]);
     }
 
     /**
