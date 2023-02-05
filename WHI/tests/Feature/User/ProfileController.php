@@ -18,7 +18,7 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィールの更新
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class ProfileController extends TestCase
     /**
      * ユーザーのプロフィール表示
      *
-     * @test
+     * test
      * @return void
      */
     public function index()

@@ -21,7 +21,7 @@ class UserController extends TestCase
     /**
      * ユーザー登録のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -55,13 +55,13 @@ class UserController extends TestCase
         $response->assertJson($data);
 
         // 新規ユーザー用のプロフィールDBが作成されているか確認
-        $this->assertDatabaseHas('profiles', ['user_id' => 1]);
+        $this->assertDatabaseHas('profiles', ['user_id' => $user->id]);
     }
 
     /**
      * ユーザー退会のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */

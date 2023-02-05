@@ -68,14 +68,10 @@ class UserController extends Controller
         $service = new SignUp();
         $id = $service->record($name, $email, $password);
         if($id !== 0) {
-            // 新規ユーザー用のプロフィールDBの作成
-            $profile = new WriteProfile();
-            $profile->write($id, $name);
-
             $data = ['id' => $id, 'name' => $name];
             return response()->json($data);
         }
-            return response()->json('error');
+            return response()->json('Error');
     }
 
     /**

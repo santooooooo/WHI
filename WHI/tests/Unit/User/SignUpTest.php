@@ -6,6 +6,7 @@ namespace Tests\Unit\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Profile;
 use App\Services\User\SignUp;
 use Illuminate\Support\Facades\Hash;
 
@@ -40,7 +41,9 @@ class SignUpTest extends TestCase
 
         // 同じ情報の登録ができないことを確認
         $noUser = $domain->record($name, $email, $password);
-
         $this->assertTrue($noUser === 0);
+
+        // ユーザー登録の際にプロフィールが作成されているかのチェック
+        $this->assertDatabaseHas('profiles', ['user_id' => $user->id]);
     }
 }

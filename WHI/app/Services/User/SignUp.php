@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace App\Services\User;
 
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 final class SignUp
 {
     public function __construct()
     {
         $this->user = new User();
+        $this->profile = new Profile();
     }
 
     /**
@@ -18,20 +21,33 @@ final class SignUp
      */
     public function record(string $name, string $email, string $password): int
     {
-        $valueCheck = strlen($name) > 0 && strlen($email) > 0 && strlen($password) > 0;
         $isNew = $this->isNew($email);
 
-        if($valueCheck && $isNew) {
-            $this->user->create(
-                [
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make($password)
-                ]
-            );
+        if($isNew) {
+            try {
+                DB::beginTransaction();
+                // 新規ユーザーの作成
+                $this->user->create(
+                    [
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => Hash::make($password)
+                    ]
+                );
 
-            $id = $this->user->where('email', $email)->value('id');
-            return $id;
+                // 新規ユーザー用のプロフィールの作成
+                $id = $this->user->where('email', $email)->value('id');
+                $this->profile->create(
+                    [
+                    'user_id' => $id,
+                    ]
+                );
+                DB::commit();
+                return $id;
+            } catch(\Exception $e) {
+                DB::rollBack();
+                return 0;
+            }
         }
         return 0;
     }

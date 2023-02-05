@@ -22,29 +22,19 @@ final class WriteProfile
     {
         $isUser = $this->user->where('id', $id)->exists();
         if($isUser) {
-            // 新しいユーザーであった場合、内容が空のプロフィール欄を作成
-            $isNew = !$this->profile->where('user_id', $id)->exists();
-            if($isNew) {
-                $this->profile->create(
-                    [
-                    'user_id' => $id,
-                    ]
-                );
-                return true;
-            }
-                $this->deleteIcon($id, $icon);
-                $path = $this->storeIcon($id, $icon);
-                $this->profile->where('user_id', $id)->update(
-                    [
-                    'icon' => $path,
-                    'career' => $carrer,
-                    'title' => $title,
-                    'text' => $text,
-                    'mail' => $mail,
-                    'twitter' => $twitter,
-                    ]
-                );
-                return true;
+            $this->deleteIcon($id, $icon);
+            $path = $this->storeIcon($id, $icon);
+            $this->profile->where('user_id', $id)->update(
+                [
+                'icon' => $path,
+                'career' => $carrer,
+                'title' => $title,
+                'text' => $text,
+                'mail' => $mail,
+                'twitter' => $twitter,
+                ]
+            );
+            return true;
         }
         return false;
     }
@@ -84,7 +74,6 @@ final class WriteProfile
         $oldIcon = $this->profile->where('user_id', $id)->value('icon');
         if(!is_null($newIcon) && !is_null($oldIcon)) {
             Storage::disk('s3')->delete($oldIcon);
-            return;
         }
         return;
     }
