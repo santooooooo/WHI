@@ -16,9 +16,9 @@ use App\Services\User\DeleteContent;
 use App\Services\User\DeleteBlog;
 use App\Services\User\GetUser;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\DestroyUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Services\User\DestroyUser;
 
 class UserController extends Controller
 {
@@ -124,49 +124,33 @@ class UserController extends Controller
         } elseif($result === 'double email') {
             return response()->json($result);
 
-	} else {
+        } else {
             // ユーザーの認証用のセッションデータの更新
-	    $this->auth->name =  $result['name'];
-	    $this->auth->password =  $result['password'];
+            $this->auth->name =  $result['name'];
+            $this->auth->password =  $result['password'];
 
             return response()->json($result);
-	}
+        }
     }
 
     /**
      * ユーザーの退会機能
      *
-     * @param  int                                   $id
-     * @param  \App\Http\Requests\DestroyUserRequest $request
+     * @param  int                     $id
+     * @param  Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(DestroyUserRequest $request): JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
-        // 退会するユーザーのプロフィール削除
-        $deleteProfile = new DeleteProfile();
-        $deleteProfile->deleteProfile($this->auth->id, $this->auth->name);
-
-        // 退会するユーザーのすべてのコンテンツブログ削除
-        $deleteBlog = new DeleteBlog();
-        $deleteBlog->allRemove($this->auth->id);
-
-        // 退会するユーザーのすべてのコンテンツ削除
-        $deleteContent = new DeleteContent();
-        $deleteContent->allRemove($this->auth->id, $this->auth->name);
-
-        // 退会するユーザーのすべてのセクション削除
-        $deleteSection = new DeleteSection();
-        $deleteSection->allRemove($this->auth->id, $this->auth->name);
-
-        // ユーザーの退会
-        $resign = new Resign();
-        $resign->remove($this->auth->id, $this->auth->name);
-
-        // 認証用のセッションデータの削除
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return response()->json('Success'); 
+        $destroyUser = new DestroyUser($this->auth->id, $this->auth->name);
+        if($destroyUser->destroy()) {
+               // 認証用のセッションデータの削除
+               Auth::logout();
+               $request->session()->invalidate();
+               $request->session()->regenerateToken();
+            return response()->json('Success'); 
+        } else {
+            return response()->json('Error'); 
+        }
     }
 }

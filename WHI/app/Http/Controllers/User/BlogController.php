@@ -138,11 +138,11 @@ class BlogController extends Controller
         // ブログが存在しないときの処理
         if(is_null($contentId)) {
             return response()->json('Error');
+        } else {
+            // ブログのURLが格納されていたコンテンツの削除
+            $deleteContent = new DeleteContent();
+            $deleteContent->remove($this->auth->id, $sectionId, $contentId);
+            return response()->json('Success');
         }
-
-        // ブログのURLが格納されていたコンテンツの削除
-        $deleteContent = new DeleteContent();
-        $deleteContent->remove($this->auth->id, $sectionId, $contentId);
-        return response()->json('Success');
     }
 }

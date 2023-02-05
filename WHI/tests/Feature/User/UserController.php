@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Section;
+use App\Models\Content;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -64,43 +67,23 @@ class UserController extends TestCase
      */
     public function destroy()
     {
+        // テスト用のユーザーデータの作成
         $user = User::factory()->create();
         Profile::factory()->for($user)->create();
-
-        // プロフィールのセクションの作成
-        $sectionId = 1;
-        $storeData = [
-        'userName' => $user->name,
-        'sectionName' => 'test'
-        ];
-        $this->post('/user/'.$user->id.'/sections', $storeData);
-
-        // プロフィールのコンテンツの作成
-        $contentData = [
-        'userId' => $user->id,
-        'sectionId' => $sectionId,
-        'type' => 'text',
-        'substance' => 'testtest',
-        ];
-        $this->post('/user/'.$user->id.'/contents', $contentData);
-
-        // ブログの作成
-        $blogData = [
-        'userId' => $user->id,
-        'sectionId' => $sectionId,
-        'title' => Str::random(255),
-        'text' => Str::random(10000)
-        ];
-        $response = $this->post('/blog/', $blogData);
+        $section = Section::factory()->for($user)->create();
+	Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
+	Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
 
         // ユーザーの退会を行うリクエストを送信
-        $response = $this->actingAs($user)->delete('/user/'.$user->id, ['name' => $user->name]);
+        $response = $this->actingAs($user)->delete('/user/'.$user->id);
 
         // 存在しないユーザーの退会を行うリクエストを送信
         //$response = $this->delete('/user/2', ['email' => $email]);
 
         // リクエスト及びDBの値の確認
         $response->assertStatus(200);
+        $trueResult = ['Success'];
+        $response->assertExactJson($trueResult, true);
         // DBからユーザーが削除されているか
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
         // DBから削除されたユーザーのプロフィールが削除されているか

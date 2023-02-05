@@ -58,7 +58,7 @@ class BlogController extends TestCase
     /**
      * ブログの削除のテスト
      *
-     * test
+     * @test
      *
      * @return void
      */
@@ -67,23 +67,17 @@ class BlogController extends TestCase
         // ユーザー情報の作成と初期セクションの作成
         $user = User::factory()->create();
         $section = Section::factory()->for($user)->create();
-
-        // ブログの作成、ブログの削除時にコンテンツの削除を行う場合、ブログの作成機能を通じたブログのURL情報が必要なため、Factoryを使用しない
-        $blogId = 1;
-        $blogData = [
-        'userId' => $user->id,
-        'sectionId' => $section->id,
-        'title' => Str::random(255),
-        'text' => Str::random(10000)
-        ];
-        $this->actingAs($user)->post('/blog/', $blogData);
+        $blog = Blog::factory()->state(['user_id' => $user->id, 'section_id' => $section->id])->create();
+        $appUrl = env('APP_URL');
+        $blogUrl = $appUrl.'/#/blogs/'.$blog->id;
+        Content::factory()->state(['user_id' => $user->id, 'section_id' => $section->id, 'type' => 'blog', 'substance' => $blogUrl])->create();
 
         // ブログの削除
         $deleteBlogData = [
         'userId' => $user->id,
         'sectionId' => $section->id,
         ];
-        $response = $this->actingAs($user)->delete('/blog/'.$blogId, $deleteBlogData);
+        $response = $this->actingAs($user)->delete('/blog/'.$blog->id, $deleteBlogData);
 
         // リクエストの結果の確認
         $response->assertStatus(200);
@@ -91,11 +85,11 @@ class BlogController extends TestCase
         $response->assertExactJson($trueResult, true);
 
         // ブログが削除されているか確認
-        $this->assertDatabaseMissing('blogs', ['user_id' => $user->id, 'section_id' => $section->id, 'title' => $blogData['title'], 'text' => $blogData['text']]);
+        $this->assertDatabaseMissing('blogs', ['user_id' => $user->id, 'section_id' => $section->id, 'title' => $blog->title, 'text' => $blog->text]);
 
         // コンテンツが削除されているか確認
         $appUrl = env('APP_URL');
-        $blogUrl = $appUrl.'/#/blogs/'.$blogId;
+        $blogUrl = $appUrl.'/#/blogs/'.$blog->id;
         $content = ['section_id' => $section->id, 'type' => 'blog', 'substance' => $blogUrl];
         $this->assertDatabaseMissing('contents', $content);
     }
@@ -134,7 +128,7 @@ class BlogController extends TestCase
     /**
      * ブログの取得のテスト
      *
-     * @test
+     * test
      *
      * @return void
      */
